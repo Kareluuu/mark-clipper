@@ -4,6 +4,7 @@ import React, { useEffect, useState } from "react";
 import { useClips } from "../lib/useClips";
 import logoStyles from "./components/Logo.module.css";
 import styles from "./page.module.css";
+import { OrbitProgress } from "react-loading-indicators";
 
 function Logo() {
   return (
@@ -45,13 +46,7 @@ function DeleteButton({ onDelete, isLoading }: { onDelete: () => void; isLoading
       disabled={isLoading}
     >
       {isLoading ? (
-        <div className={styles.deleteLoading}>
-          <div className={styles.xlviLoader}>
-            <div className={styles.xlviBox}></div>
-            <div className={styles.xlviBox}></div>
-            <div className={styles.xlviBox}></div>
-          </div>
-        </div>
+        <OrbitProgress variant="disc" color="#000000" size="small" text="" textColor="" />
       ) : (
         <svg 
           width="20" 
