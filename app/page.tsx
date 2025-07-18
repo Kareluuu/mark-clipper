@@ -3,6 +3,7 @@
 import React, { useEffect, useState } from "react";
 import { useClips } from "../lib/useClips";
 import logoStyles from "./components/Logo.module.css";
+import styles from "./page.module.css";
 
 function Logo() {
   return (
@@ -19,23 +20,19 @@ function Logo() {
 function RefreshButton({ onRefresh }: { onRefresh: () => void }) {
   return (
     <button
-      className="relative flex items-center justify-center rounded-md w-14 h-14 hover:bg-zinc-100 transition p-0"
-      style={{ minWidth: 56, minHeight: 56 }}
+      className={styles.refreshButton}
       onClick={onRefresh}
     >
-      <img src="/button_icon_refresh.svg" alt="refresh" className="w-9 h-9" />
+      <img src="/button_icon_refresh.svg" alt="refresh" className={styles.refreshButtonIcon} />
     </button>
   );
 }
 
 function CopyButton() {
   return (
-    <button
-      className="bg-zinc-900 flex flex-row items-center justify-center gap-2.5 px-4 py-2 rounded-md h-9"
-      style={{ minHeight: 36, minWidth: 36 }}
-    >
-      <img src="/button_icon_copy.svg" alt="copy" className="w-5 h-5" />
-      <span className="text-neutral-50 text-sm font-medium leading-5">Copy</span>
+    <button className={styles.copyButton}>
+      <img src="/button_icon_copy.svg" alt="copy" className={styles.copyButtonIcon} />
+      <span className={styles.copyButtonText}>Copy</span>
     </button>
   );
 }
@@ -43,29 +40,20 @@ function CopyButton() {
 function DeleteButton({ onDelete, isLoading }: { onDelete: () => void; isLoading: boolean }) {
   return (
     <button
-      className="relative flex items-center justify-center w-9 h-9 hover:bg-black/10 transition-colors rounded disabled:cursor-not-allowed"
+      className={styles.deleteButton}
       onClick={onDelete}
       disabled={isLoading}
     >
       {isLoading ? (
-        <div className="relative w-8 h-8 flex items-center justify-center scale-110">
-          {/* 外层旋转容器 - 类似XlviLoader效果 */}
-          <div className="absolute inset-0 animate-spin" style={{ animationDuration: '1.5s' }}>
-            {/* 多彩小球，模拟XlviLoader的彩色方块效果 */}
-            <div className="w-2 h-2 bg-red-500 rounded-full absolute top-0 left-1/2 transform -translate-x-1/2 animate-pulse shadow-lg" 
-                 style={{ animationDelay: '0ms', animationDuration: '1s' }}></div>
-            <div className="w-2 h-2 bg-amber-500 rounded-full absolute top-1/2 right-0 transform -translate-y-1/2 animate-pulse shadow-lg" 
-                 style={{ animationDelay: '250ms', animationDuration: '1s' }}></div>
-            <div className="w-2 h-2 bg-indigo-500 rounded-full absolute bottom-0 left-1/2 transform -translate-x-1/2 animate-pulse shadow-lg" 
-                 style={{ animationDelay: '500ms', animationDuration: '1s' }}></div>
-            <div className="w-2 h-2 bg-emerald-500 rounded-full absolute top-1/2 left-0 transform -translate-y-1/2 animate-pulse shadow-lg" 
-                 style={{ animationDelay: '750ms', animationDuration: '1s' }}></div>
+        <div className={styles.deleteLoading}>
+          <div className={styles.deleteLoadingSpinner}>
+            <div className={styles.deleteLoadingDot}></div>
+            <div className={styles.deleteLoadingDot}></div>
+            <div className={styles.deleteLoadingDot}></div>
+            <div className={styles.deleteLoadingDot}></div>
           </div>
-          {/* 内层反向旋转圆环 */}
-          <div className="absolute inset-2 border border-gray-300 rounded-full animate-spin opacity-60" 
-               style={{ animationDuration: '2s', animationDirection: 'reverse' }}></div>
-          {/* 中心脉动点 */}
-          <div className="w-1 h-1 bg-gray-600 rounded-full animate-ping"></div>
+          <div className={styles.deleteLoadingRing}></div>
+          <div className={styles.deleteLoadingCenter}></div>
         </div>
       ) : (
         <svg 
@@ -75,7 +63,7 @@ function DeleteButton({ onDelete, isLoading }: { onDelete: () => void; isLoading
           fill="none" 
           stroke="currentColor" 
           strokeWidth="2"
-          className="text-black"
+          className={styles.deleteButtonIcon}
         >
           <path d="M3 6h18M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2m3 0v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6h14zM10 11v6M14 11v6" />
         </svg>
@@ -92,15 +80,15 @@ function Card({ id, title, text_plain, onDelete, isDeleting }: {
   isDeleting: boolean;
 }) {
   return (
-    <div className="bg-[#b1cd93] w-full p-6 mb-4">
-      <div className="flex flex-col gap-4 w-full">
-        <div className="flex flex-row gap-2.5 w-full">
-          <h2 className="text-[24px] font-bold text-black">{title}</h2>
+    <div className={styles.card}>
+      <div className={styles.cardContent}>
+        <div className={styles.cardTitleRow}>
+          <h2 className={styles.cardTitle}>{title}</h2>
         </div>
-        <div className="flex flex-row gap-2.5 w-full">
-          <p className="text-[16px] text-black">{text_plain}</p>
+        <div className={styles.cardTextRow}>
+          <p className={styles.cardText}>{text_plain}</p>
         </div>
-        <div className="flex flex-row justify-between items-center w-full">
+        <div className={styles.cardActionsRow}>
           <DeleteButton onDelete={() => onDelete(id)} isLoading={isDeleting} />
           <CopyButton />
         </div>
@@ -111,16 +99,16 @@ function Card({ id, title, text_plain, onDelete, isDeleting }: {
 
 function SkeletonCard() {
   return (
-    <div className="bg-[#E4E4E7] w-full p-6 mb-4 animate-pulse rounded-md">
-      <div className="flex flex-col gap-4 w-full">
-        <div className="flex flex-row gap-2.5 w-full">
-          <div className="h-7 w-2/3 bg-[#D4D4D8] rounded"></div>
+    <div className={styles.skeletonCard}>
+      <div className={styles.skeletonContent}>
+        <div className={styles.skeletonTitleRow}>
+          <div className={styles.skeletonTitle}></div>
         </div>
-        <div className="flex flex-row gap-2.5 w-full">
-          <div className="h-5 w-full bg-[#D4D4D8] rounded"></div>
+        <div className={styles.skeletonTextRow}>
+          <div className={styles.skeletonText}></div>
         </div>
-        <div className="flex flex-row justify-end w-full">
-          <div className="h-9 w-20 bg-[#71717A] rounded"></div>
+        <div className={styles.skeletonActionsRow}>
+          <div className={styles.skeletonButton}></div>
         </div>
       </div>
     </div>
@@ -131,32 +119,24 @@ function Toast({ type, show }: { type: 'success' | 'fail' | 'deleted' | 'delete-
   const getToastConfig = () => {
     switch (type) {
       case 'success':
-        return { bg: 'bg-zinc-900', text: 'Updated!' };
+        return { className: styles.toastSuccess, text: 'Updated!' };
       case 'fail':
-        return { bg: 'bg-red-500', text: 'Please try again.' };
+        return { className: styles.toastError, text: 'Please try again.' };
       case 'deleted':
-        return { bg: 'bg-zinc-900', text: 'Deleted!' };
+        return { className: styles.toastSuccess, text: 'Deleted!' };
       case 'delete-fail':
-        return { bg: 'bg-red-500', text: 'Please try again.' };
+        return { className: styles.toastError, text: 'Please try again.' };
       default:
-        return { bg: 'bg-zinc-900', text: 'Updated!' };
+        return { className: styles.toastSuccess, text: 'Updated!' };
     }
   };
 
-  const { bg, text } = getToastConfig();
+  const { className, text } = getToastConfig();
 
   return (
-    <div
-      className={`fixed bottom-0 left-0 w-full flex justify-center z-50 pointer-events-none transition-transform duration-300 ${
-        show ? 'translate-y-0' : 'translate-y-12'
-      }`}
-      style={{ height: 48 }}
-    >
-      <div
-        className={`${bg} text-neutral-50 w-full flex items-center justify-center h-full px-0 py-0`}
-        style={{ fontFamily: 'Geist, sans-serif', fontWeight: 600, fontSize: 14, lineHeight: '20px', height: 48 }}
-      >
-        <span className="text-sm font-semibold leading-5 select-none">
+    <div className={`${styles.toast} ${show ? styles.toastVisible : styles.toastHidden}`}>
+      <div className={`${styles.toastContent} ${className}`}>
+        <span className={styles.toastText}>
           {text}
         </span>
       </div>
@@ -224,19 +204,19 @@ export default function Home() {
   }, [clips]);
 
   return (
-    <div className="bg-neutral-50 min-h-screen w-full flex flex-col items-center">
-      <div className="w-full max-w-sm sm:max-w-md mx-auto flex flex-col gap-6 pt-6 px-4 sm:px-6">
-        <div className="flex flex-row items-center justify-between w-full py-4 sticky top-0 z-20 bg-neutral-50">
-          <div className="flex-1 max-w-[240px] sm:max-w-[280px] md:max-w-[320px] h-12 sm:h-16 md:h-20 flex flex-col justify-center">
+    <div className={styles.container}>
+      <div className={styles.content}>
+        <div className={styles.stickyHeader}>
+          <div className={styles.logoContainer}>
             <Logo />
           </div>
           <RefreshButton onRefresh={handleRefresh} />
         </div>
-        <div className="flex flex-col gap-4 w-full">
+        <div className={styles.clipsContainer}>
           {isLoading ? (
-            <div className="text-center text-gray-400">加载中...</div>
+            <div className={styles.loadingText}>加载中...</div>
           ) : error ? (
-            <div className="text-center text-red-400">加载失败</div>
+            <div className={styles.errorText}>加载失败</div>
           ) : !clips ? (
             Array.from({ length: skeletonCount }).map((_, idx) => <SkeletonCard key={idx} />)
           ) : (

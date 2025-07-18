@@ -11,7 +11,7 @@
 
 .content {
   width: 100%;
-  max-width: 28rem;
+  max-width: 24rem;
   margin: 0 auto;
   display: flex;
   flex-direction: column;
@@ -35,16 +35,34 @@
   align-items: center;
   justify-content: space-between;
   width: 100%;
+  padding: 1rem 0;
   position: sticky;
   top: 0;
-  z-index: 10;
+  z-index: 20;
   background-color: #fafafa;
-  padding: 0.5rem 0;
 }
 
 .logoContainer {
+  flex: 1;
+  max-width: 240px;
+  height: 48px;
   display: flex;
-  align-items: center;
+  flex-direction: column;
+  justify-content: center;
+}
+
+@media (min-width: 640px) {
+  .logoContainer {
+    max-width: 280px;
+    height: 64px;
+  }
+}
+
+@media (min-width: 768px) {
+  .logoContainer {
+    max-width: 320px;
+    height: 80px;
+  }
 }
 
 .clipsContainer {
@@ -62,4 +80,350 @@
 .errorText {
   text-align: center;
   color: #f87171;
+}
+
+/* 刷新按钮样式 */
+.refreshButton {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 0.375rem;
+  width: 3.5rem;
+  height: 3.5rem;
+  padding: 0;
+  border: none;
+  background: transparent;
+  transition: background-color 0.2s;
+  cursor: pointer;
+}
+
+.refreshButton:hover {
+  background-color: rgba(0, 0, 0, 0.05);
+}
+
+.refreshButtonIcon {
+  width: 2.25rem;
+  height: 2.25rem;
+}
+
+/* Copy按钮样式 */
+.copyButton {
+  background-color: #18181b;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 0.625rem;
+  padding: 0.5rem 1rem;
+  border-radius: 0.375rem;
+  height: 2.25rem;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.copyButton:hover {
+  background-color: #27272a;
+}
+
+.copyButtonIcon {
+  width: 1.25rem;
+  height: 1.25rem;
+}
+
+.copyButtonText {
+  color: #fafafa;
+  font-size: 0.875rem;
+  font-weight: 500;
+  line-height: 1.25rem;
+}
+
+/* 删除按钮样式 */
+.deleteButton {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.25rem;
+  height: 2.25rem;
+  border-radius: 0.375rem;
+  border: none;
+  background: transparent;
+  transition: background-color 0.2s;
+  cursor: pointer;
+}
+
+.deleteButton:hover {
+  background-color: rgba(0, 0, 0, 0.1);
+}
+
+.deleteButton:disabled {
+  cursor: not-allowed;
+}
+
+.deleteButtonIcon {
+  color: #000;
+}
+
+/* 删除按钮Loading动画容器 */
+.deleteLoading {
+  position: relative;
+  width: 2rem;
+  height: 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transform: scale(1.1);
+}
+
+.deleteLoadingSpinner {
+  position: absolute;
+  inset: 0;
+  animation: spin 1.5s linear infinite;
+}
+
+.deleteLoadingDot {
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: 50%;
+  position: absolute;
+  animation: pulse 1s ease-in-out infinite;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+}
+
+.deleteLoadingDot:nth-child(1) {
+  background-color: #ef4444;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  animation-delay: 0ms;
+}
+
+.deleteLoadingDot:nth-child(2) {
+  background-color: #f59e0b;
+  top: 50%;
+  right: 0;
+  transform: translateY(-50%);
+  animation-delay: 250ms;
+}
+
+.deleteLoadingDot:nth-child(3) {
+  background-color: #6366f1;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  animation-delay: 500ms;
+}
+
+.deleteLoadingDot:nth-child(4) {
+  background-color: #10b981;
+  top: 50%;
+  left: 0;
+  transform: translateY(-50%);
+  animation-delay: 750ms;
+}
+
+.deleteLoadingRing {
+  position: absolute;
+  inset: 0.5rem;
+  border: 1px solid #d1d5db;
+  border-radius: 50%;
+  opacity: 0.6;
+  animation: spin 2s linear infinite reverse;
+}
+
+.deleteLoadingCenter {
+  width: 0.25rem;
+  height: 0.25rem;
+  background-color: #4b5563;
+  border-radius: 50%;
+  animation: ping 1s cubic-bezier(0, 0, 0.2, 1) infinite;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.5;
+    transform: scale(0.95);
+  }
+}
+
+@keyframes ping {
+  75%, 100% {
+    transform: scale(2);
+    opacity: 0;
+  }
+}
+
+/* 卡片样式 */
+.card {
+  background-color: #b1cd93;
+  width: 100%;
+  padding: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+.cardContent {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  width: 100%;
+}
+
+.cardTitleRow {
+  display: flex;
+  flex-direction: row;
+  gap: 0.625rem;
+  width: 100%;
+}
+
+.cardTitle {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #000;
+}
+
+.cardTextRow {
+  display: flex;
+  flex-direction: row;
+  gap: 0.625rem;
+  width: 100%;
+}
+
+.cardText {
+  font-size: 1rem;
+  color: #000;
+}
+
+.cardActionsRow {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+
+/* 骨架屏样式 */
+.skeletonCard {
+  background-color: #e4e4e7;
+  width: 100%;
+  padding: 1.5rem;
+  margin-bottom: 1rem;
+  border-radius: 0.375rem;
+  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+.skeletonContent {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  width: 100%;
+}
+
+.skeletonTitleRow {
+  display: flex;
+  flex-direction: row;
+  gap: 0.625rem;
+  width: 100%;
+}
+
+.skeletonTitle {
+  height: 1.75rem;
+  width: 66.666667%;
+  background-color: #d4d4d8;
+  border-radius: 0.25rem;
+}
+
+.skeletonTextRow {
+  display: flex;
+  flex-direction: row;
+  gap: 0.625rem;
+  width: 100%;
+}
+
+.skeletonText {
+  height: 1.25rem;
+  width: 100%;
+  background-color: #d4d4d8;
+  border-radius: 0.25rem;
+}
+
+.skeletonActionsRow {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  width: 100%;
+}
+
+.skeletonButton {
+  height: 2.25rem;
+  width: 5rem;
+  background-color: #71717a;
+  border-radius: 0.25rem;
+}
+
+/* Toast样式 */
+.toast {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  z-index: 50;
+  pointer-events: none;
+  transition: transform 0.3s ease;
+  height: 3rem;
+}
+
+.toastVisible {
+  transform: translateY(0);
+}
+
+.toastHidden {
+  transform: translateY(3rem);
+}
+
+.toastContent {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  padding: 0;
+  font-family: 'Geist', sans-serif;
+  font-weight: 600;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  height: 3rem;
+}
+
+.toastSuccess {
+  background-color: #18181b;
+  color: #fafafa;
+}
+
+.toastError {
+  background-color: #ef4444;
+  color: #fafafa;
+}
+
+.toastText {
+  font-size: 0.875rem;
+  font-weight: 600;
+  line-height: 1.25rem;
+  user-select: none;
 } 
