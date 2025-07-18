@@ -7,7 +7,7 @@ import { useClips } from "../lib/useClips";
 
 function Logo() {
   return (
-    <div className="h-24 w-auto">
+    <div className="h-19 w-auto">
       <img 
         alt="logo" 
         className="h-full w-auto object-contain" 
