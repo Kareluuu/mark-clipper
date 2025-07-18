@@ -43,7 +43,7 @@ function CopyButton() {
 function DeleteButton({ onDelete, isLoading }: { onDelete: () => void; isLoading: boolean }) {
   return (
     <button
-      className="relative flex items-center justify-center w-9 h-9 hover:bg-black/10 transition-colors rounded disabled:cursor-not-allowed overflow-visible"
+      className="relative flex items-center justify-center w-9 h-9 hover:bg-black/10 transition-colors rounded disabled:cursor-not-allowed"
       onClick={onDelete}
       disabled={isLoading}
     >
@@ -100,10 +100,8 @@ function Card({ id, title, text_plain, onDelete, isDeleting }: {
         <div className="flex flex-row gap-2.5 w-full">
           <p className="text-[16px] text-black">{text_plain}</p>
         </div>
-        <div className="flex flex-row justify-between items-center w-full relative">
-          <div className="relative z-10">
-            <DeleteButton onDelete={() => onDelete(id)} isLoading={isDeleting} />
-          </div>
+        <div className="flex flex-row justify-between items-center w-full">
+          <DeleteButton onDelete={() => onDelete(id)} isLoading={isDeleting} />
           <CopyButton />
         </div>
       </div>
@@ -228,7 +226,7 @@ export default function Home() {
   return (
     <div className="bg-neutral-50 min-h-screen w-full flex flex-col items-center">
       <div className="w-full max-w-sm sm:max-w-md mx-auto flex flex-col gap-6 pt-6 px-4 sm:px-6">
-        <div className="flex flex-row items-center justify-between w-full h-16 sm:h-20 md:h-24 sticky top-0 z-10 bg-neutral-50">
+        <div className="flex flex-row items-center justify-between w-full py-4 sticky top-0 z-20 bg-neutral-50">
           <div className="flex-1 max-w-[240px] sm:max-w-[280px] md:max-w-[320px] h-12 sm:h-16 md:h-20 flex flex-col justify-center">
             <Logo />
           </div>
