@@ -40,28 +40,57 @@ function CopyButton() {
   );
 }
 
-function DeleteButton({ onDelete }: { onDelete: () => void }) {
+function DeleteButton({ onDelete, isLoading }: { onDelete: () => void; isLoading: boolean }) {
   return (
     <button
-      className="flex items-center justify-center w-9 h-9 hover:bg-black/10 transition-colors rounded"
+      className="flex items-center justify-center w-9 h-9 hover:bg-black/10 transition-colors rounded disabled:opacity-50 disabled:cursor-not-allowed"
       onClick={onDelete}
+      disabled={isLoading}
     >
-      <svg 
-        width="20" 
-        height="20" 
-        viewBox="0 0 24 24" 
-        fill="none" 
-        stroke="currentColor" 
-        strokeWidth="2"
-        className="text-black"
-      >
-        <path d="M3 6h18M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2m3 0v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6h14zM10 11v6M14 11v6" />
-      </svg>
+      {isLoading ? (
+        <svg
+          width="20"
+          height="20"
+          viewBox="0 0 24 24"
+          className="text-black animate-spin"
+        >
+          <circle
+            cx="12"
+            cy="12"
+            r="10"
+            stroke="currentColor"
+            strokeWidth="2"
+            fill="none"
+            strokeLinecap="round"
+            strokeDasharray="31.416"
+            strokeDashoffset="31.416"
+            className="animate-spin"
+          />
+        </svg>
+      ) : (
+        <svg 
+          width="20" 
+          height="20" 
+          viewBox="0 0 24 24" 
+          fill="none" 
+          stroke="currentColor" 
+          strokeWidth="2"
+          className="text-black"
+        >
+          <path d="M3 6h18M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2m3 0v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6h14zM10 11v6M14 11v6" />
+        </svg>
+      )}
     </button>
   );
 }
 
-function Card({ id, title, text_plain, onDelete }: { id: number; title: string; text_plain: string; onDelete: (id: number) => void }) {
+function Card({ id, title, text_plain, onDelete, isDeleting }: { 
+  id: number; 
+  title: string; 
+  text_plain: string; 
+  onDelete: (id: number) => void;
+  isDeleting: boolean;
+}) {
   return (
     <div className="bg-[#b1cd93] w-full p-6 mb-4">
       <div className="flex flex-col gap-4 w-full">
@@ -72,7 +101,7 @@ function Card({ id, title, text_plain, onDelete }: { id: number; title: string; 
           <p className="text-[16px] text-black">{text_plain}</p>
         </div>
         <div className="flex flex-row justify-between items-center w-full">
-          <DeleteButton onDelete={() => onDelete(id)} />
+          <DeleteButton onDelete={() => onDelete(id)} isLoading={isDeleting} />
           <CopyButton />
         </div>
       </div>
@@ -140,6 +169,7 @@ export default function Home() {
   const { data: clips, error, isLoading, mutate } = useClips();
   const [skeletonCount, setSkeletonCount] = useState(4);
   const [toast, setToast] = useState<{ show: boolean; type: 'success' | 'fail' | 'deleted' | 'delete-fail' }>({ show: false, type: 'success' });
+  const [deletingIds, setDeletingIds] = useState<Set<number>>(new Set());
 
   // 刷新按钮逻辑，调用 mutate 重新请求
   const handleRefresh = async () => {
@@ -156,7 +186,10 @@ export default function Home() {
 
   // 删除卡片逻辑
   const handleDelete = async (id: number) => {
+    // 设置loading状态
+    setDeletingIds(prev => new Set(prev).add(id));
     setToast({ show: false, type: 'deleted' });
+    
     try {
       const response = await fetch(`/api/clips/${id}`, {
         method: 'DELETE',
@@ -173,7 +206,15 @@ export default function Home() {
     } catch (error) {
       // 网络错误等，显示失败Toast
       setToast({ show: true, type: 'delete-fail' });
+    } finally {
+      // 清除loading状态
+      setDeletingIds(prev => {
+        const newSet = new Set(prev);
+        newSet.delete(id);
+        return newSet;
+      });
     }
+    
     setTimeout(() => setToast((t) => ({ ...t, show: false })), 2000);
   };
 
@@ -206,6 +247,7 @@ export default function Home() {
                 title={clip.title} 
                 text_plain={clip.text_plain} 
                 onDelete={handleDelete}
+                isDeleting={deletingIds.has(clip.id)}
               />
             ))
           )}
