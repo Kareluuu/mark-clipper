@@ -46,14 +46,11 @@ function DeleteButton({ onDelete, isLoading }: { onDelete: () => void; isLoading
     >
       {isLoading ? (
         <div className={styles.deleteLoading}>
-          <div className={styles.deleteLoadingSpinner}>
-            <div className={styles.deleteLoadingDot}></div>
-            <div className={styles.deleteLoadingDot}></div>
-            <div className={styles.deleteLoadingDot}></div>
-            <div className={styles.deleteLoadingDot}></div>
+          <div className={styles.xlviLoader}>
+            <div className={styles.xlviBox}></div>
+            <div className={styles.xlviBox}></div>
+            <div className={styles.xlviBox}></div>
           </div>
-          <div className={styles.deleteLoadingRing}></div>
-          <div className={styles.deleteLoadingCenter}></div>
         </div>
       ) : (
         <svg 
