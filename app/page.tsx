@@ -43,30 +43,30 @@ function CopyButton() {
 function DeleteButton({ onDelete, isLoading }: { onDelete: () => void; isLoading: boolean }) {
   return (
     <button
-      className="flex items-center justify-center w-9 h-9 hover:bg-black/10 transition-colors rounded disabled:opacity-50 disabled:cursor-not-allowed"
+      className="relative flex items-center justify-center w-9 h-9 hover:bg-black/10 transition-colors rounded disabled:cursor-not-allowed overflow-visible"
       onClick={onDelete}
       disabled={isLoading}
     >
       {isLoading ? (
-        <svg
-          width="20"
-          height="20"
-          viewBox="0 0 24 24"
-          className="text-black animate-spin"
-        >
-          <circle
-            cx="12"
-            cy="12"
-            r="10"
-            stroke="currentColor"
-            strokeWidth="2"
-            fill="none"
-            strokeLinecap="round"
-            strokeDasharray="31.416"
-            strokeDashoffset="31.416"
-            className="animate-spin"
-          />
-        </svg>
+        <div className="relative w-8 h-8 flex items-center justify-center scale-110">
+          {/* 外层旋转容器 - 类似XlviLoader效果 */}
+          <div className="absolute inset-0 animate-spin" style={{ animationDuration: '1.5s' }}>
+            {/* 多彩小球，模拟XlviLoader的彩色方块效果 */}
+            <div className="w-2 h-2 bg-red-500 rounded-full absolute top-0 left-1/2 transform -translate-x-1/2 animate-pulse shadow-lg" 
+                 style={{ animationDelay: '0ms', animationDuration: '1s' }}></div>
+            <div className="w-2 h-2 bg-amber-500 rounded-full absolute top-1/2 right-0 transform -translate-y-1/2 animate-pulse shadow-lg" 
+                 style={{ animationDelay: '250ms', animationDuration: '1s' }}></div>
+            <div className="w-2 h-2 bg-indigo-500 rounded-full absolute bottom-0 left-1/2 transform -translate-x-1/2 animate-pulse shadow-lg" 
+                 style={{ animationDelay: '500ms', animationDuration: '1s' }}></div>
+            <div className="w-2 h-2 bg-emerald-500 rounded-full absolute top-1/2 left-0 transform -translate-y-1/2 animate-pulse shadow-lg" 
+                 style={{ animationDelay: '750ms', animationDuration: '1s' }}></div>
+          </div>
+          {/* 内层反向旋转圆环 */}
+          <div className="absolute inset-2 border border-gray-300 rounded-full animate-spin opacity-60" 
+               style={{ animationDuration: '2s', animationDirection: 'reverse' }}></div>
+          {/* 中心脉动点 */}
+          <div className="w-1 h-1 bg-gray-600 rounded-full animate-ping"></div>
+        </div>
       ) : (
         <svg 
           width="20" 
@@ -100,8 +100,10 @@ function Card({ id, title, text_plain, onDelete, isDeleting }: {
         <div className="flex flex-row gap-2.5 w-full">
           <p className="text-[16px] text-black">{text_plain}</p>
         </div>
-        <div className="flex flex-row justify-between items-center w-full">
-          <DeleteButton onDelete={() => onDelete(id)} isLoading={isDeleting} />
+        <div className="flex flex-row justify-between items-center w-full relative">
+          <div className="relative z-10">
+            <DeleteButton onDelete={() => onDelete(id)} isLoading={isDeleting} />
+          </div>
           <CopyButton />
         </div>
       </div>
