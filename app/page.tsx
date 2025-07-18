@@ -2,15 +2,15 @@
 
 import React, { useEffect, useState } from "react";
 import { useClips } from "../lib/useClips";
+import styles from "./page.module.css";
 
-// 移除未使用的图片变量
-
+// Logo组件
 function Logo() {
   return (
-    <div className="h-19 w-auto">
+    <div className={styles.logo}>
       <img 
         alt="logo" 
-        className="h-full w-auto object-contain" 
+        className={styles.logoImage} 
         src="/markat_logo.svg" 
       />
     </div>
@@ -127,19 +127,19 @@ export default function Home() {
   }, [clips]);
 
   return (
-    <div className="bg-neutral-50 min-h-screen w-full flex flex-col items-center">
-      <div className="w-full max-w-sm sm:max-w-md mx-auto flex flex-col gap-6 pt-6 px-4 sm:px-6">
-        <div className="flex flex-row items-center justify-between w-full sticky top-0 z-10 bg-neutral-50 py-2">
-          <div className="flex items-center">
+    <div className={styles.container}>
+      <div className={styles.content}>
+        <div className={styles.stickyHeader}>
+          <div className={styles.logoContainer}>
             <Logo />
           </div>
           <RefreshButton onRefresh={handleRefresh} />
         </div>
-        <div className="flex flex-col gap-4 w-full">
+        <div className={styles.clipsContainer}>
           {isLoading ? (
-            <div className="text-center text-gray-400">加载中...</div>
+            <div className={styles.loadingText}>加载中...</div>
           ) : error ? (
-            <div className="text-center text-red-400">加载失败</div>
+            <div className={styles.errorText}>加载失败</div>
           ) : !clips ? (
             Array.from({ length: skeletonCount }).map((_, idx) => <SkeletonCard key={idx} />)
           ) : (

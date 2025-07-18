@@ -1,0 +1,65 @@
+/* page.module.css - 页面组件样式 */
+
+.container {
+  background-color: #fafafa;
+  min-height: 100vh;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.content {
+  width: 100%;
+  max-width: 28rem;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  padding-top: 1.5rem;
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
+
+@media (min-width: 640px) {
+  .content {
+    max-width: 28rem;
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+  }
+}
+
+.stickyHeader {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background-color: #fafafa;
+  padding: 0.5rem 0;
+}
+
+.logoContainer {
+  display: flex;
+  align-items: center;
+}
+
+.clipsContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  width: 100%;
+}
+
+.loadingText {
+  text-align: center;
+  color: #9ca3af;
+}
+
+.errorText {
+  text-align: center;
+  color: #f87171;
+} 

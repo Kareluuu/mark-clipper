@@ -1,0 +1,12 @@
+/* Logo.module.css - Logo组件样式 */
+
+.logo {
+  height: 4.75rem; /* 76px */
+  width: auto;
+}
+
+.logoImage {
+  height: 100%;
+  width: auto;
+  object-fit: contain;
+} 
