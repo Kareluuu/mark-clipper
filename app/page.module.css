@@ -272,47 +272,143 @@
 .card {
   background-color: #b1cd93;
   width: 100%;
-  padding: 1.5rem;
+  padding: 24px;
   margin-bottom: 1rem;
+  position: relative;
 }
 
 .cardContent {
   display: flex;
   flex-direction: column;
-  gap: 1rem;
+  gap: 16px;
   width: 100%;
 }
 
-.cardTitleRow {
+/* 卡片内容区域 */
+.cardMainSection {
   display: flex;
-  flex-direction: row;
-  gap: 0.625rem;
+  flex-direction: column;
+  gap: 16px;
+  align-items: flex-start;
+  justify-content: flex-start;
   width: 100%;
 }
 
-.cardTitle {
-  font-size: 1.5rem;
-  font-weight: bold;
-  color: #000;
+/* 卡片顶部icon */
+.cardIcon {
+  width: 24px;
+  height: 24px;
+  flex-shrink: 0;
 }
 
+/* 主要内容文本 */
 .cardTextRow {
   display: flex;
   flex-direction: row;
-  gap: 0.625rem;
+  gap: 10px;
+  align-items: flex-start;
+  justify-content: flex-start;
   width: 100%;
 }
 
 .cardText {
-  font-size: 1rem;
-  color: #000;
+  font-family: 'Helvetica', sans-serif;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 20px;
+  line-height: normal;
+  color: #000000;
+  flex-basis: 0;
+  flex-grow: 1;
+  min-height: 1px;
+  min-width: 1px;
+  flex-shrink: 0;
 }
 
+/* 分割线 */
+.cardDivider {
+  width: 100%;
+  height: 0;
+  flex-shrink: 0;
+  position: relative;
+}
+
+.cardDivider::before {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  top: -1px;
+  background-color: #000000;
+}
+
+/* Ref区域 */
+.cardRefSection {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  align-items: flex-start;
+  justify-content: flex-start;
+  width: 100%;
+}
+
+/* Ref标签 */
+.cardRefBadge {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  height: 22px;
+  align-items: center;
+  justify-content: center;
+  padding: 2px 10px;
+  border-radius: 6px;
+  flex-shrink: 0;
+  position: relative;
+  border: 1px solid #18181b;
+}
+
+.cardRefText {
+  font-family: 'Geist', sans-serif;
+  font-style: normal;
+  font-weight: 600;
+  font-size: 12px;
+  line-height: 16px;
+  color: #18181b;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+/* 标题区域 */
+.cardTitleRow {
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+  align-items: flex-start;
+  justify-content: flex-start;
+  width: 100%;
+}
+
+.cardTitle {
+  font-family: 'Inter', sans-serif;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 12px;
+  line-height: 20px;
+  color: #18181b;
+  flex-basis: 0;
+  flex-grow: 1;
+  min-height: 1px;
+  min-width: 1px;
+  flex-shrink: 0;
+}
+
+/* 操作区域 */
 .cardActionsRow {
   display: flex;
   flex-direction: row;
-  justify-content: space-between;
   align-items: center;
+  justify-content: space-between;
   width: 100%;
 }
 

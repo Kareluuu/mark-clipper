@@ -82,12 +82,38 @@ function Card({ id, title, text_plain, onDelete, isDeleting }: {
   return (
     <div className={styles.card}>
       <div className={styles.cardContent}>
-        <div className={styles.cardTitleRow}>
-          <h2 className={styles.cardTitle}>{title}</h2>
+        {/* 主要内容区域 */}
+        <div className={styles.cardMainSection}>
+          {/* 引用图标 */}
+          <img 
+            className={styles.cardIcon}
+            src="/quote.svg" 
+            alt="quote" 
+          />
+
+          {/* 主要内容文本 */}
+          <div className={styles.cardTextRow}>
+            <p className={styles.cardText}>{text_plain}</p>
+          </div>
+
+          {/* 分割线 */}
+          <div className={styles.cardDivider}></div>
+
+          {/* Ref区域 */}
+          <div className={styles.cardRefSection}>
+            {/* Ref标签 */}
+            <div className={styles.cardRefBadge}>
+              <div className={styles.cardRefText}>Ref</div>
+            </div>
+            
+            {/* 标题 */}
+            <div className={styles.cardTitleRow}>
+              <div className={styles.cardTitle}>{title}</div>
+            </div>
+          </div>
         </div>
-        <div className={styles.cardTextRow}>
-          <p className={styles.cardText}>{text_plain}</p>
-        </div>
+
+        {/* 操作按钮区域 */}
         <div className={styles.cardActionsRow}>
           <DeleteButton onDelete={() => onDelete(id)} isLoading={isDeleting} />
           <CopyButton />
