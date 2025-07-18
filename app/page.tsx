@@ -132,7 +132,7 @@ export default function Home() {
     <div className="bg-neutral-50 min-h-screen w-full flex flex-col items-center">
       <div className="w-full max-w-sm sm:max-w-md mx-auto flex flex-col gap-6 pt-6 px-4 sm:px-6">
         <div className="flex flex-row items-center justify-between w-full h-16 sm:h-20 md:h-24 sticky top-0 z-10 bg-neutral-50">
-          <div className="flex-1 max-w-[240px] sm:max-w-[280px] md:max-w-[320px] h-12 sm:h-16 md:h-20 flex flex-col justify-center">
+          <div className="flex-1 max-w-[240px] sm:max-w-[280px] md:max-w-[320px] h-12 sm:h-16 md:h-20 flex items-center justify-start">
             <Logo />
           </div>
           <RefreshButton onRefresh={handleRefresh} />
