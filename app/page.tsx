@@ -3,14 +3,15 @@
 import React, { useEffect, useState } from "react";
 import { useClips } from "../lib/useClips";
 import styles from "./page.module.css";
+import logoStyles from "./components/Logo.module.css";
 
 // Logo组件
 function Logo() {
   return (
-    <div className={styles.logo}>
+    <div className={logoStyles.logo}>
       <img 
         alt="logo" 
-        className={styles.logoImage} 
+        className={logoStyles.logoImage} 
         src="/markat_logo.svg" 
       />
     </div>
