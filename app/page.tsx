@@ -2,17 +2,16 @@
 
 import React, { useEffect, useState } from "react";
 import { useClips } from "../lib/useClips";
+import logoStyles from "./components/Logo.module.css";
 
 function Logo() {
   return (
-    <div className="w-full h-full flex items-center justify-start">
-      <div className="aspect-[211/52.5] h-full w-auto max-w-full">
-        <img 
-          alt="logo" 
-          className="w-full h-full object-contain" 
-          src="/markat_logo.svg" 
-        />
-      </div>
+    <div className={logoStyles.logo}>
+      <img 
+        alt="logo" 
+        className={logoStyles.logoImage} 
+        src="/markat_logo.svg" 
+      />
     </div>
   );
 }
