@@ -6,6 +6,17 @@ const supabase = createClient(
   process.env.SUPABASE_SERVICE_ROLE_KEY!
 );
 
+// CORS 头部配置
+const corsHeaders = {
+  'Access-Control-Allow-Origin': '*',
+  'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
+  'Access-Control-Allow-Headers': 'Content-Type, Authorization',
+};
+
+export async function OPTIONS() {
+  return new Response(null, { status: 200, headers: corsHeaders });
+}
+
 // 编辑剪藏
 export async function PUT(request: Request, { params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
@@ -16,9 +27,9 @@ export async function PUT(request: Request, { params }: { params: Promise<{ id: 
     .eq('id', id)
     .select();
   if (error) {
-    return NextResponse.json({ error: error.message }, { status: 500 });
+    return NextResponse.json({ error: error.message }, { status: 500, headers: corsHeaders });
   }
-  return NextResponse.json({ data: data[0] });
+  return NextResponse.json({ data: data[0] }, { headers: corsHeaders });
 }
 
 // 删除剪藏
@@ -26,9 +37,9 @@ export async function DELETE(request: Request, { params }: { params: Promise<{ i
   const { id } = await params;
   const { error } = await supabase.from('clips').delete().eq('id', id);
   if (error) {
-    return NextResponse.json({ error: error.message }, { status: 500 });
+    return NextResponse.json({ error: error.message }, { status: 500, headers: corsHeaders });
   }
-  return NextResponse.json({ message: 'Deleted successfully' });
+  return NextResponse.json({ message: 'Deleted successfully' }, { headers: corsHeaders });
 }
 
 export async function POST(request: Request) {
@@ -36,7 +47,7 @@ export async function POST(request: Request) {
   const { title, text_plain } = body;
   const { data, error } = await supabase.from('clips').insert([{ title, text_plain }]).select();
   if (error) {
-    return NextResponse.json({ error: error.message }, { status: 500 });
+    return NextResponse.json({ error: error.message }, { status: 500, headers: corsHeaders });
   }
-  return NextResponse.json({ data: data[0] });
+  return NextResponse.json({ data: data[0] }, { status: 201, headers: corsHeaders });
 } 
