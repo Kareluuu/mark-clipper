@@ -166,6 +166,21 @@
   color: #000;
 }
 
+/* 删除按钮Loading动画容器 - 20x20px */
+.deleteLoading {
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* 强制OrbitProgress组件尺寸为20x20px */
+.deleteLoading > * {
+  width: 20px !important;
+  height: 20px !important;
+}
+
 
 /* 卡片样式 */
 .card {

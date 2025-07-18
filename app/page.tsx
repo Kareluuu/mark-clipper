@@ -46,7 +46,9 @@ function DeleteButton({ onDelete, isLoading }: { onDelete: () => void; isLoading
       disabled={isLoading}
     >
       {isLoading ? (
-        <OrbitProgress variant="disc" color="#000000" size="small" text="" textColor="" />
+        <div className={styles.deleteLoading}>
+          <OrbitProgress variant="disc" color="#000000" size="small" text="" textColor="" />
+        </div>
       ) : (
         <svg 
           width="20" 
