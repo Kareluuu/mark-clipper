@@ -166,8 +166,9 @@
   color: #000;
 }
 
-/* 删除按钮Loading动画容器 - 20x20px */
+/* 删除按钮Loading动画 - XlviLoader样式 */
 .deleteLoading {
+  position: relative;
   width: 20px;
   height: 20px;
   display: flex;
@@ -175,12 +176,73 @@
   justify-content: center;
 }
 
-/* 强制OrbitProgress组件尺寸为20x20px */
-.deleteLoading > * {
-  width: 20px !important;
-  height: 20px !important;
+.xlviLoader {
+  position: relative;
+  width: 20px;
+  height: 20px;
 }
 
+.xlviBox {
+  position: absolute;
+  width: 4px;
+  height: 4px;
+  border-radius: 1px;
+  animation: xlviAnimation 2s ease-in-out infinite;
+}
+
+.xlviBox:nth-child(1) {
+  background-color: #EF4444;
+  animation-delay: 0s;
+}
+
+.xlviBox:nth-child(2) {
+  background-color: #F59E0B;
+  animation-delay: -0.4s;
+}
+
+.xlviBox:nth-child(3) {
+  background-color: #6366F1;
+  animation-delay: -0.8s;
+}
+
+@keyframes xlviAnimation {
+  0%, 100% {
+    transform: translate(0, 0);
+  }
+  8.33% {
+    transform: translate(8px, 0);
+  }
+  16.67% {
+    transform: translate(8px, 8px);
+  }
+  25% {
+    transform: translate(0, 8px);
+  }
+  33.33% {
+    transform: translate(-8px, 8px);
+  }
+  41.67% {
+    transform: translate(-8px, 0);
+  }
+  50% {
+    transform: translate(-8px, -8px);
+  }
+  58.33% {
+    transform: translate(0, -8px);
+  }
+  66.67% {
+    transform: translate(8px, -8px);
+  }
+  75% {
+    transform: translate(8px, 0);
+  }
+  83.33% {
+    transform: translate(8px, 8px);
+  }
+  91.67% {
+    transform: translate(0, 8px);
+  }
+}
 
 /* 卡片样式 */
 .card {
