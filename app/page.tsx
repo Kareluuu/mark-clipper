@@ -7,10 +7,10 @@ import { useClips } from "../lib/useClips";
 
 function Logo() {
   return (
-    <div className="aspect-[211/52.5] h-full w-auto">
+    <div className="h-24 w-auto">
       <img 
         alt="logo" 
-        className="w-full h-full object-contain" 
+        className="h-full w-auto object-contain" 
         src="/markat_logo.svg" 
       />
     </div>
