@@ -180,6 +180,9 @@
   position: relative;
   width: 20px;
   height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .xlviBox {
@@ -188,6 +191,9 @@
   height: 4px;
   border-radius: 1px;
   animation: xlviAnimation 2s ease-in-out infinite;
+  top: 50%;
+  left: 50%;
+  transform-origin: center;
 }
 
 .xlviBox:nth-child(1) {
@@ -207,40 +213,40 @@
 
 @keyframes xlviAnimation {
   0%, 100% {
-    transform: translate(0, 0);
+    transform: translate(-50%, -50%) translate(0, 0);
   }
   8.33% {
-    transform: translate(8px, 0);
+    transform: translate(-50%, -50%) translate(6px, 0);
   }
   16.67% {
-    transform: translate(8px, 8px);
+    transform: translate(-50%, -50%) translate(6px, 6px);
   }
   25% {
-    transform: translate(0, 8px);
+    transform: translate(-50%, -50%) translate(0, 6px);
   }
   33.33% {
-    transform: translate(-8px, 8px);
+    transform: translate(-50%, -50%) translate(-6px, 6px);
   }
   41.67% {
-    transform: translate(-8px, 0);
+    transform: translate(-50%, -50%) translate(-6px, 0);
   }
   50% {
-    transform: translate(-8px, -8px);
+    transform: translate(-50%, -50%) translate(-6px, -6px);
   }
   58.33% {
-    transform: translate(0, -8px);
+    transform: translate(-50%, -50%) translate(0, -6px);
   }
   66.67% {
-    transform: translate(8px, -8px);
+    transform: translate(-50%, -50%) translate(6px, -6px);
   }
   75% {
-    transform: translate(8px, 0);
+    transform: translate(-50%, -50%) translate(6px, 0);
   }
   83.33% {
-    transform: translate(8px, 8px);
+    transform: translate(-50%, -50%) translate(6px, 6px);
   }
   91.67% {
-    transform: translate(0, 8px);
+    transform: translate(-50%, -50%) translate(0, 6px);
   }
 }
 
