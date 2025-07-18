@@ -3,10 +3,7 @@
 import React, { useEffect, useState } from "react";
 import { useClips } from "../lib/useClips";
 
-const img = "/file.svg";
-const img1 = "/globe.svg";
-const img2 = "/next.svg";
-const img3 = "/vercel.svg";
+// 移除未使用的图片变量
 
 function Logo() {
   return (
