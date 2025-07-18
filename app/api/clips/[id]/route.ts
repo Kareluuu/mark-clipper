@@ -7,8 +7,8 @@ const supabase = createClient(
 );
 
 // 编辑剪藏
-export async function PUT(request: Request, { params }: { params: { id: string } }) {
-  const { id } = params;
+export async function PUT(request: Request, { params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params;
   const body = await request.json();
   const { url, title, text_plain, html_raw, meta } = body;
   const { data, error } = await supabase.from('clips')
@@ -22,8 +22,8 @@ export async function PUT(request: Request, { params }: { params: { id: string }
 }
 
 // 删除剪藏
-export async function DELETE(request: Request, { params }: { params: { id: string } }) {
-  const { id } = params;
+export async function DELETE(request: Request, { params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params;
   const { error } = await supabase.from('clips').delete().eq('id', id);
   if (error) {
     return NextResponse.json({ error: error.message }, { status: 500 });
