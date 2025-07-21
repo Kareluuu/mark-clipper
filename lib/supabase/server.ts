@@ -17,4 +17,5 @@ export const createRouteClient = () => {
 }
 
 // 默认服务端实例
-export const supabaseServer = createServerClient() 
+// 注意：不要在模块顶层调用createServerClient()，会导致构建时cookies()错误
+// export const supabaseServer = createServerClient() 

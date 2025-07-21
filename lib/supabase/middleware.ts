@@ -10,7 +10,7 @@ export const createMiddlewareClient = (req: NextRequest, res: NextResponse) => {
 
 // 中间件辅助函数
 export const updateSession = async (req: NextRequest) => {
-  let res = NextResponse.next({
+  const res = NextResponse.next({
     request: {
       headers: req.headers,
     },
@@ -19,16 +19,14 @@ export const updateSession = async (req: NextRequest) => {
   const supabase = createMiddlewareClient(req, res)
 
   // 刷新会话（如果过期会自动刷新）
-  const {
-    data: { session },
-  } = await supabase.auth.getSession()
+  await supabase.auth.getSession()
 
   return res
 }
 
 // 路由保护辅助函数
 export const protectedRoute = async (req: NextRequest, redirectTo = '/login') => {
-  let res = NextResponse.next({
+  const res = NextResponse.next({
     request: {
       headers: req.headers,
     },

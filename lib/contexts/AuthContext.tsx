@@ -9,10 +9,10 @@ interface AuthContextType {
   user: User | null
   session: Session | null
   loading: boolean
-  signIn: (email: string, password: string) => Promise<any>
-  signUp: (email: string, password: string) => Promise<any>
+  signIn: (email: string, password: string) => Promise<unknown>
+  signUp: (email: string, password: string) => Promise<unknown>
   signOut: () => Promise<void>
-  signInWithProvider: (provider: 'google' | 'github' | 'discord') => Promise<any>
+  signInWithProvider: (provider: 'google' | 'github' | 'discord') => Promise<unknown>
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined)

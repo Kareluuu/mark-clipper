@@ -208,7 +208,7 @@ export default function Home() {
         // 删除失败，显示失败Toast
         setToast({ show: true, type: 'delete-fail' });
       }
-    } catch (error) {
+    } catch {
       // 网络错误等，显示失败Toast
       setToast({ show: true, type: 'delete-fail' });
     } finally {

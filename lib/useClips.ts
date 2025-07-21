@@ -22,7 +22,7 @@ class AuthError extends Error {
 }
 
 // 智能的 fetcher，支持认证和错误处理
-const createAuthenticatedFetcher = (signOut: () => Promise<void>, router: any) => {
+const createAuthenticatedFetcher = (signOut: () => Promise<void>, router: ReturnType<typeof useRouter>) => {
   return async (url: string): Promise<Clip[]> => {
     try {
       const response = await fetch(url, {
@@ -82,7 +82,7 @@ export function useClips() {
 
   // 创建带认证的 fetcher
   const authenticatedFetcher = useCallback(
-    createAuthenticatedFetcher(signOut, router),
+    (url: string) => createAuthenticatedFetcher(signOut, router)(url),
     [signOut, router]
   );
 

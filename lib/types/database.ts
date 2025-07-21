@@ -35,12 +35,15 @@ export interface Database {
     }
     Views: {
       // 视图类型定义
+      [_: string]: never
     }
     Functions: {
       // 函数类型定义
+      [_: string]: never
     }
     Enums: {
       // 枚举类型定义
+      [_: string]: never
     }
   }
 } 

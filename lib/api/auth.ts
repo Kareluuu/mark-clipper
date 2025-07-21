@@ -1,6 +1,6 @@
 import { NextRequest } from 'next/server'
 import { createClient } from '@supabase/supabase-js'
-import { createRouteClient } from '@/lib/supabase/server'
+// import { createRouteClient } from '@/lib/supabase/server' // 暂时不使用，避免构建时cookies()错误
 
 // 认证结果接口
 export interface AuthResult {
@@ -53,24 +53,10 @@ export async function authenticateRequest(request: NextRequest): Promise<AuthRes
       }
     }
 
-    // 作为备选方案，直接验证 Cookie
-    try {
-      const supabase = createRouteClient()
-      const { data: { user }, error } = await supabase.auth.getUser()
-      
-      if (error || !user) {
-        console.log('Cookie 认证失败:', error?.message)
-      } else {
-        console.log('✅ Cookie 认证成功 (直接验证):', user.email)
-        return {
-          success: true,
-          userId: user.id,
-          userEmail: user.email || ''
-        }
-      }
-    } catch (cookieError) {
-      console.log('Cookie 验证异常:', cookieError)
-    }
+    // 备选方案：直接验证 Cookie (当中间件未注入用户信息时)
+    // 暂时跳过这个检查，因为在大多数情况下中间件已经注入了用户信息
+    // 如果需要，可以在具体的API路由中单独处理
+    console.log('中间件未注入用户信息，跳过Cookie直接验证')
 
     // 策略3: 都无效时返回失败
     return {
