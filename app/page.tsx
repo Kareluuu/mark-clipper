@@ -4,6 +4,8 @@ import React, { useEffect, useState } from "react";
 import { useClips } from "../lib/useClips";
 import logoStyles from "./components/Logo.module.css";
 import styles from "./page.module.css";
+import UserMenu from "./components/UserMenu";
+import AuthGuard from "@/lib/components/AuthGuard";
 
 function Logo() {
   return (
@@ -227,36 +229,41 @@ export default function Home() {
   }, [clips]);
 
   return (
-    <div className={styles.container}>
-      <div className={styles.content}>
-        <div className={styles.stickyHeader}>
-          <div className={styles.logoContainer}>
-            <Logo />
+    <AuthGuard requireAuth={true}>
+      <div className={styles.container}>
+        <div className={styles.content}>
+          <div className={styles.stickyHeader}>
+            <div className={styles.logoContainer}>
+              <Logo />
+            </div>
+            <div className={styles.headerActions}>
+              <RefreshButton onRefresh={handleRefresh} />
+              <UserMenu />
+            </div>
           </div>
-          <RefreshButton onRefresh={handleRefresh} />
+          <div className={styles.clipsContainer}>
+            {isLoading ? (
+              <div className={styles.loadingText}>加载中...</div>
+            ) : error ? (
+              <div className={styles.errorText}>加载失败</div>
+            ) : !clips ? (
+              Array.from({ length: skeletonCount }).map((_, idx) => <SkeletonCard key={idx} />)
+            ) : (
+              clips.map((clip) => (
+                <Card 
+                  key={clip.id} 
+                  id={clip.id} 
+                  title={clip.title} 
+                  text_plain={clip.text_plain} 
+                  onDelete={handleDelete}
+                  isDeleting={deletingIds.has(clip.id)}
+                />
+              ))
+            )}
+          </div>
         </div>
-        <div className={styles.clipsContainer}>
-          {isLoading ? (
-            <div className={styles.loadingText}>加载中...</div>
-          ) : error ? (
-            <div className={styles.errorText}>加载失败</div>
-          ) : !clips ? (
-            Array.from({ length: skeletonCount }).map((_, idx) => <SkeletonCard key={idx} />)
-          ) : (
-            clips.map((clip) => (
-              <Card 
-                key={clip.id} 
-                id={clip.id} 
-                title={clip.title} 
-                text_plain={clip.text_plain} 
-                onDelete={handleDelete}
-                isDeleting={deletingIds.has(clip.id)}
-              />
-            ))
-          )}
-        </div>
+        <Toast type={toast.type} show={toast.show} />
       </div>
-      <Toast type={toast.type} show={toast.show} />
-    </div>
+    </AuthGuard>
   );
 }
