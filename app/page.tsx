@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
+import Image from "next/image";
 import { useClips } from "../lib/useClips";
 import logoStyles from "./components/Logo.module.css";
 import styles from "./page.module.css";
@@ -10,10 +11,13 @@ import AuthGuard from "@/lib/components/AuthGuard";
 function Logo() {
   return (
     <div className={logoStyles.logo}>
-      <img 
+      <Image 
         alt="logo" 
         className={logoStyles.logoImage} 
-        src="/markat_logo.svg" 
+        src="/markat_logo.svg"
+        width={120}
+        height={40}
+        priority
       />
     </div>
   );
@@ -25,7 +29,7 @@ function RefreshButton({ onRefresh }: { onRefresh: () => void }) {
       className={styles.refreshButton}
       onClick={onRefresh}
     >
-      <img src="/button_icon_refresh.svg" alt="refresh" className={styles.refreshButtonIcon} />
+      <Image src="/button_icon_refresh.svg" alt="refresh" className={styles.refreshButtonIcon} width={16} height={16} />
     </button>
   );
 }
@@ -33,7 +37,7 @@ function RefreshButton({ onRefresh }: { onRefresh: () => void }) {
 function CopyButton() {
   return (
     <button className={styles.copyButton}>
-      <img src="/button_icon_copy.svg" alt="copy" className={styles.copyButtonIcon} />
+      <Image src="/button_icon_copy.svg" alt="copy" className={styles.copyButtonIcon} width={16} height={16} />
       <span className={styles.copyButtonText}>Copy</span>
     </button>
   );
@@ -84,10 +88,12 @@ function Card({ id, title, text_plain, onDelete, isDeleting }: {
         {/* 主要内容区域 */}
         <div className={styles.cardMainSection}>
           {/* 引用图标 */}
-          <img 
+          <Image 
             className={styles.cardIcon}
             src="/quote.svg" 
-            alt="quote" 
+            alt="quote"
+            width={20}
+            height={20}
           />
 
           {/* 主要内容文本 */}

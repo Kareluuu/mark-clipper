@@ -1,16 +1,20 @@
 'use client'
 
 import { useRouter } from 'next/navigation'
+import Image from 'next/image'
 import logoStyles from '../../components/Logo.module.css'
 import styles from '../auth.module.css'
 
 function Logo() {
   return (
     <div className={logoStyles.logo}>
-      <img 
+      <Image 
         alt="logo" 
         className={logoStyles.logoImage} 
-        src="/markat_logo.svg" 
+        src="/markat_logo.svg"
+        width={120}
+        height={40}
+        priority
       />
     </div>
   )
