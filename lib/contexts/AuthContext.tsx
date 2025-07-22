@@ -12,7 +12,7 @@ interface AuthContextType {
   signIn: (email: string, password: string) => Promise<unknown>
   signUp: (email: string, password: string) => Promise<unknown>
   signOut: () => Promise<void>
-  signInWithProvider: (provider: 'google' | 'github' | 'discord') => Promise<unknown>
+  signInWithGoogle: () => Promise<unknown>
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined)
@@ -108,12 +108,12 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     }
   }
 
-  // OAuth 登录
-  const signInWithProvider = async (provider: 'google' | 'github' | 'discord') => {
+  // Google OAuth 登录
+  const signInWithGoogle = async () => {
     setLoading(true)
     try {
       const result = await supabase.auth.signInWithOAuth({
-        provider,
+        provider: 'google',
         options: {
           redirectTo: `${location.origin}/auth/callback`
         }
@@ -131,7 +131,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     signIn,
     signUp,
     signOut,
-    signInWithProvider,
+    signInWithGoogle,
   }
 
   return (

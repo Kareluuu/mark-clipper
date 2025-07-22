@@ -36,11 +36,11 @@ export const auth = {
     return await supabase.auth.signOut()
   },
 
-  // OAuth 登录
-  signInWithProvider: async (provider: 'google' | 'github' | 'discord') => {
+  // Google OAuth 登录
+  signInWithGoogle: async () => {
     const supabase = createClient()
     return await supabase.auth.signInWithOAuth({
-      provider,
+      provider: 'google',
       options: {
         redirectTo: `${location.origin}/auth/callback`
       }

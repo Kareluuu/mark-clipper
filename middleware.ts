@@ -82,7 +82,7 @@ export const config = {
     /*
      * 匹配所有请求路径，除了：
      * - _next/static (静态文件)
-     * - _next/image (图片优化文件)  
+     * - _next/image (图片优化文件)
      * - favicon.ico (favicon 文件)
      * - 静态资源文件 (.svg, .png, .jpg, 等)
      * - public 目录下的文件

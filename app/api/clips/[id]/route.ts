@@ -23,9 +23,9 @@ export async function PUT(request: NextRequest, { params }: { params: Promise<{ 
   }
 
   try {
-    const { id } = await params;
-    const body = await request.json();
-    const { url, title, text_plain, html_raw, meta } = body;
+  const { id } = await params;
+  const body = await request.json();
+  const { url, title, text_plain, html_raw, meta } = body;
 
     // 使用 service role 客户端
     const supabase = createClient(
@@ -44,17 +44,17 @@ export async function PUT(request: NextRequest, { params }: { params: Promise<{ 
         meta, 
         updated_at: new Date().toISOString() 
       })
-      .eq('id', id)
+    .eq('id', id)
       .eq('user_id', authResult.userId!) // 用户数据隔离
-      .select();
+    .select();
 
-    if (error) {
+  if (error) {
       console.error('更新 clip 错误:', error);
       return NextResponse.json(
         { error: 'Failed to update clip', details: error.message }, 
         { status: 500, headers: corsHeaders }
       );
-    }
+  }
 
     if (!data || data.length === 0) {
       return NextResponse.json(
@@ -85,7 +85,7 @@ export async function DELETE(request: NextRequest, { params }: { params: Promise
   }
 
   try {
-    const { id } = await params;
+  const { id } = await params;
 
     // 使用 service role 客户端
     const supabase = createClient(
@@ -100,13 +100,13 @@ export async function DELETE(request: NextRequest, { params }: { params: Promise
       .eq('id', id)
       .eq('user_id', authResult.userId!); // 用户数据隔离
 
-    if (error) {
+  if (error) {
       console.error('删除 clip 错误:', error);
       return NextResponse.json(
         { error: 'Failed to delete clip', details: error.message }, 
         { status: 500, headers: corsHeaders }
       );
-    }
+  }
 
     if (count === 0) {
       return NextResponse.json(
@@ -137,8 +137,8 @@ export async function POST(request: NextRequest) {
   }
 
   try {
-    const body = await request.json();
-    const { title, text_plain } = body;
+  const body = await request.json();
+  const { title, text_plain } = body;
 
     // 使用 service role 客户端
     const supabase = createClient(
@@ -157,16 +157,16 @@ export async function POST(request: NextRequest) {
       }])
       .select();
 
-    if (error) {
+  if (error) {
       console.error('创建 clip 错误:', error);
       return NextResponse.json(
         { error: 'Failed to create clip', details: error.message }, 
         { status: 500, headers: corsHeaders }
       );
-    }
+  }
 
     console.log(`✅ 用户 ${authResult.userEmail} 在 [id] 路由创建了新 clip`);
-    return NextResponse.json({ data: data[0] }, { status: 201, headers: corsHeaders });
+  return NextResponse.json({ data: data[0] }, { status: 201, headers: corsHeaders });
 
   } catch (error) {
     console.error('POST /api/clips/[id] 异常:', error);
