@@ -230,9 +230,11 @@ export default function Home() {
   const [skeletonCount, setSkeletonCount] = useState(4);
   const [toast, setToast] = useState<{ show: boolean; type: 'success' | 'fail' | 'deleted' | 'delete-fail' }>({ show: false, type: 'success' });
   const [deletingIds, setDeletingIds] = useState<Set<number>>(new Set());
+  const [refreshing, setRefreshing] = useState(false);
 
   // 刷新按钮逻辑，调用 mutate 重新请求
   const handleRefresh = async () => {
+    setRefreshing(true);
     setSkeletonCount(clips?.length || 4);
     setToast({ show: false, type: 'success' });
     try {
@@ -242,6 +244,7 @@ export default function Home() {
       setToast({ show: true, type: 'fail' });
     }
     setTimeout(() => setToast((t) => ({ ...t, show: false })), 2000);
+    setRefreshing(false);
   };
 
   // 删除卡片逻辑
@@ -297,7 +300,7 @@ export default function Home() {
             </div>
           </div>
           <div className={styles.clipsContainer}>
-            {isLoading ? (
+            {(isLoading || refreshing) ? (
               Array.from({ length: skeletonCount }).map((_, idx) => <SkeletonCard key={idx} />)
             ) : error ? (
               <div className={styles.errorText}>加载失败</div>
