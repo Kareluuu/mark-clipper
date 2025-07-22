@@ -146,6 +146,55 @@ function SkeletonCard() {
   );
 }
 
+function EmptyState() {
+  return (
+    <div className={styles.emptyState}>
+      {/* 手势图标 */}
+      <div className={styles.emptyStateIcon}>👋</div>
+      
+      {/* 主要内容 */}
+      <div className={styles.emptyStateContent}>
+        {/* 标题 */}
+        <h1 className={styles.emptyStateTitle}>Welcome to MarkAT!</h1>
+        
+        {/* 描述 */}
+        <div className={styles.emptyStateDescription}>
+          I am a SaaS application that allows you to{' '}
+          <span style={{ fontWeight: 'bold', color: '#18181b' }}>mark any useful information on the web</span>.{' '}
+          Please follow the steps below to complete your first task!
+        </div>
+        
+        {/* 步骤 */}
+        <div className={styles.emptyStateSteps}>
+          {/* Step 1 */}
+          <div className={styles.emptyStateStep}>
+            <div className={styles.emptyStateStepBadge}>
+              <p className={styles.emptyStateStepBadgeText}>Step 1</p>
+            </div>
+            <p className={styles.emptyStateStepDescription}>
+              Download and install the MarkAT Chrome extension.
+            </p>
+          </div>
+          
+          {/* Step 2 */}
+          <div className={styles.emptyStateStep}>
+            <div className={styles.emptyStateStepBadge}>
+              <p className={styles.emptyStateStepBadgeText}>Step 2</p>
+            </div>
+            <p className={styles.emptyStateStepDescription}>
+              Once the extension is installed, simply use your cursor to copy any piece of content, 
+              and it will be marked and saved here!
+            </p>
+          </div>
+        </div>
+        
+        {/* Call to action */}
+        <p className={styles.emptyStateCallToAction}>Well, let us do it!</p>
+      </div>
+    </div>
+  );
+}
+
 function Toast({ type, show }: { type: 'success' | 'fail' | 'deleted' | 'delete-fail'; show: boolean }) {
   const getToastConfig = () => {
     switch (type) {
@@ -254,6 +303,8 @@ export default function Home() {
               <div className={styles.errorText}>加载失败</div>
             ) : !clips ? (
               Array.from({ length: skeletonCount }).map((_, idx) => <SkeletonCard key={idx} />)
+            ) : clips.length === 0 ? (
+              <EmptyState />
             ) : (
               clips.map((clip) => (
                 <Card 

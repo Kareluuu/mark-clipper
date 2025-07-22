@@ -511,4 +511,115 @@
   font-weight: 600;
   line-height: 1.25rem;
   user-select: none;
-} 
+}
+
+/* 空状态样式 */
+.emptyState {
+  background-color: #F4F4F5;
+  width: 100%;
+  padding: 24px;
+  border-radius: 0.375rem;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  align-items: flex-start;
+  justify-content: flex-start;
+}
+
+.emptyStateIcon {
+  width: 24px;
+  height: 24px;
+  flex-shrink: 0;
+  font-size: 24px;
+  line-height: 1;
+}
+
+.emptyStateContent {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  align-items: flex-start;
+  justify-content: flex-start;
+  width: 100%;
+}
+
+.emptyStateTitle {
+  font-family: 'Helvetica', sans-serif;
+  font-style: normal;
+  font-weight: bold;
+  font-size: 24px;
+  line-height: normal;
+  color: #000000;
+  margin: 0;
+}
+
+.emptyStateDescription {
+  font-family: 'Helvetica', sans-serif;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: normal;
+  color: #52525B;
+  margin: 0;
+}
+
+.emptyStateDescription .highlight {
+  font-weight: bold;
+  color: #18181b;
+}
+
+.emptyStateSteps {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  width: 100%;
+}
+
+.emptyStateStep {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 100%;
+}
+
+.emptyStateStepBadge {
+  background-color: #fafafa;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2px 10px;
+  border-radius: 6px;
+  height: 22px;
+  width: fit-content;
+}
+
+.emptyStateStepBadgeText {
+  font-family: 'Geist', sans-serif;
+  font-style: normal;
+  font-weight: 600;
+  font-size: 12px;
+  line-height: 16px;
+  color: #18181b;
+  white-space: nowrap;
+  margin: 0;
+}
+
+.emptyStateStepDescription {
+  font-family: 'Helvetica', sans-serif;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: normal;
+  color: #52525B;
+  margin: 0;
+}
+
+.emptyStateCallToAction {
+  font-family: 'Helvetica', sans-serif;
+  font-style: normal;
+  font-weight: bold;
+  font-size: 16px;
+  line-height: normal;
+  color: #000000;
+  margin: 0;
+}
