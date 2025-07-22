@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState, Suspense } from 'react'
+import { useEffect, useState, Suspense, useCallback } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { Auth } from '@supabase/auth-ui-react'
 import { createClient } from '@/lib/supabase/client'
@@ -23,6 +23,55 @@ function ExtensionAuthContent() {
   const redirectTo = searchParams.get('redirect_to')
   const source = searchParams.get('source')
 
+  // 处理认证成功的逻辑
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const handleAuthSuccess = useCallback(async (session: any) => {
+    setIsAuthenticating(true)
+    
+    try {
+      if (redirectTo) {
+        // OAuth重定向方式 - 将认证信息附加到重定向URL
+        const authData = {
+          access_token: session.access_token,
+          refresh_token: session.refresh_token,
+          expires_at: session.expires_at?.toString() || '',
+          user: JSON.stringify({
+            id: session.user.id,
+            email: session.user.email,
+            name: session.user.user_metadata?.name || session.user.email
+          })
+        }
+        
+        const redirectUrl = new URL(redirectTo)
+        redirectUrl.hash = new URLSearchParams(authData).toString()
+        
+        console.log('Redirecting to extension:', redirectUrl.href)
+        window.location.href = redirectUrl.href
+      } else {
+        // PostMessage方式（备选方案）
+        if (window.opener) {
+          window.opener.postMessage({
+            type: 'AUTH_SUCCESS',
+            session: {
+              access_token: session.access_token,
+              refresh_token: session.refresh_token,
+              expires_at: session.expires_at,
+              user: {
+                id: session.user.id,
+                email: session.user.email,
+                name: session.user.user_metadata?.name || session.user.email
+              }
+            }
+          }, '*')
+          window.close()
+        }
+      }
+    } catch (error) {
+      console.error('Extension auth redirect failed:', error)
+      setIsAuthenticating(false)
+    }
+  }, [redirectTo])
+
   useEffect(() => {
     // 检查是否来自扩展
     if (source !== 'extension') {
@@ -30,54 +79,28 @@ function ExtensionAuthContent() {
       return
     }
 
+    // 检查当前是否已有活跃会话
+    const checkCurrentSession = async () => {
+      try {
+        const { data: { session }, error } = await supabase.auth.getSession()
+        console.log('Current session check:', session?.user?.email, error)
+        
+        if (session && !error) {
+          // 用户已登录，直接处理认证信息返回
+          await handleAuthSuccess(session)
+        }
+      } catch (error) {
+        console.error('检查当前会话失败:', error)
+      }
+    }
+
+    checkCurrentSession()
+
     const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, session) => {
       console.log('Extension auth event:', event, session?.user?.email)
       
       if (event === 'SIGNED_IN' && session) {
-        setIsAuthenticating(true)
-        
-        try {
-          if (redirectTo) {
-            // OAuth重定向方式 - 将认证信息附加到重定向URL
-            const authData = {
-              access_token: session.access_token,
-              refresh_token: session.refresh_token,
-              expires_at: session.expires_at?.toString() || '',
-              user: JSON.stringify({
-                id: session.user.id,
-                email: session.user.email,
-                name: session.user.user_metadata?.name || session.user.email
-              })
-            }
-            
-            const redirectUrl = new URL(redirectTo)
-            redirectUrl.hash = new URLSearchParams(authData).toString()
-            
-            console.log('Redirecting to extension:', redirectUrl.href)
-            window.location.href = redirectUrl.href
-          } else {
-            // PostMessage方式（备选方案）
-            if (window.opener) {
-              window.opener.postMessage({
-                type: 'AUTH_SUCCESS',
-                session: {
-                  access_token: session.access_token,
-                  refresh_token: session.refresh_token,
-                  expires_at: session.expires_at,
-                  user: {
-                    id: session.user.id,
-                    email: session.user.email,
-                    name: session.user.user_metadata?.name || session.user.email
-                  }
-                }
-              }, '*')
-              window.close()
-            }
-          }
-        } catch (error) {
-          console.error('Extension auth redirect failed:', error)
-          setIsAuthenticating(false)
-        }
+        await handleAuthSuccess(session)
       }
       
       if (event === 'SIGNED_OUT') {
@@ -86,7 +109,7 @@ function ExtensionAuthContent() {
     })
 
     return () => subscription.unsubscribe()
-  }, [supabase, router, redirectTo, source])
+  }, [supabase, router, redirectTo, source, handleAuthSuccess])
 
   // 如果不是来自扩展，不渲染内容（会被重定向）
   if (source !== 'extension') {

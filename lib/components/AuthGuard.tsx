@@ -29,7 +29,8 @@ export default function AuthGuard({ children, requireAuth = true }: AuthGuardPro
     }
 
     // 如果用户已登录但在认证页面，重定向到首页
-    if (user && pathname.startsWith('/auth')) {
+    // 但允许扩展专用页面正常工作
+    if (user && pathname.startsWith('/auth') && pathname !== '/auth/extension') {
       router.push('/')
       return
     }
@@ -82,7 +83,8 @@ export default function AuthGuard({ children, requireAuth = true }: AuthGuardPro
   }
 
   // 如果用户已登录但在认证页面，不渲染内容（等待重定向）
-  if (user && pathname.startsWith('/auth')) {
+  // 但允许扩展专用页面正常工作
+  if (user && pathname.startsWith('/auth') && pathname !== '/auth/extension') {
     return null
   }
 
