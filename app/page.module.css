@@ -204,17 +204,17 @@
 }
 
 .xlviBox:nth-child(1) {
-  background-color: #EF4444;
+  background-color: #000000;
   animation-delay: 0s;
 }
 
 .xlviBox:nth-child(2) {
-  background-color: #F59E0B;
+  background-color: #000000;
   animation-delay: -0.4s;
 }
 
 .xlviBox:nth-child(3) {
-  background-color: #6366F1;
+  background-color: #000000;
   animation-delay: -0.8s;
 }
 
@@ -458,6 +458,39 @@
   width: 5rem;
   background-color: #71717a;
   border-radius: 0.25rem;
+}
+
+.skeletonShimmer {
+  position: relative;
+  overflow: hidden;
+  background: #f4f4f5; /* 骨架底色，可根据设计稿调整 */
+}
+
+.skeletonShimmer::after {
+  content: "";
+  position: absolute;
+  top: 0; left: 0; bottom: 0; right: 0;
+  background: linear-gradient(
+    120deg,
+    rgba(255,255,255,0) 0%,
+    rgba(255,255,255,0.6) 50%,
+    rgba(255,255,255,0) 100%
+  );
+  transform: translateX(-100%);
+  animation: shimmer 1.5s infinite;
+}
+
+@keyframes shimmer {
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+/* 可选：让骨架条本身也有圆角和高度 */
+.skeletonTitle, .skeletonText, .skeletonButton {
+  border-radius: 6px;
+  min-height: 16px;
+  background: #e4e4e7;
 }
 
 /* Toast样式 */

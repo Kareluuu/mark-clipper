@@ -130,16 +130,16 @@ function Card({ id, title, text_plain, onDelete, isDeleting }: {
 
 function SkeletonCard() {
   return (
-    <div className={styles.skeletonCard}>
+    <div className={`${styles.skeletonCard} ${styles.skeletonShimmer}`}>
       <div className={styles.skeletonContent}>
         <div className={styles.skeletonTitleRow}>
-          <div className={styles.skeletonTitle}></div>
+          <div className={`${styles.skeletonTitle} ${styles.skeletonShimmer}`}></div>
         </div>
         <div className={styles.skeletonTextRow}>
-          <div className={styles.skeletonText}></div>
+          <div className={`${styles.skeletonText} ${styles.skeletonShimmer}`}></div>
         </div>
         <div className={styles.skeletonActionsRow}>
-          <div className={styles.skeletonButton}></div>
+          <div className={`${styles.skeletonButton} ${styles.skeletonShimmer}`}></div>
         </div>
       </div>
     </div>
