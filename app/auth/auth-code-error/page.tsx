@@ -1,10 +1,11 @@
 'use client'
 
+import { Suspense } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { Logo } from '../config'
 import styles from '../auth.module.css'
 
-export default function AuthCodeErrorPage() {
+function AuthCodeErrorContent() {
   const router = useRouter()
   const searchParams = useSearchParams()
   const error = searchParams.get('error')
@@ -105,5 +106,34 @@ export default function AuthCodeErrorPage() {
         </div>
       </div>
     </div>
+  )
+}
+
+function LoadingFallback() {
+  return (
+    <div className={styles.container}>
+      <div className={styles.content}>
+        <div className={styles.logoContainer}>
+          <Logo />
+        </div>
+        
+        <div className={styles.authWrapper}>
+          <div className={styles.authCard}>
+            <h1 className={styles.authTitle}>加载中...</h1>
+            <p className={styles.authSubtitle}>
+              正在处理您的请求，请稍候...
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  )
+}
+
+export default function AuthCodeErrorPage() {
+  return (
+    <Suspense fallback={<LoadingFallback />}>
+      <AuthCodeErrorContent />
+    </Suspense>
   )
 } 
