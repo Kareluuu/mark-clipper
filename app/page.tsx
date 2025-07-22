@@ -298,7 +298,7 @@ export default function Home() {
           </div>
           <div className={styles.clipsContainer}>
             {isLoading ? (
-              <div className={styles.loadingText}>加载中...</div>
+              Array.from({ length: skeletonCount }).map((_, idx) => <SkeletonCard key={idx} />)
             ) : error ? (
               <div className={styles.errorText}>加载失败</div>
             ) : !clips ? (
