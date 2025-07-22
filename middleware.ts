@@ -64,7 +64,8 @@ export async function middleware(request: NextRequest) {
   }
 
   // 3. 已登录用户访问认证页面 → 重定向到主页
-  if (session && pathname.startsWith('/auth') && pathname !== '/auth/callback') {
+  // 但允许扩展专用页面正常工作
+  if (session && pathname.startsWith('/auth') && pathname !== '/auth/callback' && pathname !== '/auth/extension') {
     const redirectUrl = request.nextUrl.clone()
     redirectUrl.pathname = '/'
     redirectUrl.searchParams.delete('redirectedFrom')
