@@ -45,8 +45,16 @@ function ExtensionAuthContent() {
         const redirectUrl = new URL(redirectTo)
         redirectUrl.hash = new URLSearchParams(authData).toString()
         
-        console.log('Redirecting to extension:', redirectUrl.href)
-        window.location.href = redirectUrl.href
+        console.log('重定向详细信息:')
+        console.log('- 原始redirectTo:', redirectTo)
+        console.log('- 认证数据:', authData)
+        console.log('- 最终重定向URL:', redirectUrl.href)
+        console.log('- Hash部分:', redirectUrl.hash)
+        
+        // 添加短暂延迟确保日志输出
+        setTimeout(() => {
+          window.location.href = redirectUrl.href
+        }, 1000)
       } else {
         // PostMessage方式（备选方案）
         if (window.opener) {
@@ -126,6 +134,14 @@ function ExtensionAuthContent() {
                 <div className="loading-spinner mx-auto mb-4"></div>
                 <h2 className={styles.authTitle}>登录成功</h2>
                 <p className={styles.authSubtitle}>正在返回扩展...</p>
+                <div className="mt-4 p-3 bg-green-50 rounded-lg">
+                  <p className="text-sm text-green-700">
+                    ⏳ 正在重定向到扩展，请稍候...
+                  </p>
+                  <p className="text-xs text-green-600 mt-1">
+                    如果页面没有自动关闭，请手动关闭此标签页
+                  </p>
+                </div>
               </div>
             </div>
           </div>
