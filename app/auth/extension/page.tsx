@@ -181,7 +181,7 @@ function ExtensionAuthContent() {
               }}
               showLinks={AUTH_OPTIONS.showLinks}
               localization={authLocalization}
-              redirectTo={redirectTo || window.location.origin}
+              redirectTo={`${typeof window !== 'undefined' ? window.location.origin : ''}/auth/callback`}
             />
             
             <div className="mt-4 p-3 bg-blue-50 rounded-lg">

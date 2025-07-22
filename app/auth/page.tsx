@@ -45,6 +45,7 @@ export default function AuthPage() {
                 }}
                 showLinks={AUTH_OPTIONS.showLinks}
                 localization={authLocalization}
+                redirectTo={`${typeof window !== 'undefined' ? window.location.origin : ''}/auth/callback`}
               />
             </div>
           </div>

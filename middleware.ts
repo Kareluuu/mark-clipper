@@ -6,6 +6,9 @@ const publicRoutes = [
   '/auth',
   '/auth/callback',
   '/auth/auth-code-error',
+  '/auth/extension',
+  '/auth/verify',
+  '/auth/confirm',
 ]
 
 // API 路由前缀
