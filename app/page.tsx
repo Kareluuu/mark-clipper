@@ -2,7 +2,8 @@
 
 import React, { useEffect, useState } from "react";
 import Image from "next/image";
-import { useClips } from "../lib/useClips";
+import { useClips, Clip } from "../lib/useClips";
+import { getThemeConfig } from '@/lib/themes/themeConfig';
 import logoStyles from "./components/Logo.module.css";
 import styles from "./page.module.css";
 import UserMenu from "./components/UserMenu";
@@ -75,15 +76,16 @@ function DeleteButton({ onDelete, isLoading }: { onDelete: () => void; isLoading
   );
 }
 
-function Card({ id, title, text_plain, onDelete, isDeleting }: { 
-  id: number; 
-  title: string; 
-  text_plain: string; 
+function Card({ clip, onDelete, isDeleting }: { 
+  clip: Clip; 
   onDelete: (id: number) => void;
   isDeleting: boolean;
 }) {
+  const theme = getThemeConfig(clip.theme_name);
+  const style = theme.cssVariables as React.CSSProperties;
+
   return (
-    <div className={styles.card}>
+    <div style={style} className={`${styles.card} ${styles[theme.key]}`}>
       <div className={styles.cardContent}>
         {/* 主要内容区域 */}
         <div className={styles.cardMainSection}>
@@ -98,7 +100,7 @@ function Card({ id, title, text_plain, onDelete, isDeleting }: {
 
           {/* 主要内容文本 */}
           <div className={styles.cardTextRow}>
-            <p className={styles.cardText}>{text_plain}</p>
+            <p className={styles.cardText}>{clip.text_plain}</p>
           </div>
 
           {/* 分割线 */}
@@ -113,14 +115,14 @@ function Card({ id, title, text_plain, onDelete, isDeleting }: {
             
             {/* 标题 */}
             <div className={styles.cardTitleRow}>
-              <div className={styles.cardTitle}>{title}</div>
+              <div className={styles.cardTitle}>{clip.title}</div>
             </div>
           </div>
         </div>
 
         {/* 操作按钮区域 */}
         <div className={styles.cardActionsRow}>
-          <DeleteButton onDelete={() => onDelete(id)} isLoading={isDeleting} />
+          <DeleteButton onDelete={() => onDelete(clip.id)} isLoading={isDeleting} />
           <CopyButton />
         </div>
       </div>
@@ -312,9 +314,7 @@ export default function Home() {
               clips.map((clip) => (
                 <Card 
                   key={clip.id} 
-                  id={clip.id} 
-                  title={clip.title} 
-                  text_plain={clip.text_plain} 
+                  clip={clip} 
                   onDelete={handleDelete}
                   isDeleting={deletingIds.has(clip.id)}
                 />

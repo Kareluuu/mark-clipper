@@ -1,0 +1,38 @@
+/* Olivine Theme - Default theme with green tones */
+:root {
+  --theme-primary: #b1cd93;
+  --theme-primary-hover: #a1bd83;
+  --theme-primary-active: #91ad73;
+  --theme-secondary: #e8f5e8;
+  --theme-text: #2d3748;
+  --theme-text-light: #718096;
+  --theme-background: #ffffff;
+  --theme-border: #e2e8f0;
+}
+
+.theme {
+  color: var(--theme-text);
+  background-color: var(--theme-background);
+}
+
+.primary {
+  background-color: var(--theme-primary);
+  color: white;
+}
+
+.primary:hover {
+  background-color: var(--theme-primary-hover);
+}
+
+.primary:active {
+  background-color: var(--theme-primary-active);
+}
+
+.secondary {
+  background-color: var(--theme-secondary);
+  color: var(--theme-text);
+}
+
+.border {
+  border-color: var(--theme-border);
+} 

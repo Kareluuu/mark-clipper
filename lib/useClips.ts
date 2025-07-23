@@ -2,6 +2,7 @@ import useSWR from 'swr';
 import { useAuth } from '@/lib/contexts/AuthContext';
 import { useRouter } from 'next/navigation';
 import { useCallback } from 'react';
+import { ThemeKey } from '@/lib/themes/themeConfig';
 
 // 更新的 Clip 接口，匹配 API 返回格式
 export interface Clip {
@@ -10,6 +11,7 @@ export interface Clip {
   text_plain: string;
   created_at: string; // API 现在总是返回这个字段
   url?: string; // 可选字段
+  theme_name: ThemeKey; // 新增
   // 不包含 user_id，因为 API 已经过滤了
 }
 

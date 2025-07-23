@@ -259,11 +259,28 @@
 
 /* 卡片样式 */
 .card {
-  background-color: #b1cd93;
+  background-color: var(--theme-primary, #b1cd93); /* 使用主题变量，Olivine作为fallback */
   width: 100%;
   padding: 24px;
   margin-bottom: 1rem;
   position: relative;
+}
+
+/* 主题特定样式 - 用于特定布局差异 */
+.Olivine {
+  /* Olivine 主题特定样式 */
+}
+
+.Jasmine {
+  /* Jasmine 主题特定样式 */
+}
+
+.Maya_blue {
+  /* Maya_blue 主题特定样式 */
+}
+
+.Eggshell {
+  /* Eggshell 主题特定样式 */
 }
 
 .cardContent {
@@ -407,7 +424,7 @@
   width: 100%;
   padding: 1.5rem;
   margin-bottom: 1rem;
-  border-radius: 0.375rem;
+  border-radius: 0px;
   animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
 }
 
@@ -429,7 +446,7 @@
   height: 1.75rem;
   width: 66.666667%;
   background-color: #d4d4d8;
-  border-radius: 0.25rem;
+  border-radius: 0px;
 }
 
 .skeletonTextRow {
@@ -443,7 +460,7 @@
   height: 1.25rem;
   width: 100%;
   background-color: #d4d4d8;
-  border-radius: 0.25rem;
+  border-radius: 0px;
 }
 
 .skeletonActionsRow {
@@ -457,7 +474,7 @@
   height: 2.25rem;
   width: 5rem;
   background-color: #71717a;
-  border-radius: 0.25rem;
+  border-radius: 0px;
 }
 
 .skeletonShimmer {

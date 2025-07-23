@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
 import { authenticateRequest, createAuthErrorResponse } from '@/lib/api/auth';
+import { DEFAULT_THEME, ThemeKey } from '@/lib/themes/themeConfig';
 
 // CORS 头部配置
 const corsHeaders = {
@@ -28,23 +29,23 @@ export async function GET(request: NextRequest) {
       process.env.SUPABASE_SERVICE_ROLE_KEY!
     );
 
-    // 只获取当前用户的 clips，实现数据隔离
-  const { data, error } = await supabase
-    .from('clips')
-      .select('id, title, text_plain, created_at, url')
+    // 获取当前用户的 clips，包含 theme_name 字段
+    const { data, error } = await supabase
+      .from('clips')
+      .select('id, title, text_plain, created_at, url, theme_name')
       .eq('user_id', authResult.userId!)
       .order('created_at', { ascending: false });
 
-  if (error) {
+    if (error) {
       console.error('数据库查询错误:', error);
       return NextResponse.json(
         { error: 'Failed to fetch clips', details: error.message }, 
         { status: 500, headers: corsHeaders }
       );
-  }
+    }
 
     console.log(`✅ 用户 ${authResult.userEmail} 获取了 ${data?.length || 0} 条 clips`);
-  return NextResponse.json(data, { headers: corsHeaders });
+    return NextResponse.json(data, { headers: corsHeaders });
 
   } catch (error) {
     console.error('GET /api/clips 异常:', error);
@@ -64,7 +65,7 @@ export async function POST(request: NextRequest) {
   }
 
   try {
-  const body = await request.json();
+    const body = await request.json();
     
     // 使用 service role 客户端进行数据插入
     const supabase = createClient(
@@ -72,29 +73,30 @@ export async function POST(request: NextRequest) {
       process.env.SUPABASE_SERVICE_ROLE_KEY!
     );
 
-    // 支持单条或多条插入，自动注入 user_id
-  const records = Array.isArray(body) ? body : [body];
+    // 支持单条或多条插入，自动注入 user_id 和处理 theme_name
+    const records = Array.isArray(body) ? body : [body];
     const recordsWithUserId = records.map(record => ({
       ...record,
       user_id: authResult.userId!, // 自动注入当前用户ID
+      theme_name: record.theme_name || DEFAULT_THEME, // 若缺少 theme_name，回退到默认主题
       created_at: new Date().toISOString()
     }));
 
-  const { data, error } = await supabase
-    .from('clips')
+    const { data, error } = await supabase
+      .from('clips')
       .insert(recordsWithUserId)
-      .select('id, title, text_plain, created_at, url');
+      .select('id, title, text_plain, created_at, url, theme_name');
 
-  if (error) {
+    if (error) {
       console.error('数据库插入错误:', error);
       return NextResponse.json(
         { error: 'Failed to create clips', details: error.message }, 
         { status: 500, headers: corsHeaders }
       );
-  }
+    }
 
     console.log(`✅ 用户 ${authResult.userEmail} 创建了 ${data?.length || 0} 条 clips`);
-  return NextResponse.json(data, { status: 201, headers: corsHeaders });
+    return NextResponse.json(data, { status: 201, headers: corsHeaders });
 
   } catch (error) {
     console.error('POST /api/clips 异常:', error);

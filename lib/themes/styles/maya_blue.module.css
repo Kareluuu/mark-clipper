@@ -1,0 +1,38 @@
+/* Maya Blue Theme - Cool blue tones */
+:root {
+  --theme-primary: #7fbce5;
+  --theme-primary-hover: #6fb1e0;
+  --theme-primary-active: #5fa6db;
+  --theme-secondary: #e6f4fd;
+  --theme-text: #2d3748;
+  --theme-text-light: #718096;
+  --theme-background: #ffffff;
+  --theme-border: #e2e8f0;
+}
+
+.theme {
+  color: var(--theme-text);
+  background-color: var(--theme-background);
+}
+
+.primary {
+  background-color: var(--theme-primary);
+  color: white;
+}
+
+.primary:hover {
+  background-color: var(--theme-primary-hover);
+}
+
+.primary:active {
+  background-color: var(--theme-primary-active);
+}
+
+.secondary {
+  background-color: var(--theme-secondary);
+  color: var(--theme-text);
+}
+
+.border {
+  border-color: var(--theme-border);
+} 

@@ -2,33 +2,38 @@
 // 您可以使用 Supabase CLI 生成这些类型：
 // npx supabase gen types typescript --project-id YOUR_PROJECT_ID --schema public
 
+import { ThemeKey } from '@/lib/themes/themeConfig';
+
 export interface Database {
   public: {
     Tables: {
       clips: {
         Row: {
-          id: string
+          id: number
           created_at: string
           title: string | null
-          content: string | null
+          text_plain: string | null
           url: string | null
-          user_id: string | null
+          user_id: string
+          theme_name: ThemeKey
         }
         Insert: {
-          id?: string
+          id?: number
           created_at?: string
           title?: string | null
-          content?: string | null
+          text_plain?: string | null
           url?: string | null
-          user_id?: string | null
+          user_id: string
+          theme_name?: ThemeKey
         }
         Update: {
-          id?: string
+          id?: number
           created_at?: string
           title?: string | null
-          content?: string | null
+          text_plain?: string | null
           url?: string | null
-          user_id?: string | null
+          user_id?: string
+          theme_name?: ThemeKey
         }
       }
       // 添加其他表的类型定义...

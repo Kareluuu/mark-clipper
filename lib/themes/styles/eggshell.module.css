@@ -1,0 +1,38 @@
+/* Eggshell Theme - Warm neutral tones */
+:root {
+  --theme-primary: #f0e8d4;
+  --theme-primary-hover: #ede3ca;
+  --theme-primary-active: #eadec0;
+  --theme-secondary: #faf8f3;
+  --theme-text: #2d3748;
+  --theme-text-light: #718096;
+  --theme-background: #ffffff;
+  --theme-border: #e2e8f0;
+}
+
+.theme {
+  color: var(--theme-text);
+  background-color: var(--theme-background);
+}
+
+.primary {
+  background-color: var(--theme-primary);
+  color: var(--theme-text);
+}
+
+.primary:hover {
+  background-color: var(--theme-primary-hover);
+}
+
+.primary:active {
+  background-color: var(--theme-primary-active);
+}
+
+.secondary {
+  background-color: var(--theme-secondary);
+  color: var(--theme-text);
+}
+
+.border {
+  border-color: var(--theme-border);
+} 
