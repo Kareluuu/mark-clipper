@@ -35,11 +35,77 @@ function RefreshButton({ onRefresh }: { onRefresh: () => void }) {
   );
 }
 
-function CopyButton() {
+function ShareButton({ textToShare, title }: { textToShare: string; title?: string }) {
+  const [isSharing, setIsSharing] = useState(false);
+
+  const handleShare = async () => {
+    if (isSharing) return;
+    
+    setIsSharing(true);
+    
+    try {
+      // 检查是否支持Web Share API
+      if (navigator.share && navigator.canShare) {
+        const shareData = {
+          title: title || 'MarkAT分享',
+          text: textToShare,
+          url: window.location.origin
+        };
+
+        // 检查数据是否可以分享
+        if (navigator.canShare(shareData)) {
+          await navigator.share(shareData);
+          return;
+        }
+      }
+      
+      // Fallback: 复制到剪贴板
+      await navigator.clipboard.writeText(textToShare);
+      
+      // 显示提示（可以考虑添加一个简单的toast提示）
+      console.log('内容已复制到剪贴板');
+      
+    } catch (error) {
+      console.error('分享失败:', error);
+      
+      // 如果Web Share API失败，尝试复制到剪贴板
+      try {
+        await navigator.clipboard.writeText(textToShare);
+        console.log('内容已复制到剪贴板');
+      } catch (clipboardError) {
+        console.error('复制到剪贴板也失败了:', clipboardError);
+        
+        // 最后的fallback：使用旧的复制方法
+        const textArea = document.createElement('textarea');
+        textArea.value = textToShare;
+        textArea.style.position = 'fixed';
+        textArea.style.opacity = '0';
+        document.body.appendChild(textArea);
+        textArea.select();
+        document.execCommand('copy');
+        document.body.removeChild(textArea);
+      }
+    } finally {
+      setIsSharing(false);
+    }
+  };
+
   return (
-    <button className={styles.copyButton}>
-      <Image src="/button_icon_copy.svg" alt="copy" className={styles.copyButtonIcon} width={16} height={16} />
-      <span className={styles.copyButtonText}>Copy</span>
+    <button 
+      className={styles.copyButton}
+      onClick={handleShare}
+      disabled={isSharing}
+    >
+      <Image 
+        src="/button_icon_copy.svg" 
+        alt="share" 
+        className={styles.copyButtonIcon} 
+        width={16} 
+        height={16} 
+      />
+      <span className={styles.copyButtonText}>
+        {isSharing ? '分享中...' : 'Share'}
+      </span>
     </button>
   );
 }
@@ -123,7 +189,7 @@ function Card({ clip, onDelete, isDeleting }: {
         {/* 操作按钮区域 */}
         <div className={styles.cardActionsRow}>
           <DeleteButton onDelete={() => onDelete(clip.id)} isLoading={isDeleting} />
-          <CopyButton />
+          <ShareButton textToShare={clip.text_plain} title={clip.title} />
         </div>
       </div>
     </div>
