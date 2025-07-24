@@ -35,7 +35,7 @@ function RefreshButton({ onRefresh }: { onRefresh: () => void }) {
   );
 }
 
-function ShareButton({ textToShare, title }: { textToShare: string; title?: string }) {
+function ShareButton({ textToShare }: { textToShare: string }) {
   const [isSharing, setIsSharing] = useState(false);
 
   const handleShare = async () => {
@@ -47,9 +47,7 @@ function ShareButton({ textToShare, title }: { textToShare: string; title?: stri
       // 检查是否支持Web Share API
       if (navigator.share && navigator.canShare) {
         const shareData = {
-          title: title || 'MarkAT分享',
-          text: textToShare,
-          url: window.location.origin
+          text: textToShare
         };
 
         // 检查数据是否可以分享
@@ -63,17 +61,17 @@ function ShareButton({ textToShare, title }: { textToShare: string; title?: stri
       await navigator.clipboard.writeText(textToShare);
       
       // 显示提示（可以考虑添加一个简单的toast提示）
-      console.log('内容已复制到剪贴板');
+      console.log('Content copied to clipboard');
       
     } catch (error) {
-      console.error('分享失败:', error);
+      console.error('Share failed:', error);
       
       // 如果Web Share API失败，尝试复制到剪贴板
       try {
         await navigator.clipboard.writeText(textToShare);
-        console.log('内容已复制到剪贴板');
+        console.log('Content copied to clipboard');
       } catch (clipboardError) {
-        console.error('复制到剪贴板也失败了:', clipboardError);
+        console.error('Clipboard copy also failed:', clipboardError);
         
         // 最后的fallback：使用旧的复制方法
         const textArea = document.createElement('textarea');
@@ -104,7 +102,7 @@ function ShareButton({ textToShare, title }: { textToShare: string; title?: stri
         height={16} 
       />
       <span className={styles.copyButtonText}>
-        {isSharing ? '分享中...' : 'Share'}
+        {isSharing ? 'Sharing...' : 'Share'}
       </span>
     </button>
   );
@@ -189,7 +187,7 @@ function Card({ clip, onDelete, isDeleting }: {
         {/* 操作按钮区域 */}
         <div className={styles.cardActionsRow}>
           <DeleteButton onDelete={() => onDelete(clip.id)} isLoading={isDeleting} />
-          <ShareButton textToShare={clip.text_plain} title={clip.title} />
+          <ShareButton textToShare={clip.text_plain} />
         </div>
       </div>
     </div>
