@@ -35,13 +35,13 @@ function RefreshButton({ onRefresh }: { onRefresh: () => void }) {
   );
 }
 
-function ShareButton({ textToShare }: { textToShare: string }) {
-  const [isSharing, setIsSharing] = useState(false);
+function CopyButton({ textToShare }: { textToShare: string }) {
+  const [isCopying, setIsCopying] = useState(false);
 
-  const handleShare = async () => {
-    if (isSharing) return;
+  const handleCopy = async () => {
+    if (isCopying) return;
     
-    setIsSharing(true);
+    setIsCopying(true);
     
     try {
       // 检查是否支持Web Share API
@@ -64,7 +64,7 @@ function ShareButton({ textToShare }: { textToShare: string }) {
       console.log('Content copied to clipboard');
       
     } catch (error) {
-      console.error('Share failed:', error);
+      console.error('Copy failed:', error);
       
       // 如果Web Share API失败，尝试复制到剪贴板
       try {
@@ -84,25 +84,25 @@ function ShareButton({ textToShare }: { textToShare: string }) {
         document.body.removeChild(textArea);
       }
     } finally {
-      setIsSharing(false);
+      setIsCopying(false);
     }
   };
 
   return (
     <button 
       className={styles.copyButton}
-      onClick={handleShare}
-      disabled={isSharing}
+      onClick={handleCopy}
+      disabled={isCopying}
     >
       <Image 
         src="/button_icon_copy.svg" 
-        alt="share" 
+        alt="copy" 
         className={styles.copyButtonIcon} 
         width={16} 
         height={16} 
       />
       <span className={styles.copyButtonText}>
-        {isSharing ? 'Sharing...' : 'Share'}
+        {isCopying ? 'Copying...' : 'Copy'}
       </span>
     </button>
   );
@@ -187,7 +187,7 @@ function Card({ clip, onDelete, isDeleting }: {
         {/* 操作按钮区域 */}
         <div className={styles.cardActionsRow}>
           <DeleteButton onDelete={() => onDelete(clip.id)} isLoading={isDeleting} />
-          <ShareButton textToShare={clip.text_plain} />
+          <CopyButton textToShare={clip.text_plain} />
         </div>
       </div>
     </div>
