@@ -2,11 +2,11 @@
 
 import React, { useEffect, useState } from "react";
 import Image from "next/image";
-import { useClips, Clip } from "../lib/useClips";
-import { getThemeConfig } from '@/lib/themes/themeConfig';
+import { useClips } from "../lib/useClips";
+import { useEditClip } from "../lib/useEditClip";
+import { Card, UserMenu, EditModal } from "./components";
 import logoStyles from "./components/Logo.module.css";
 import styles from "./page.module.css";
-import UserMenu from "./components/UserMenu";
 import AuthGuard from "@/lib/components/AuthGuard";
 
 function Logo() {
@@ -35,164 +35,7 @@ function RefreshButton({ onRefresh }: { onRefresh: () => void }) {
   );
 }
 
-function CopyButton({ textToShare }: { textToShare: string }) {
-  const [isCopying, setIsCopying] = useState(false);
 
-  const handleCopy = async () => {
-    if (isCopying) return;
-    
-    setIsCopying(true);
-    
-    try {
-      // 检查是否支持Web Share API
-      if (navigator.share && navigator.canShare) {
-        const shareData = {
-          text: textToShare
-        };
-
-        // 检查数据是否可以分享
-        if (navigator.canShare(shareData)) {
-          await navigator.share(shareData);
-          return;
-        }
-      }
-      
-      // Fallback: 复制到剪贴板
-      await navigator.clipboard.writeText(textToShare);
-      
-      // 显示提示（可以考虑添加一个简单的toast提示）
-      console.log('Content copied to clipboard');
-      
-    } catch (error) {
-      console.error('Copy failed:', error);
-      
-      // 如果Web Share API失败，尝试复制到剪贴板
-      try {
-        await navigator.clipboard.writeText(textToShare);
-        console.log('Content copied to clipboard');
-      } catch (clipboardError) {
-        console.error('Clipboard copy also failed:', clipboardError);
-        
-        // 最后的fallback：使用旧的复制方法
-        const textArea = document.createElement('textarea');
-        textArea.value = textToShare;
-        textArea.style.position = 'fixed';
-        textArea.style.opacity = '0';
-        document.body.appendChild(textArea);
-        textArea.select();
-        document.execCommand('copy');
-        document.body.removeChild(textArea);
-      }
-    } finally {
-      setIsCopying(false);
-    }
-  };
-
-  return (
-    <button 
-      className={styles.copyButton}
-      onClick={handleCopy}
-      disabled={isCopying}
-    >
-      <Image 
-        src="/button_icon_copy.svg" 
-        alt="copy" 
-        className={styles.copyButtonIcon} 
-        width={16} 
-        height={16} 
-      />
-      <span className={styles.copyButtonText}>
-        {isCopying ? 'Copying...' : 'Copy'}
-      </span>
-    </button>
-  );
-}
-
-function DeleteButton({ onDelete, isLoading }: { onDelete: () => void; isLoading: boolean }) {
-  return (
-    <button
-      className={styles.deleteButton}
-      onClick={onDelete}
-      disabled={isLoading}
-    >
-      {isLoading ? (
-        <div className={styles.deleteLoading}>
-          <div className={styles.xlviLoader}>
-            <div className={styles.xlviBox}></div>
-            <div className={styles.xlviBox}></div>
-            <div className={styles.xlviBox}></div>
-          </div>
-        </div>
-      ) : (
-        <svg 
-          width="20" 
-          height="20" 
-          viewBox="0 0 24 24" 
-          fill="none" 
-          stroke="currentColor" 
-          strokeWidth="2"
-          className={styles.deleteButtonIcon}
-        >
-          <path d="M3 6h18M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2m3 0v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6h14zM10 11v6M14 11v6" />
-        </svg>
-      )}
-    </button>
-  );
-}
-
-function Card({ clip, onDelete, isDeleting }: { 
-  clip: Clip; 
-  onDelete: (id: number) => void;
-  isDeleting: boolean;
-}) {
-  const theme = getThemeConfig(clip.theme_name);
-  const style = theme.cssVariables as React.CSSProperties;
-
-  return (
-    <div style={style} className={`${styles.card} ${styles[theme.key]}`}>
-      <div className={styles.cardContent}>
-        {/* 主要内容区域 */}
-        <div className={styles.cardMainSection}>
-          {/* 引用图标 */}
-          <Image 
-            className={styles.cardIcon}
-            src="/quote.svg" 
-            alt="quote"
-            width={20}
-            height={20}
-          />
-
-          {/* 主要内容文本 */}
-          <div className={styles.cardTextRow}>
-            <p className={styles.cardText}>{clip.text_plain}</p>
-          </div>
-
-          {/* 分割线 */}
-          <div className={styles.cardDivider}></div>
-
-          {/* Ref区域 */}
-          <div className={styles.cardRefSection}>
-            {/* Ref标签 */}
-            <div className={styles.cardRefBadge}>
-              <div className={styles.cardRefText}>Ref</div>
-            </div>
-            
-            {/* 标题 */}
-            <div className={styles.cardTitleRow}>
-              <div className={styles.cardTitle}>{clip.title}</div>
-            </div>
-          </div>
-        </div>
-
-        {/* 操作按钮区域 */}
-        <div className={styles.cardActionsRow}>
-          <DeleteButton onDelete={() => onDelete(clip.id)} isLoading={isDeleting} />
-          <CopyButton textToShare={clip.text_plain} />
-        </div>
-      </div>
-    </div>
-  );
-}
 
 function SkeletonCard() {
   return (
@@ -291,8 +134,35 @@ function Toast({ type, show }: { type: 'success' | 'fail' | 'deleted' | 'delete-
 }
 
 export default function Home() {
-  // 删除 useSWR 相关内容，改为调用 useClips
+  // 数据获取
   const { data: clips, error, isLoading, mutate } = useClips();
+  
+  // 编辑状态管理 - 使用专门的hook
+  const {
+    isOpen: editModalOpen,
+    editingClip,
+    isSubmitting: editSubmitting,
+    openEdit,
+    closeEdit,
+    submitEdit,
+  } = useEditClip(
+    // 成功回调
+    () => {
+      console.log('Edit success');
+      setToast({ show: true, type: 'success' });
+      setTimeout(() => setToast((t) => ({ ...t, show: false })), 2000);
+    },
+    // 错误回调
+    (error) => {
+      console.error('Edit error:', error);
+      setToast({ show: true, type: 'fail' });
+      setTimeout(() => setToast((t) => ({ ...t, show: false })), 2000);
+    },
+    // mutate函数
+    mutate
+  );
+  
+  // UI状态管理
   const [skeletonCount, setSkeletonCount] = useState(4);
   const [toast, setToast] = useState<{ show: boolean; type: 'success' | 'fail' | 'deleted' | 'delete-fail' }>({ show: false, type: 'success' });
   const [deletingIds, setDeletingIds] = useState<Set<number>>(new Set());
@@ -313,6 +183,14 @@ export default function Home() {
     setRefreshing(false);
   };
 
+  // 编辑卡片逻辑 - 使用hook中的函数
+  const handleEdit = (id: number) => {
+    const clipToEdit = clips?.find(clip => clip.id === id);
+    if (clipToEdit) {
+      openEdit(clipToEdit);
+    }
+  };
+
   // 删除卡片逻辑
   const handleDelete = async (id: number) => {
     // 设置loading状态
@@ -320,20 +198,16 @@ export default function Home() {
     setToast({ show: false, type: 'deleted' });
     
     try {
-      const response = await fetch(`/api/clips/${id}`, {
-        method: 'DELETE',
-      });
+      // 使用新的API客户端
+      const { deleteClip } = await import('@/lib/api/clips');
+      await deleteClip(id);
       
-      if (response.ok) {
-        // 删除成功，重新获取数据并显示成功Toast
-        await mutate();
-        setToast({ show: true, type: 'deleted' });
-      } else {
-        // 删除失败，显示失败Toast
-        setToast({ show: true, type: 'delete-fail' });
-      }
-    } catch {
-      // 网络错误等，显示失败Toast
+      // 删除成功，重新获取数据并显示成功Toast
+      await mutate();
+      setToast({ show: true, type: 'deleted' });
+    } catch (error) {
+      console.error('Delete failed:', error);
+      // 删除失败，显示失败Toast
       setToast({ show: true, type: 'delete-fail' });
     } finally {
       // 清除loading状态
@@ -380,6 +254,7 @@ export default function Home() {
                   key={clip.id} 
                   clip={clip} 
                   onDelete={handleDelete}
+                  onEdit={handleEdit}
                   isDeleting={deletingIds.has(clip.id)}
                 />
               ))
@@ -387,6 +262,15 @@ export default function Home() {
           </div>
         </div>
         <Toast type={toast.type} show={toast.show} />
+        
+        {/* 编辑模态框 */}
+        <EditModal
+          isOpen={editModalOpen}
+          onClose={closeEdit}
+          clip={editingClip}
+          onSubmit={submitEdit}
+          isSubmitting={editSubmitting}
+        />
       </div>
     </AuthGuard>
   );

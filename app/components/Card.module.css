@@ -1,0 +1,176 @@
+/* Card组件样式 */
+
+/* 卡片样式 */
+.card {
+  background-color: var(--theme-primary, #b1cd93); /* 使用主题变量，Olivine作为fallback */
+  width: 100%;
+  max-width: 100%;
+  padding: 24px;
+  margin-bottom: 1rem;
+  position: relative;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+/* 主题特定样式 - 用于特定布局差异 */
+.Olivine {
+  /* Olivine 主题特定样式 */
+}
+
+.Jasmine {
+  /* Jasmine 主题特定样式 */
+}
+
+.Maya_blue {
+  /* Maya_blue 主题特定样式 */
+}
+
+.Eggshell {
+  /* Eggshell 主题特定样式 */
+}
+
+.cardContent {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  width: 100%;
+}
+
+/* 卡片内容区域 */
+.cardMainSection {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  align-items: flex-start;
+  justify-content: flex-start;
+  width: 100%;
+}
+
+/* 卡片顶部icon */
+.cardIcon {
+  width: 24px;
+  height: 24px;
+  flex-shrink: 0;
+}
+
+/* 主要内容文本 */
+.cardTextRow {
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+  align-items: flex-start;
+  justify-content: flex-start;
+  width: 100%;
+}
+
+.cardText {
+  font-family: 'Helvetica', sans-serif;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 20px;
+  line-height: normal;
+  color: #000000;
+  flex-basis: 0;
+  flex-grow: 1;
+  min-height: 1px;
+  min-width: 1px;
+  flex-shrink: 1;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+}
+
+/* 分割线 */
+.cardDivider {
+  width: 100%;
+  height: 0;
+  flex-shrink: 0;
+  position: relative;
+}
+
+.cardDivider::before {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  top: -1px;
+  background-color: #000000;
+}
+
+/* Ref区域 */
+.cardRefSection {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  align-items: flex-start;
+  justify-content: flex-start;
+  width: 100%;
+}
+
+/* Ref标签 */
+.cardRefBadge {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  height: 22px;
+  align-items: center;
+  justify-content: center;
+  padding: 2px 10px;
+  border-radius: 6px;
+  flex-shrink: 0;
+  position: relative;
+  border: 1px solid #18181b;
+}
+
+.cardRefText {
+  font-family: 'Geist', sans-serif;
+  font-style: normal;
+  font-weight: 600;
+  font-size: 12px;
+  line-height: 16px;
+  color: #18181b;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+/* 标题区域 */
+.cardTitleRow {
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+  align-items: flex-start;
+  justify-content: flex-start;
+  width: 100%;
+}
+
+.cardTitle {
+  font-family: 'Inter', sans-serif;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 12px;
+  line-height: 20px;
+  color: #18181b;
+  flex-basis: 0;
+  flex-grow: 1;
+  min-height: 1px;
+  min-width: 1px;
+  flex-shrink: 1;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+}
+
+/* 操作区域 */
+.cardActionsRow {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.cardActionsRight {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 0.5rem;
+} 

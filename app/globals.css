@@ -1,28 +1,69 @@
-@import "tailwindcss";
+/* 在globals.css开头添加React 19兼容性注释 */
+
+/* === React 19兼容性处理 === */
+/* 
+  为了解决react-quill与React 19的兼容性问题，
+  我们在polyfill中提供了findDOMNode的替代实现
+*/
+
+/* 应用全局样式 */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Quill Editor Styles */
+@import 'quill/dist/quill.snow.css';
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --foreground-rgb: 0, 0, 0;
+  --background-start-rgb: 250, 250, 250;
+  --background-end-rgb: 250, 250, 250;
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    --foreground-rgb: 255, 255, 255;
+    --background-start-rgb: 0, 0, 0;
+    --background-end-rgb: 0, 0, 0;
   }
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  color: rgb(var(--foreground-rgb));
+  background: #FAFAFA;
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+}
+
+/* Quill Editor 自定义样式 */
+.ql-container {
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.ql-editor {
+  min-height: 150px;
+  padding: 12px 15px;
+}
+
+.ql-toolbar.ql-snow {
+  border-top: 1px solid #ccc;
+  border-left: 1px solid #ccc;
+  border-right: 1px solid #ccc;
+  border-bottom: none;
+  border-radius: 8px 8px 0 0;
+}
+
+.ql-container.ql-snow {
+  border-left: 1px solid #ccc;
+  border-right: 1px solid #ccc;
+  border-bottom: 1px solid #ccc;
+  border-top: none;
+  border-radius: 0 0 8px 8px;
 }
 
 /* ==================== Supabase UI 样式覆盖 ==================== */

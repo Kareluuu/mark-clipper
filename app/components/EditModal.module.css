@@ -1,0 +1,261 @@
+/* EditModal组件样式 */
+
+/* 模态框容器 - 使用Portal渲染 */
+.modalOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 50;
+  display: flex;
+  align-items: stretch;
+  justify-content: center;
+  padding: 1rem;
+  min-height: 100vh;
+  height: 100vh;
+}
+
+/* 背景模糊遮罩层 */
+.backdrop {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  backdrop-filter: blur(20px);
+  background-color: rgba(250, 250, 250, 0.7);
+  cursor: pointer;
+}
+
+/* 模态框主容器 */
+.modalContainer {
+  position: relative;
+  width: 100%;
+  max-width: 100%;
+  height: 100%;
+  max-height: calc(100vh - 2rem);
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+  pointer-events: none;
+}
+
+/* 编辑器容器 */
+.editorContainer {
+  position: relative;
+  width: 100%;
+  max-width: 100%;
+  height: 100%;
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  padding: 1.5rem;
+  box-sizing: border-box;
+  pointer-events: auto;
+}
+
+/* 模态框头部 */
+.modalHeader {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+  flex-shrink: 0;
+}
+
+/* 标题样式 */
+.modalTitle {
+  font-family: 'Helvetica', sans-serif;
+  font-style: normal;
+  font-weight: bold;
+  font-size: 24px;
+  line-height: normal;
+  color: #000000;
+  margin: 0;
+}
+
+/* 关闭按钮 */
+.closeButton {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 3.5rem;
+  height: 3.5rem;
+  border-radius: 0.375rem;
+  border: none;
+  background: transparent;
+  transition: background-color 0.2s;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.closeButton:hover {
+  background-color: rgba(0, 0, 0, 0.1);
+}
+
+.closeButtonIcon {
+  width: 1.5rem;
+  height: 1.5rem;
+  color: #000000;
+}
+
+/* Ref区域 */
+.refSection {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+  flex-shrink: 0;
+}
+
+/* Ref标签 */
+.refBadge {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2px 10px;
+  border-radius: 6px;
+  height: 22px;
+  border: 1px solid #18181b;
+  width: fit-content;
+}
+
+.refBadgeText {
+  font-family: 'Geist', sans-serif;
+  font-style: normal;
+  font-weight: 600;
+  font-size: 12px;
+  line-height: 16px;
+  color: #18181b;
+  white-space: nowrap;
+}
+
+/* Ref标题 */
+.refTitle {
+  font-family: 'Inter', sans-serif;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 12px;
+  line-height: 20px;
+  color: #18181b;
+  margin: 0;
+}
+
+/* 编辑器区域 */
+.editorArea {
+  background-color: #ffffff;
+  border-radius: 0rem;
+  flex: 1;
+  min-height: 250px;
+  width: 100%;
+  max-width: 100%;
+  border: 1px solid #e4e4e7;
+  padding: 0;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+/* 底部按钮区域 */
+.modalFooter {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+  flex-shrink: 0;
+}
+
+/* 提交按钮 */
+.submitButton {
+  background-color: #18181b;
+  color: #fafafa;
+  border: none;
+  border-radius: 0px;
+  padding: 0.5rem 1rem;
+  height: 2.25rem;
+  width: 100%;
+  font-family: 'Geist', sans-serif;
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 20px;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+}
+
+.submitButton:hover {
+  background-color: #27272a;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.submitButton:active {
+  background-color: #3f3f46;
+  transform: translateY(0);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.submitButton:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+  transform: none;
+  box-shadow: none;
+}
+
+/* 响应式设计 */
+@media (min-width: 640px) {
+  .modalContainer {
+    max-width: 393px;
+    height: 100%;
+    max-height: calc(100vh - 4rem);
+  }
+  
+  .modalOverlay {
+    padding: 2rem;
+    align-items: center;
+  }
+}
+
+/* 动画效果 */
+.modalOverlay {
+  animation: fadeIn 0.2s ease-out;
+}
+
+.modalContainer {
+  animation: slideUp 0.3s ease-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* 防止背景滚动 */
+.modalOpen {
+  overflow: hidden;
+} 

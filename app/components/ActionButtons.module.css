@@ -1,0 +1,203 @@
+/* Action按钮组件样式 */
+
+/* 编辑按钮样式 */
+.editButton {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.25rem; /* 36px */
+  height: 2.25rem; /* 36px */
+  border-radius: 0;
+  border: none;
+  background-color: #18181b; /* zinc-900 */
+  transition: all 0.2s ease-in-out;
+  cursor: pointer;
+}
+
+.editButton:hover {
+  background-color: #27272a;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.editButton:active {
+  background-color: #3f3f46;
+  transform: translateY(0);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.editButton:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+  transform: none;
+  box-shadow: none;
+}
+
+.editButtonIcon {
+  color: #fafafa;
+  width: 1.25rem;
+  height: 1.25rem;
+}
+
+/* 删除按钮样式 */
+.deleteButton {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.25rem; /* 36px */
+  height: 2.25rem; /* 36px */
+  border-radius: 0;
+  border: none;
+  background: transparent;
+  transition: all 0.2s ease-in-out;
+  cursor: pointer;
+}
+
+.deleteButton:hover {
+  background-color: rgba(220, 38, 38, 0.1);
+  transform: translateY(-1px);
+}
+
+.deleteButton:active {
+  background-color: rgba(220, 38, 38, 0.15);
+  transform: translateY(0);
+}
+
+.deleteButton:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+  transform: none;
+}
+
+.deleteButtonIcon {
+  color: #18181b; /* zinc-900 */
+  transition: color 0.2s;
+  width: 1.25rem;
+  height: 1.25rem;
+}
+
+/* Copy按钮样式 - 现在与edit按钮相同的icon button样式 */
+.copyButton {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.25rem; /* 36px */
+  height: 2.25rem; /* 36px */
+  border-radius: 0;
+  border: none;
+  background-color: #18181b; /* zinc-900 */
+  transition: all 0.2s ease-in-out;
+  cursor: pointer;
+}
+
+.copyButton:hover {
+  background-color: #27272a;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.copyButton:active {
+  background-color: #3f3f46;
+  transform: translateY(0);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.copyButton:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+  transform: none;
+  box-shadow: none;
+}
+
+.copyButtonIcon {
+  color: #fafafa;
+  width: 1.25rem;
+  height: 1.25rem;
+}
+
+/* 删除按钮Loading动画 - XlviLoader样式 */
+.deleteLoading {
+  position: relative;
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.xlviLoader {
+  position: relative;
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.xlviBox {
+  position: absolute;
+  width: 4px;
+  height: 4px;
+  border-radius: 1px;
+  animation: xlviAnimation 2s ease-in-out infinite;
+  top: 50%;
+  left: 50%;
+  transform-origin: center;
+}
+
+.xlviBox:nth-child(1) {
+  background-color: #18181b;
+  animation-delay: 0s;
+}
+
+.xlviBox:nth-child(2) {
+  background-color: #18181b;
+  animation-delay: -0.4s;
+}
+
+.xlviBox:nth-child(3) {
+  background-color: #18181b;
+  animation-delay: -0.8s;
+}
+
+@keyframes xlviAnimation {
+  0%, 100% {
+    transform: translate(-50%, -50%) translate(0, 0);
+  }
+  8.33% {
+    transform: translate(-50%, -50%) translate(6px, 0);
+  }
+  16.67% {
+    transform: translate(-50%, -50%) translate(6px, 6px);
+  }
+  25% {
+    transform: translate(-50%, -50%) translate(0, 6px);
+  }
+  33.33% {
+    transform: translate(-50%, -50%) translate(-6px, 6px);
+  }
+  41.67% {
+    transform: translate(-50%, -50%) translate(-6px, 0);
+  }
+  50% {
+    transform: translate(-50%, -50%) translate(-6px, -6px);
+  }
+  58.33% {
+    transform: translate(-50%, -50%) translate(0, -6px);
+  }
+  66.67% {
+    transform: translate(-50%, -50%) translate(6px, -6px);
+  }
+  75% {
+    transform: translate(-50%, -50%) translate(6px, 0);
+  }
+  83.33% {
+    transform: translate(-50%, -50%) translate(6px, 6px);
+  }
+  91.67% {
+    transform: translate(-50%, -50%) translate(0, 6px);
+  }
+} 

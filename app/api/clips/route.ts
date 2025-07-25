@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
 import { authenticateRequest, createAuthErrorResponse } from '@/lib/api/auth';
-import { DEFAULT_THEME, ThemeKey } from '@/lib/themes/themeConfig';
+import { DEFAULT_THEME } from '@/lib/themes/themeConfig';
 
 // CORS 头部配置
 const corsHeaders = {

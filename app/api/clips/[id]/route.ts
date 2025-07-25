@@ -23,9 +23,98 @@ export async function PUT(request: NextRequest, { params }: { params: Promise<{ 
   }
 
   try {
-  const { id } = await params;
-  const body = await request.json();
-  const { url, title, text_plain, html_raw, meta } = body;
+    const { id } = await params;
+    
+    // 验证clip ID格式
+    if (!id || isNaN(Number(id))) {
+      return NextResponse.json(
+        { error: 'Invalid clip ID format' }, 
+        { status: 400, headers: corsHeaders }
+      );
+    }
+
+    // 解析请求体
+    let body;
+    try {
+      body = await request.json();
+    } catch {
+      return NextResponse.json(
+        { error: 'Invalid JSON in request body' }, 
+        { status: 400, headers: corsHeaders }
+      );
+    }
+
+    const { url, title, text_plain, html_raw, meta, theme_name } = body;
+
+    // 请求体验证
+    const validationErrors: string[] = [];
+
+    // text_plain是编辑的核心字段，必须存在且有意义
+    if (text_plain === undefined || text_plain === null) {
+      validationErrors.push('text_plain field is required');
+    } else if (typeof text_plain !== 'string') {
+      validationErrors.push('text_plain must be a string');
+    } else if (text_plain.trim().length === 0) {
+      validationErrors.push('text_plain cannot be empty or only whitespace');
+    } else if (text_plain.length > 50000) { // 设置合理的长度限制
+      validationErrors.push('text_plain exceeds maximum length of 50,000 characters');
+    }
+
+    // title验证（如果提供）
+    if (title !== undefined && title !== null) {
+      if (typeof title !== 'string') {
+        validationErrors.push('title must be a string');
+      } else if (title.length > 500) {
+        validationErrors.push('title exceeds maximum length of 500 characters');
+      }
+    }
+
+    // URL验证（如果提供）
+    if (url !== undefined && url !== null) {
+      if (typeof url !== 'string') {
+        validationErrors.push('url must be a string');
+      } else if (url.length > 2000) {
+        validationErrors.push('url exceeds maximum length of 2,000 characters');
+      }
+    }
+
+    // theme_name验证（如果提供）
+    if (theme_name !== undefined && theme_name !== null) {
+      const validThemes = ['eggshell', 'jasmine', 'maya_blue', 'olivine'];
+      if (!validThemes.includes(theme_name)) {
+        validationErrors.push(`theme_name must be one of: ${validThemes.join(', ')}`);
+      }
+    }
+
+    // 如果有验证错误，返回400状态
+    if (validationErrors.length > 0) {
+      return NextResponse.json(
+        { 
+          error: 'Validation failed', 
+          details: validationErrors,
+          received_fields: Object.keys(body)
+        }, 
+        { status: 400, headers: corsHeaders }
+      );
+    }
+
+    // 准备更新数据（只包含有效字段）
+    const updateData: Record<string, unknown> = {
+      updated_at: new Date().toISOString()
+    };
+
+    // 只更新提供的字段
+    if (text_plain !== undefined) updateData.text_plain = text_plain.trim();
+    if (title !== undefined) updateData.title = title?.trim() || null;
+    if (url !== undefined) updateData.url = url?.trim() || null;
+    if (html_raw !== undefined) updateData.html_raw = html_raw;
+    if (meta !== undefined) updateData.meta = meta;
+    if (theme_name !== undefined) updateData.theme_name = theme_name;
+
+    console.log(`🔄 用户 ${authResult.userEmail} 正在更新 clip ${id}`, {
+      fields: Object.keys(updateData),
+      text_length: text_plain?.length || 0
+    });
 
     // 使用 service role 客户端
     const supabase = createClient(
@@ -36,38 +125,51 @@ export async function PUT(request: NextRequest, { params }: { params: Promise<{ 
     // 确保只能编辑自己的 clips
     const { data, error } = await supabase
       .from('clips')
-      .update({ 
-        url, 
-        title, 
-        text_plain, 
-        html_raw, 
-        meta, 
-        updated_at: new Date().toISOString() 
-      })
-    .eq('id', id)
+      .update(updateData)
+      .eq('id', id)
       .eq('user_id', authResult.userId!) // 用户数据隔离
-    .select();
+      .select();
 
-  if (error) {
-      console.error('更新 clip 错误:', error);
+    if (error) {
+      console.error('更新 clip 数据库错误:', error);
       return NextResponse.json(
-        { error: 'Failed to update clip', details: error.message }, 
+        { 
+          error: 'Failed to update clip', 
+          details: error.message,
+          code: error.code 
+        }, 
         { status: 500, headers: corsHeaders }
       );
-  }
+    }
 
     if (!data || data.length === 0) {
+      console.warn(`用户 ${authResult.userEmail} 尝试更新不存在的 clip ${id}`);
       return NextResponse.json(
         { error: 'Clip not found or access denied' }, 
         { status: 404, headers: corsHeaders }
       );
     }
 
-    console.log(`✅ 用户 ${authResult.userEmail} 更新了 clip ${id}`);
-    return NextResponse.json({ data: data[0] }, { headers: corsHeaders });
+    console.log(`✅ 用户 ${authResult.userEmail} 成功更新了 clip ${id}`);
+    return NextResponse.json(
+      { 
+        data: data[0],
+        message: 'Clip updated successfully' 
+      }, 
+      { headers: corsHeaders }
+    );
 
   } catch (error) {
     console.error('PUT /api/clips/[id] 异常:', error);
+    
+    // 区分不同类型的错误
+    if (error instanceof SyntaxError) {
+      return NextResponse.json(
+        { error: 'Invalid JSON format' }, 
+        { status: 400, headers: corsHeaders }
+      );
+    }
+    
     return NextResponse.json(
       { error: 'Internal server error' }, 
       { status: 500, headers: corsHeaders }
