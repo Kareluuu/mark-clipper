@@ -4,12 +4,14 @@
 .card {
   background-color: var(--theme-primary, #b1cd93); /* 使用主题变量，Olivine作为fallback */
   width: 100%;
-  max-width: 100%;
+  max-width: 368px;
   padding: 24px;
   margin-bottom: 1rem;
   position: relative;
   box-sizing: border-box;
   overflow: hidden;
+  min-height: fit-content;
+  height: auto;
 }
 
 /* 主题特定样式 - 用于特定布局差异 */
