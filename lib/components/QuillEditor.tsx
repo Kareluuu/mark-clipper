@@ -139,14 +139,19 @@ export function QuillEditor({
         .ql-container {
           border: none !important;
           flex: 1 !important;
-          font-size: 14px !important;
+          font-size: 16px !important;
           font-family: 'Inter', sans-serif !important;
         }
         .ql-editor {
           padding: 16px !important;
           line-height: 1.6 !important;
           min-height: ${minHeight} !important;
+          font-size: 16px !important;
           color: #1f2937 !important;  /* 编辑器文字颜色 - 深灰色 */
+          -webkit-text-size-adjust: 100% !important;
+          -webkit-user-select: text !important;
+          -webkit-touch-callout: none !important;
+          -webkit-tap-highlight-color: transparent !important;
         }
         .ql-editor.ql-blank::before {
           color: #9ca3af !important;

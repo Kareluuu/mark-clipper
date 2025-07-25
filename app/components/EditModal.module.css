@@ -7,25 +7,30 @@
   left: 0;
   right: 0;
   bottom: 0;
+  width: 100vw;
+  height: 100vh;
   z-index: 50;
   display: flex;
   align-items: stretch;
   justify-content: center;
   padding: 1rem;
   min-height: 100vh;
-  height: 100vh;
+  overflow: hidden;
 }
 
 /* 背景模糊遮罩层 */
 .backdrop {
-  position: absolute;
+  position: fixed;
   top: 0;
   left: 0;
   right: 0;
   bottom: 0;
+  width: 100vw;
+  height: 100vh;
   backdrop-filter: blur(20px);
   background-color: rgba(250, 250, 250, 0.7);
   cursor: pointer;
+  z-index: 1;
 }
 
 /* 模态框主容器 */
@@ -166,6 +171,38 @@
   overflow: hidden;
 }
 
+/* 防止移动端聚焦时页面放大的样式 */
+.editorArea :global(.ql-editor) {
+  font-size: 16px !important;
+  line-height: 1.6 !important;
+  /* 防止iOS Safari在聚焦时放大页面 */
+  -webkit-text-size-adjust: 100% !important;
+  -webkit-user-select: text !important;
+  -webkit-touch-callout: none !important;
+  -webkit-tap-highlight-color: transparent !important;
+}
+
+.editorArea :global(.ql-editor):focus {
+  outline: none !important;
+  /* 确保聚焦时不会触发缩放 */
+  font-size: 16px !important;
+  -webkit-text-size-adjust: 100% !important;
+}
+
+/* 工具栏按钮也应用相同的防缩放样式 */
+.editorArea :global(.ql-toolbar) {
+  -webkit-text-size-adjust: 100% !important;
+  -webkit-touch-callout: none !important;
+  -webkit-tap-highlight-color: transparent !important;
+}
+
+.editorArea :global(.ql-toolbar button) {
+  font-size: 14px !important;
+  -webkit-text-size-adjust: 100% !important;
+  -webkit-touch-callout: none !important;
+  -webkit-tap-highlight-color: transparent !important;
+}
+
 /* 底部按钮区域 */
 .modalFooter {
   display: flex;
@@ -258,4 +295,8 @@
 /* 防止背景滚动 */
 .modalOpen {
   overflow: hidden;
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  -webkit-overflow-scrolling: touch;
 } 
