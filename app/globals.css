@@ -28,9 +28,38 @@
   }
 }
 
+/* 基础响应式设置 */
+html {
+  height: 100%;
+  box-sizing: border-box;
+}
+
+*, *:before, *:after {
+  box-sizing: inherit;
+}
+
 body {
   color: rgb(var(--foreground-rgb));
   background: #FAFAFA;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
+  font-size: 16px;
+  line-height: 1.5;
+}
+
+/* 防止移动端横屏时文字过小 */
+@media screen and (orientation: landscape) and (max-height: 600px) {
+  body {
+    font-size: 14px;
+  }
+}
+
+/* 确保根容器占满视口 */
+#__next {
+  height: 100%;
+  min-height: 100vh;
 }
 
 @layer utilities {

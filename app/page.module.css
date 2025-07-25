@@ -3,10 +3,12 @@
 .container {
   background-color: #fafafa;
   min-height: 100vh;
+  max-height: 100vh;
   width: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
+  overflow: hidden;
 }
 
 .content {
@@ -19,13 +21,33 @@
   padding-top: 1.5rem;
   padding-left: 1rem;
   padding-right: 1rem;
+  height: 100vh;
+  box-sizing: border-box;
 }
 
 @media (min-width: 640px) {
   .content {
-    max-width: 28rem;
+    max-width: 32rem;
     padding-left: 1.5rem;
     padding-right: 1.5rem;
+  }
+}
+
+@media (min-width: 768px) {
+  .content {
+    max-width: 42rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .content {
+    max-width: 48rem;
+  }
+}
+
+@media (min-width: 1280px) {
+  .content {
+    max-width: 56rem;
   }
 }
 
@@ -40,6 +62,7 @@
   top: 0;
   z-index: 20;
   background-color: #fafafa;
+  flex-shrink: 0;
 }
 
 .logoContainer {
@@ -77,6 +100,29 @@
   flex-direction: column;
   gap: 1rem;
   width: 100%;
+  flex: 1;
+  overflow-y: auto;
+  padding-bottom: 2rem;
+  /* 自定义滚动条样式 */
+  scrollbar-width: thin;
+  scrollbar-color: #d4d4d8 transparent;
+}
+
+.clipsContainer::-webkit-scrollbar {
+  width: 6px;
+}
+
+.clipsContainer::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.clipsContainer::-webkit-scrollbar-thumb {
+  background-color: #d4d4d8;
+  border-radius: 3px;
+}
+
+.clipsContainer::-webkit-scrollbar-thumb:hover {
+  background-color: #a1a1aa;
 }
 
 .loadingText {

@@ -18,6 +18,13 @@
   overflow: hidden;
 }
 
+@media (min-width: 640px) {
+  .modalOverlay {
+    padding: 2rem;
+    align-items: center;
+  }
+}
+
 /* 背景模糊遮罩层 */
 .backdrop {
   position: fixed;
@@ -47,6 +54,32 @@
   pointer-events: none;
 }
 
+@media (min-width: 640px) {
+  .modalContainer {
+    max-width: 480px;
+    height: auto;
+    max-height: calc(100vh - 4rem);
+  }
+}
+
+@media (min-width: 768px) {
+  .modalContainer {
+    max-width: 600px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .modalContainer {
+    max-width: 720px;
+  }
+}
+
+@media (min-width: 1280px) {
+  .modalContainer {
+    max-width: 800px;
+  }
+}
+
 /* 编辑器容器 */
 .editorContainer {
   position: relative;
@@ -60,6 +93,14 @@
   padding: 1.5rem;
   box-sizing: border-box;
   pointer-events: auto;
+}
+
+@media (min-width: 640px) {
+  .editorContainer {
+    height: auto;
+    min-height: 70vh;
+    max-height: calc(100vh - 4rem);
+  }
 }
 
 /* 模态框头部 */
@@ -161,6 +202,7 @@
   border-radius: 0rem;
   flex: 1;
   min-height: 250px;
+  max-height: calc(70vh - 200px);
   width: 100%;
   max-width: 100%;
   border: 1px solid #e4e4e7;
@@ -169,6 +211,27 @@
   display: flex;
   flex-direction: column;
   overflow: hidden;
+}
+
+@media (min-width: 640px) {
+  .editorArea {
+    min-height: 300px;
+    max-height: calc(100vh - 300px);
+  }
+}
+
+@media (min-width: 768px) {
+  .editorArea {
+    min-height: 350px;
+    max-height: calc(100vh - 280px);
+  }
+}
+
+@media (min-width: 1024px) {
+  .editorArea {
+    min-height: 400px;
+    max-height: calc(100vh - 250px);
+  }
 }
 
 /* 防止移动端聚焦时页面放大的样式 */
@@ -247,20 +310,6 @@
   opacity: 0.6;
   transform: none;
   box-shadow: none;
-}
-
-/* 响应式设计 */
-@media (min-width: 640px) {
-  .modalContainer {
-    max-width: 393px;
-    height: 100%;
-    max-height: calc(100vh - 4rem);
-  }
-  
-  .modalOverlay {
-    padding: 2rem;
-    align-items: center;
-  }
 }
 
 /* 动画效果 */
