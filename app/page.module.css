@@ -3,12 +3,10 @@
 .container {
   background-color: #fafafa;
   min-height: 100vh;
-  max-height: 100vh;
   width: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
-  overflow: hidden;
 }
 
 .content {
@@ -21,8 +19,9 @@
   padding-top: 1.5rem;
   padding-left: 1rem;
   padding-right: 1rem;
-  height: 100vh;
+  padding-bottom: 2rem;
   box-sizing: border-box;
+  min-height: 100vh;
 }
 
 @media (min-width: 640px) {
@@ -99,8 +98,8 @@
   flex-direction: column;
   gap: 1rem;
   width: 100%;
-  flex: 1;
-  overflow-y: auto;
+  /* 移除 flex: 1 以避免压缩子元素 */
+  overflow-y: visible;
   padding-bottom: 2rem;
   /* 自定义滚动条样式 */
   scrollbar-width: thin;
@@ -424,4 +423,33 @@
   line-height: normal;
   color: #000000;
   margin: 0;
+}
+
+/* 移动端特殊优化 */
+@media (max-width: 639px) {
+  .container {
+    min-height: 100vh;
+    min-height: 100dvh; /* 使用动态视口高度，适配移动端浏览器UI */
+  }
+  
+  .content {
+    min-height: 100vh;
+    min-height: 100dvh; /* 使用动态视口高度 */
+    padding-bottom: calc(2rem + env(safe-area-inset-bottom)); /* 适配安全区域 */
+  }
+  
+  .clipsContainer {
+    /* 确保在移动端内容能够完整显示 */
+    overflow: visible;
+    flex-shrink: 0;
+  }
+}
+
+/* 确保卡片和骨架屏在移动端不被压缩 */
+@media (max-width: 639px) {
+  .skeletonCard,
+  .emptyState {
+    flex-shrink: 0;
+    min-height: fit-content;
+  }
 }

@@ -12,6 +12,31 @@
   overflow: hidden;
   min-height: fit-content;
   height: auto;
+  flex-shrink: 0; /* 防止在flex容器中被压缩 */
+}
+
+/* 移动端专用优化 */
+@media (max-width: 639px) {
+  .card {
+    /* 确保移动端不被压缩 */
+    flex-shrink: 0;
+    min-height: fit-content;
+    height: auto;
+    /* 适配移动端安全区域 */
+    margin-bottom: calc(1rem + env(safe-area-inset-bottom, 0px));
+  }
+  
+  .cardContent {
+    /* 确保内容区域不被压缩 */
+    flex-shrink: 0;
+    min-height: fit-content;
+  }
+  
+  .cardMainSection {
+    /* 确保主要内容区域不被压缩 */
+    flex-shrink: 0;
+    min-height: fit-content;
+  }
 }
 
 /* 主题特定样式 - 用于特定布局差异 */
