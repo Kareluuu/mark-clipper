@@ -414,12 +414,12 @@
 @media (max-width: 639px) {
   .container {
     min-height: 100vh;
-    min-height: 100dvh; /* 使用动态视口高度，适配移动端浏览器UI */
+    /* 移除动态视口高度，避免滑动时高度变化 */
   }
   
   .content {
     min-height: 100vh;
-    min-height: 100dvh; /* 使用动态视口高度 */
+    /* 移除动态视口高度，避免滑动时高度变化 */
     padding-bottom: calc(2rem + env(safe-area-inset-bottom)); /* 适配安全区域 */
   }
   
@@ -427,6 +427,17 @@
     /* 确保在移动端内容能够完整显示 */
     overflow: visible;
     flex-shrink: 0;
+    /* 使用固定的margin-bottom替代gap，避免动态视口高度影响 */
+    gap: 0;
+  }
+  
+  /* 为移动端卡片添加固定的底部间距 */
+  .clipsContainer > * {
+    margin-bottom: 1rem;
+  }
+  
+  .clipsContainer > *:last-child {
+    margin-bottom: 0;
   }
 }
 

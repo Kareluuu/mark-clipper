@@ -22,8 +22,8 @@
     flex-shrink: 0;
     min-height: fit-content;
     height: auto;
-    /* 适配移动端安全区域 */
-    margin-bottom: calc(1rem + env(safe-area-inset-bottom, 0px));
+    /* 移除额外的margin-bottom，由父容器控制间距 */
+    margin-bottom: 0;
   }
   
   .cardContent {
