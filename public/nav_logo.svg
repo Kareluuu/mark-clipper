@@ -1,0 +1,16 @@
+<svg width="100" height="20" viewBox="0 0 100 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M85 5C85 2.23858 87.2386 0 90 0V10H85V5Z" fill="#93CCBA"/>
+<path d="M90 10H95V15C95 17.7614 92.7614 20 90 20V10Z" fill="#93CCBA"/>
+<rect x="90" width="10" height="10" fill="#93CCBA"/>
+<rect x="80" y="10" width="10" height="10" fill="#93CCBA"/>
+<path d="M60 0H70H80L70 10L80 20H70H60V0Z" fill="#F0E8D4"/>
+<path d="M60 10C60 4.47715 55.5228 -1.95703e-07 50 -4.37114e-07V10L60 10Z" fill="#7FBCE5"/>
+<rect x="40" y="10" width="10" height="10" fill="#7FBCE5"/>
+<path d="M50 10L60 20L50 20L50 10Z" fill="#7FBCE5"/>
+<rect x="40" width="10" height="10" fill="#7FBCE5"/>
+<path d="M30 0L40 20H20L30 0Z" fill="#F8D584"/>
+<path d="M20 0C14.4772 0 10 4.47715 10 10H20V0Z" fill="#B1CD93"/>
+<path d="M10 10C10 4.47715 5.52285 -1.95703e-07 9.53674e-07 -4.37114e-07V10L10 10Z" fill="#B1CD93"/>
+<rect y="10" width="10" height="10" fill="#B1CD93"/>
+<rect x="10" y="10" width="10" height="10" fill="#B1CD93"/>
+</svg>

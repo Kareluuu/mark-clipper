@@ -7,6 +7,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
+  position: relative;
 }
 
 .content {
@@ -19,78 +20,39 @@
   padding-top: 1.5rem;
   padding-left: 1rem;
   padding-right: 1rem;
-  padding-bottom: 2rem;
+  padding-bottom: 6rem; /* 为底部Nav留出空间 */
   box-sizing: border-box;
   min-height: 100vh;
 }
 
-@media (min-width: 640px) {
+/* 移动端样式 (Mobile First) */
+@media (max-width: 1023px) {
   .content {
-    padding-left: 1.5rem;
-    padding-right: 1.5rem;
+    /* 移动端外边距：左右16px */
+    padding-left: 1rem;
+    padding-right: 1rem;
+    /* 底部留出Nav空间：24px + Nav高度 */
+    padding-bottom: calc(6rem + 1.5rem);
   }
 }
 
-@media (min-width: 768px) {
-  .content {
-    /* 移除max-width设置，保持368px */
-  }
-}
-
+/* 桌面端响应式布局 */
 @media (min-width: 1024px) {
   .content {
-    /* 移除max-width设置，保持368px */
+    /* 桌面端双列布局 */
+    max-width: 800px; /* 调整最大宽度以容纳双列 */
+    padding-left: 2rem;
+    padding-right: 2rem;
+    padding-bottom: 6rem;
   }
 }
 
 @media (min-width: 1280px) {
   .content {
-    /* 移除max-width设置，保持368px */
+    max-width: 1000px;
+    padding-left: 3rem;
+    padding-right: 3rem;
   }
-}
-
-.stickyHeader {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: space-between;
-  width: 100%;
-  padding: 1rem 0;
-  position: sticky;
-  top: 0;
-  z-index: 20;
-  background-color: #fafafa;
-  flex-shrink: 0;
-}
-
-.logoContainer {
-  flex: 1;
-  max-width: 240px;
-  height: 48px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-}
-
-@media (min-width: 640px) {
-  .logoContainer {
-    max-width: 280px;
-    height: 64px;
-  }
-}
-
-@media (min-width: 768px) {
-  .logoContainer {
-    max-width: 320px;
-    height: 80px;
-  }
-}
-
-.headerActions {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  gap: 0.75rem;
 }
 
 .clipsContainer {
@@ -98,12 +60,38 @@
   flex-direction: column;
   gap: 1rem;
   width: 100%;
-  /* 移除 flex: 1 以避免压缩子元素 */
   overflow-y: visible;
   padding-bottom: 2rem;
-  /* 自定义滚动条样式 */
   scrollbar-width: thin;
   scrollbar-color: #d4d4d8 transparent;
+}
+
+/* 桌面端双列瀑布流布局 */
+@media (min-width: 1024px) {
+  .clipsContainer {
+    display: flex;
+    flex-direction: row;
+    gap: 1.5rem;
+    width: 100%;
+    align-items: flex-start; /* 关键：让列从顶部开始对齐 */
+    justify-content: center; /* 双列居中显示 */
+  }
+}
+
+/* 瀑布流列样式 */
+.masonryColumn {
+  width: 368px; /* 固定宽度，匹配Card的max-width */
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  flex-shrink: 0; /* 防止列被压缩 */
+}
+
+/* 确保移动端仍使用单列布局 */
+@media (max-width: 1023px) {
+  .masonryColumn {
+    width: 100%;
+  }
 }
 
 .clipsContainer::-webkit-scrollbar {
@@ -133,39 +121,21 @@
   color: #f87171;
 }
 
-/* 刷新按钮样式 */
-.refreshButton {
-  position: relative;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 0.375rem;
-  width: 3.5rem;
-  height: 3.5rem;
-  padding: 0;
-  border: none;
-  background: transparent;
-  transition: background-color 0.2s;
-  cursor: pointer;
-}
-
-.refreshButton:hover {
-  background-color: rgba(0, 0, 0, 0.05);
-}
-
-.refreshButtonIcon {
-  width: 2.25rem;
-  height: 2.25rem;
-}
-
-
-
 /* 骨架屏样式 */
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
 .skeletonCard {
-  background-color: #e4e4e7;
+  background-color: #e4e4e7; /* bg-zinc-200 */
   width: 100%;
   max-width: 368px;
-  padding: 1.5rem;
+  padding: 1.5rem; /* p-[24px] */
   margin-bottom: 1rem;
   border-radius: 0px;
   position: relative;
@@ -179,124 +149,117 @@
 .skeletonContent {
   display: flex;
   flex-direction: column;
-  gap: 1rem;
+  gap: 1rem; /* gap-4 = 16px */
   width: 100%;
+  align-items: flex-start; /* items-start */
+  justify-content: flex-start; /* justify-start */
 }
 
-.skeletonTitleRow {
-  display: flex;
-  flex-direction: row;
-  gap: 0.625rem;
-  width: 100%;
-}
-
+/* 标题骨架 - 第一个元素 */
 .skeletonTitle {
-  height: 1.75rem;
-  width: 66.666667%;
-  background-color: #d4d4d8;
+  height: 1.75rem; /* h-7 = 28px */
+  width: 179px; /* w-[179px] */
+  background-color: #d4d4d8; /* bg-zinc-300 */
   border-radius: 0px;
+  flex-shrink: 0; /* shrink-0 */
 }
 
-.skeletonTextRow {
-  display: flex;
-  flex-direction: row;
-  gap: 0.625rem;
-  width: 100%;
+/* 分割线骨架 */
+.skeletonDivider {
+  height: 1px; /* h-0 但实际是分割线 */
+  width: 100%; /* w-full */
+  background-color: #d4d4d8; /* bg-zinc-300 */
+  border-radius: 0px;
+  flex-shrink: 0; /* shrink-0 */
 }
 
+/* 文本内容骨架 - 全宽 */
 .skeletonText {
-  height: 1.25rem;
-  width: 100%;
-  background-color: #d4d4d8;
+  height: 1.125rem; /* h-[18px] */
+  width: 100%; /* w-full */
+  background-color: #d4d4d8; /* bg-zinc-300 */
   border-radius: 0px;
+  flex-shrink: 0; /* shrink-0 */
 }
 
-.skeletonActionsRow {
-  display: flex;
-  flex-direction: row;
-  justify-content: flex-end;
-  width: 100%;
-}
-
-.skeletonButton {
-  height: 2.25rem;
-  width: 5rem;
-  background-color: #71717a;
+/* 文本内容骨架 - 短宽度 */
+.skeletonTextShort {
+  height: 1.125rem; /* h-[18px] */
+  width: 108px; /* w-[108px] */
+  background-color: #d4d4d8; /* bg-zinc-300 */
   border-radius: 0px;
-}
-
-.skeletonShimmer {
-  position: relative;
-  overflow: hidden;
-  background: #f4f4f5; /* 骨架底色，可根据设计稿调整 */
-}
-
-.skeletonShimmer::after {
-  content: "";
-  position: absolute;
-  top: 0; left: 0; bottom: 0; right: 0;
-  background: linear-gradient(
-    120deg,
-    rgba(255,255,255,0) 0%,
-    rgba(255,255,255,0.6) 50%,
-    rgba(255,255,255,0) 100%
-  );
-  transform: translateX(-100%);
-  animation: shimmer 1.5s infinite;
-}
-
-@keyframes shimmer {
-  100% {
-    transform: translateX(100%);
-  }
-}
-
-/* 可选：让骨架条本身也有圆角和高度 */
-.skeletonTitle, .skeletonText, .skeletonButton {
-  border-radius: 6px;
-  min-height: 16px;
-  background: #e4e4e7;
+  flex-shrink: 0; /* shrink-0 */
 }
 
 /* Toast样式 */
 .toast {
   position: fixed;
-  bottom: 0;
-  left: 0;
-  width: 100%;
+  bottom: 6.5rem; /* 104px = 6.5rem */
+  left: 1rem;
+  right: 1rem;
+  width: calc(100% - 2rem); /* fill页面宽度，左右各减去16px外边距 */
   display: flex;
-  justify-content: center;
-  z-index: 50;
+  justify-content: stretch; /* 让子元素fill容器宽度 */
+  z-index: 40; /* 低于Nav的z-index */
   pointer-events: none;
-  transition: transform 0.3s ease;
-  height: 3rem;
+  transition: all 0.3s ease;
+  transform-origin: center bottom;
+}
+
+/* 桌面端Toast位置调整 - 与Nav宽度保持一致 */
+@media (min-width: 1024px) {
+  .toast {
+    bottom: 6.5rem; /* 104px = 6.5rem */
+    left: 50%;
+    right: auto;
+    transform: translateX(-50%);
+    /* width由JavaScript动态计算，这里不设置固定值 */
+  }
 }
 
 .toastVisible {
-  transform: translateY(0);
+  transform: translateY(0) scale(1);
+  opacity: 1;
 }
 
 .toastHidden {
-  transform: translateY(3rem);
+  transform: translateY(20px) scale(0.95); /* 由下往上渐显/由上往下渐隐 */
+  opacity: 0;
+}
+
+/* 桌面端Toast动画调整 - 与Nav宽度保持一致 */
+@media (min-width: 1024px) {
+  .toastVisible {
+    transform: translateX(-50%) translateY(0) scale(1);
+  }
+  
+  .toastHidden {
+    transform: translateX(-50%) translateY(20px) scale(0.95);
+  }
 }
 
 .toastContent {
-  width: 100%;
   display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 100%;
-  padding: 0;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  gap: 0.25rem; /* 4px，匹配Figma的gap-1 */
+  padding: 1.5rem; /* 24px，匹配Figma的p-[24px] */
   font-family: 'Geist', sans-serif;
-  font-weight: 600;
-  font-size: 0.875rem;
-  line-height: 1.25rem;
-  height: 3rem;
+  font-weight: 600; /* SemiBold */
+  font-size: 0.875rem; /* 14px，匹配Figma的Text-sm */
+  line-height: 1.25rem; /* 20px，匹配Figma的lineHeight */
+  border-radius: 0; /* 无圆角，匹配Figma设计 */
+  white-space: nowrap;
+  box-shadow: none; /* 无阴影，匹配Figma设计 */
+  background-color: #18181b; /* zinc-900，匹配Figma */
+  color: #fafafa; /* zinc-50，匹配Figma */
+  width: 100%; /* fill父容器宽度 */
+  flex: 1; /* 让内容容器fill整个可用空间 */
 }
 
 .toastSuccess {
-  background-color: #18181b;
-  color: #fafafa;
+  /* 背景色和文字色已在toastContent中设置 */
 }
 
 .toastError {
@@ -304,11 +267,33 @@
   color: #fafafa;
 }
 
+.toastWrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem; /* 4px，匹配Figma的gap-1 */
+  align-items: flex-start;
+  justify-content: flex-start;
+  width: 100%;
+  flex-shrink: 0;
+}
+
+.toastHeading {
+  display: flex;
+  flex-direction: row;
+  gap: 0.625rem; /* 10px，匹配Figma的gap-2.5 */
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
 .toastText {
-  font-size: 0.875rem;
-  font-weight: 600;
-  line-height: 1.25rem;
+  font-size: 0.875rem; /* 14px，匹配Figma的Text-sm */
+  font-weight: 600; /* SemiBold */
+  line-height: 1.25rem; /* 20px，匹配Figma的lineHeight */
   user-select: none;
+  text-align: left;
+  color: #fafafa; /* zinc-50，匹配Figma */
+  white-space: pre;
 }
 
 /* 空状态样式 */

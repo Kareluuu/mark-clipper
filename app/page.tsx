@@ -1,55 +1,27 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import Image from "next/image";
 import { useClips } from "../lib/useClips";
 import { useEditClip } from "../lib/useEditClip";
-import { Card, UserMenu, EditModal } from "./components";
-import logoStyles from "./components/Logo.module.css";
+import { Card, Nav, EditModal } from "./components";
 import styles from "./page.module.css";
 import AuthGuard from "@/lib/components/AuthGuard";
 
-function Logo() {
-  return (
-    <div className={logoStyles.logo}>
-      <Image 
-        alt="logo" 
-        className={logoStyles.logoImage} 
-        src="/markat_logo.svg"
-        width={120}
-        height={40}
-        priority
-      />
-    </div>
-  );
-}
-
-function RefreshButton({ onRefresh }: { onRefresh: () => void }) {
-  return (
-    <button
-      className={styles.refreshButton}
-      onClick={onRefresh}
-    >
-      <Image src="/button_icon_refresh.svg" alt="refresh" className={styles.refreshButtonIcon} width={16} height={16} />
-    </button>
-  );
-}
-
-
-
 function SkeletonCard() {
   return (
-    <div className={`${styles.skeletonCard} ${styles.skeletonShimmer}`}>
+    <div className={styles.skeletonCard}>
       <div className={styles.skeletonContent}>
-        <div className={styles.skeletonTitleRow}>
-          <div className={`${styles.skeletonTitle} ${styles.skeletonShimmer}`}></div>
-        </div>
-        <div className={styles.skeletonTextRow}>
-          <div className={`${styles.skeletonText} ${styles.skeletonShimmer}`}></div>
-        </div>
-        <div className={styles.skeletonActionsRow}>
-          <div className={`${styles.skeletonButton} ${styles.skeletonShimmer}`}></div>
-        </div>
+        {/* 标题骨架 - 第一个元素 */}
+        <div className={styles.skeletonTitle}></div>
+        
+        {/* 分割线 */}
+        <div className={styles.skeletonDivider}></div>
+        
+        {/* 文本内容骨架 - 全宽 */}
+        <div className={styles.skeletonText}></div>
+        
+        {/* 文本内容骨架 - 短宽度 */}
+        <div className={styles.skeletonTextShort}></div>
       </div>
     </div>
   );
@@ -58,53 +30,88 @@ function SkeletonCard() {
 function EmptyState() {
   return (
     <div className={styles.emptyState}>
-      {/* 手势图标 */}
-      <div className={styles.emptyStateIcon}>👋</div>
-      
-      {/* 主要内容 */}
+      <span className={styles.emptyStateIcon}>📋</span>
       <div className={styles.emptyStateContent}>
-        {/* 标题 */}
-        <h1 className={styles.emptyStateTitle}>Welcome to MarkAT!</h1>
-        
-        {/* 描述 */}
-        <div className={styles.emptyStateDescription}>
-          I am a SaaS application that allows you to{' '}
-          <span style={{ fontWeight: 'bold', color: '#18181b' }}>mark any useful information on the web</span>.{' '}
-          Please follow the steps below to complete your first task!
-        </div>
-        
-        {/* 步骤 */}
+        <h2 className={styles.emptyStateTitle}>还没有标记内容</h2>
+        <p className={styles.emptyStateDescription}>
+          开始使用 <span className="highlight">Marks扩展</span> 来保存您感兴趣的网页内容吧！
+        </p>
         <div className={styles.emptyStateSteps}>
-          {/* Step 1 */}
           <div className={styles.emptyStateStep}>
             <div className={styles.emptyStateStepBadge}>
-              <p className={styles.emptyStateStepBadgeText}>Step 1</p>
+              <span className={styles.emptyStateStepBadgeText}>Step 1</span>
             </div>
-            <p className={styles.emptyStateStepDescription}>
-              Download and install the MarkAT Chrome extension.
-            </p>
+            <p className={styles.emptyStateStepDescription}>安装 Marks 浏览器扩展</p>
           </div>
-          
-          {/* Step 2 */}
           <div className={styles.emptyStateStep}>
             <div className={styles.emptyStateStepBadge}>
-              <p className={styles.emptyStateStepBadgeText}>Step 2</p>
+              <span className={styles.emptyStateStepBadgeText}>Step 2</span>
             </div>
-            <p className={styles.emptyStateStepDescription}>
-              Once the extension is installed, simply use your cursor to copy any piece of content, 
-              and it will be marked and saved here!
-            </p>
+            <p className={styles.emptyStateStepDescription}>在任意网页上选择文本并点击扩展图标</p>
+          </div>
+          <div className={styles.emptyStateStep}>
+            <div className={styles.emptyStateStepBadge}>
+              <span className={styles.emptyStateStepBadgeText}>Step 3</span>
+            </div>
+            <p className={styles.emptyStateStepDescription}>您的标记将自动同步到这里</p>
           </div>
         </div>
-        
-        {/* Call to action */}
-        <p className={styles.emptyStateCallToAction}>Well, let us do it!</p>
+        <p className={styles.emptyStateCallToAction}>
+          让我们开始您的知识收集之旅！
+        </p>
       </div>
     </div>
   );
 }
 
 function Toast({ type, show }: { type: 'success' | 'fail' | 'deleted' | 'delete-fail'; show: boolean }) {
+  const [navWidth, setNavWidth] = useState<number | null>(null);
+  const [isDesktop, setIsDesktop] = useState(false);
+
+  // 检测是否为桌面端
+  useEffect(() => {
+    const checkDesktop = () => {
+      setIsDesktop(window.innerWidth >= 1024);
+    };
+    
+    checkDesktop();
+    window.addEventListener('resize', checkDesktop);
+    return () => window.removeEventListener('resize', checkDesktop);
+  }, []);
+
+  // 获取Nav宽度
+  useEffect(() => {
+    const getNavWidth = () => {
+      const navElement = document.querySelector('[data-nav]') as HTMLElement;
+      if (navElement) {
+        const width = navElement.offsetWidth;
+        setNavWidth(width);
+      }
+    };
+
+    // 初始获取
+    getNavWidth();
+
+    // 监听窗口大小变化
+    window.addEventListener('resize', getNavWidth);
+    
+    // 监听DOM变化（以防Nav内容变化）
+    const observer = new MutationObserver(getNavWidth);
+    const navElement = document.querySelector('[data-nav]');
+    if (navElement) {
+      observer.observe(navElement, { 
+        childList: true, 
+        subtree: true, 
+        attributes: true 
+      });
+    }
+
+    return () => {
+      window.removeEventListener('resize', getNavWidth);
+      observer.disconnect();
+    };
+  }, []);
+
   const getToastConfig = () => {
     switch (type) {
       case 'success':
@@ -122,14 +129,60 @@ function Toast({ type, show }: { type: 'success' | 'fail' | 'deleted' | 'delete-
 
   const { className, text } = getToastConfig();
 
+  // 计算Toast样式
+  const toastStyle: React.CSSProperties = {
+    width: isDesktop && navWidth ? `${navWidth}px` : undefined,
+  };
+
   return (
-    <div className={`${styles.toast} ${show ? styles.toastVisible : styles.toastHidden}`}>
+    <div 
+      className={`${styles.toast} ${show ? styles.toastVisible : styles.toastHidden}`}
+      style={toastStyle}
+    >
       <div className={`${styles.toastContent} ${className}`}>
+        <div className={styles.toastWrapper}>
+          <div className={styles.toastHeading}>
         <span className={styles.toastText}>
           {text}
         </span>
+          </div>
+        </div>
       </div>
     </div>
+  );
+}
+
+// 双列瀑布流布局组件
+function MasonryLayout({ children }: { children: React.ReactNode[] }) {
+  const [isDesktop, setIsDesktop] = useState(false);
+
+  useEffect(() => {
+    const checkDesktop = () => {
+      setIsDesktop(window.innerWidth >= 1024);
+    };
+    
+    checkDesktop();
+    window.addEventListener('resize', checkDesktop);
+    return () => window.removeEventListener('resize', checkDesktop);
+  }, []);
+
+  if (!isDesktop || !children.length) {
+    return <>{children}</>;
+  }
+
+  // 将卡片分成两列：左列（偶数索引）和右列（奇数索引）
+  const leftColumn = children.filter((_, index) => index % 2 === 0);
+  const rightColumn = children.filter((_, index) => index % 2 === 1);
+
+  return (
+    <>
+      <div className={styles.masonryColumn}>
+        {leftColumn}
+      </div>
+      <div className={styles.masonryColumn}>
+        {rightColumn}
+      </div>
+    </>
   );
 }
 
@@ -230,26 +283,18 @@ export default function Home() {
     <AuthGuard requireAuth={true}>
       <div className={styles.container}>
         <div className={styles.content}>
-          <div className={styles.stickyHeader}>
-            <div className={styles.logoContainer}>
-              <Logo />
-            </div>
-            <div className={styles.headerActions}>
-              <RefreshButton onRefresh={handleRefresh} />
-              <UserMenu />
-            </div>
-          </div>
           <div className={styles.clipsContainer}>
-            {(isLoading || refreshing) ? (
-              Array.from({ length: skeletonCount }).map((_, idx) => <SkeletonCard key={idx} />)
+            {(isLoading || refreshing || !clips) ? (
+              <MasonryLayout>
+                {Array.from({ length: skeletonCount }).map((_, idx) => <SkeletonCard key={idx} />)}
+              </MasonryLayout>
             ) : error ? (
               <div className={styles.errorText}>加载失败</div>
-            ) : !clips ? (
-              Array.from({ length: skeletonCount }).map((_, idx) => <SkeletonCard key={idx} />)
             ) : clips.length === 0 ? (
               <EmptyState />
             ) : (
-              clips.map((clip) => (
+              <MasonryLayout>
+                {clips.map((clip) => (
                 <Card 
                   key={clip.id} 
                   clip={clip} 
@@ -257,10 +302,16 @@ export default function Home() {
                   onEdit={handleEdit}
                   isDeleting={deletingIds.has(clip.id)}
                 />
-              ))
+                ))}
+              </MasonryLayout>
             )}
           </div>
         </div>
+        
+        {/* Nav组件 */}
+        <Nav onRefresh={handleRefresh} />
+        
+        {/* Toast */}
         <Toast type={toast.type} show={toast.show} />
         
         {/* 编辑模态框 */}

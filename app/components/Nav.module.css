@@ -1,0 +1,85 @@
+/* Nav组件样式 */
+
+/* Nav容器 */
+.nav {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  /* 移除 width: 100%，让left和right属性控制宽度 */
+  padding: 1rem; /* 16px，匹配Figma */
+  position: fixed;
+  bottom: 1.5rem; /* 向下24px */
+  left: 1rem; /* 左边距16px */
+  right: 1rem; /* 右边距16px */
+  z-index: 20;
+  background-color: #18181b; /* zinc-900，匹配Figma */
+  border-radius: 0rem;
+  flex-shrink: 0;
+  margin: 0;
+  box-shadow: 0px 4px 6px 0px rgba(0, 0, 0, 0.09); /* 匹配Figma阴影 */
+  gap: 1.5rem;
+}
+
+/* 桌面端Nav样式 - hug内容，居中 */
+@media (min-width: 1024px) {
+  .nav {
+    position: fixed;
+    bottom: 1.5rem; /* 向下24px */
+    left: 50%;
+    right: auto;
+    transform: translateX(-50%);
+    width: fit-content; /* hug子级元素宽度 */
+    margin: 0;
+    padding: 1rem; /* 保持16px内边距 */
+  }
+}
+
+/* Logo容器 - 所有断点尺寸一致 */
+.logoContainer {
+  display: flex;
+  align-items: center;
+  height: 1.25rem; /* 20px，所有断点保持一致 */
+  width: 6.25rem; /* 100px，所有断点保持一致 */
+  flex-shrink: 0;
+}
+
+.logoImage {
+  height: 100%;
+  width: 100%;
+  object-fit: contain;
+}
+
+/* Actions组 */
+.actionsGroup {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 0.5rem; /* 8px间距，匹配Figma */
+}
+
+/* 刷新按钮样式 - 所有断点尺寸一致 */
+.refreshButton {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 0.375rem;
+  width: 2.25rem; /* 36px，所有断点保持一致 */
+  height: 2.25rem; /* 36px，所有断点保持一致 */
+  padding: 0;
+  border: none;
+  background: transparent;
+  transition: background-color 0.2s;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.refreshButton:hover {
+  background-color: rgba(255, 255, 255, 0.1); /* 适应深色背景的hover效果 */
+}
+
+.refreshButtonIcon {
+  color: #fafafa; /* 白色图标，适应深色背景 */
+  flex-shrink: 0;
+} 

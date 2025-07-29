@@ -1,12 +1,21 @@
 /* Logo.module.css - Logo组件样式 */
 
 .logo {
-  height: 76px; /* 直接使用px单位确保精确 */
-  width: auto;
+  height: 1.25rem; /* 20px，匹配Figma设计 */
+  width: 6.25rem; /* 100px，匹配Figma设计 */
 }
 
 .logoImage {
   height: 100%;
-  width: auto;
+  width: 100%;
   object-fit: contain;
+  /* 移除颜色反转，nav_logo.svg应该已经是适合深色背景的颜色 */
+}
+
+/* 桌面端Logo保持相同尺寸 */
+@media (min-width: 1024px) {
+  .logo {
+    height: 1.25rem; /* 保持20px */
+    width: 6.25rem; /* 保持100px */
+  }
 } 
