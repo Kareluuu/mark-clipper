@@ -1,7 +1,7 @@
 /* Logo.module.css - Logo组件样式 */
 
 .logo {
-  height: 76px; /* 直接使用px单位确保精确 */
+  height: 28px; /* 直接使用px单位确保精确 */
   width: auto;
 }
 

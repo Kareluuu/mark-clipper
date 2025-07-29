@@ -73,6 +73,6 @@ export async function GET(request: NextRequest) {
   // 返回用户到错误页面，显示他们无法登录
   const errorUrl = new URL(`${origin}/auth/auth-code-error`)
   errorUrl.searchParams.set('error', 'missing_code')
-  errorUrl.searchParams.set('error_description', '缺少认证代码参数')
+  errorUrl.searchParams.set('error_description', 'Missing authentication code parameter')
   return NextResponse.redirect(errorUrl.toString())
 } 

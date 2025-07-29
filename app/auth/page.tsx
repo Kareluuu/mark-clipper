@@ -25,8 +25,8 @@ export default function AuthPage() {
           
           <div className={styles.authWrapper}>
             <div className={styles.authCard}>
-              <h1 className={styles.authTitle}>欢迎回来</h1>
-              <p className={styles.authSubtitle}>登录您的账户以继续使用 Mark Anytime</p>
+              <h1 className={styles.authTitle}>Your mark assistant.</h1>
+              {/* <p className={styles.authSubtitle}>Sign in to your account to continue using Mark Anytime</p> */}
               
               <Auth
                 supabaseClient={supabase}

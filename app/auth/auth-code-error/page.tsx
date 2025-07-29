@@ -13,22 +13,22 @@ function AuthCodeErrorContent() {
 
   const getErrorMessage = () => {
     if (error === 'access_denied') {
-      return '您拒绝了授权请求，或邮箱验证链接已过期。'
+      return 'You denied the authorization request, or the email verification link has expired.'
     }
     if (errorDescription) {
       return errorDescription
     }
-    return '登录过程中出现了未知错误。'
+    return 'An unknown error occurred during the login process.'
   }
 
   const getErrorSolution = () => {
     if (error === 'access_denied') {
-      return '请重新注册或检查您的邮箱中是否有新的验证邮件。'
+      return 'Please register again or check your email for a new verification email.'
     }
     if (errorDescription?.includes('expired')) {
-      return '验证链接已过期，请重新注册获取新的验证邮件。'
+      return 'The verification link has expired. Please register again to get a new verification email.'
     }
-    return '请重试或联系技术支持。'
+    return 'Please try again or contact technical support.'
   }
 
   return (
@@ -40,7 +40,7 @@ function AuthCodeErrorContent() {
         
         <div className={styles.authWrapper}>
           <div className={styles.authCard}>
-            <h1 className={styles.authTitle}>登录失败</h1>
+            <h1 className={styles.authTitle}>Login Failed</h1>
             <p className={styles.authSubtitle}>
               {getErrorMessage()}
             </p>
@@ -55,10 +55,10 @@ function AuthCodeErrorContent() {
                 fontSize: '14px'
               }}>
                 <p style={{ margin: '0 0 8px 0', fontWeight: '500', color: '#991b1b' }}>
-                  错误详情：
+                  Error Details:
                 </p>
                 <p style={{ margin: '0', color: '#7f1d1d' }}>
-                  {error}: {errorDescription || '未知错误'}
+                  {error}: {errorDescription || 'Unknown error'}
                 </p>
               </div>
             )}
@@ -72,7 +72,7 @@ function AuthCodeErrorContent() {
               fontSize: '14px'
             }}>
               <p style={{ margin: '0 0 8px 0', fontWeight: '500', color: '#0c4a6e' }}>
-                💡 解决方案：
+                💡 Solution:
               </p>
               <p style={{ margin: '0', color: '#075985' }}>
                 {getErrorSolution()}
@@ -83,7 +83,7 @@ function AuthCodeErrorContent() {
               onClick={() => router.push('/auth')}
               className={styles.retryButton}
             >
-              返回登录页面
+              Back to Login Page
             </button>
             
             <button
@@ -100,7 +100,7 @@ function AuthCodeErrorContent() {
                 cursor: 'pointer'
               }}
             >
-              重新加载页面
+              Reload Page
             </button>
           </div>
         </div>
@@ -119,9 +119,9 @@ function LoadingFallback() {
         
         <div className={styles.authWrapper}>
           <div className={styles.authCard}>
-            <h1 className={styles.authTitle}>加载中...</h1>
+            <h1 className={styles.authTitle}>Loading...</h1>
             <p className={styles.authSubtitle}>
-              正在处理您的请求，请稍候...
+              Processing your request, please wait...
             </p>
           </div>
         </div>

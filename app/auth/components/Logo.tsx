@@ -7,9 +7,9 @@ export function Logo() {
       <Image 
         alt="logo" 
         className={logoStyles.logoImage} 
-        src="/markat_logo.svg"
-        width={120}
-        height={40}
+        src="/AuthPage_logo.svg"
+        width={124}
+        height={28}
         priority
       />
     </div>
