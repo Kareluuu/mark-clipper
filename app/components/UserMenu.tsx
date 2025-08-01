@@ -108,6 +108,11 @@ export default function UserMenu() {
     router.push('/auth')
   }
 
+  const handleDiscordFeedback = () => {
+    window.open('https://discord.gg/3pbXSd28', '_blank', 'noopener,noreferrer')
+    handleCloseDropdown()
+  }
+
   // 计算dropdown样式
   const dropdownStyle: React.CSSProperties = {
     width: isDesktop && navWidth ? `${navWidth}px` : undefined,
@@ -128,7 +133,7 @@ export default function UserMenu() {
           onClick={handleSignIn}
           className={styles.signInButton}
         >
-          登录
+          Login
         </button>
       </div>
     )
@@ -161,12 +166,21 @@ export default function UserMenu() {
                 </div>
               </div>
               <div className={styles.divider}></div>
+              <div className={styles.discordWrapper}>
+                <button
+                  onClick={handleDiscordFeedback}
+                  className={styles.discordButton}
+                >
+                  Feedback on Discord
+                </button>
+              </div>
+              <div className={styles.divider}></div>
               <div className={styles.signOutWrapper}>
                 <button
                   onClick={handleSignOut}
                   className={styles.signOutButton}
                 >
-                  登出
+                  Logout
                 </button>
               </div>
             </div>
