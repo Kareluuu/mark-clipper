@@ -47,6 +47,7 @@ function CategoriesButton({
   const buttonRef = useRef<HTMLButtonElement>(null);
   const [maxWidth, setMaxWidth] = useState<number | null>(null);
   const [displayText, setDisplayText] = useState<string>('');
+  const [isDesktop, setIsDesktop] = useState<boolean>(false);
 
   // 防抖函数
   const debounce = useCallback((func: () => void, delay: number) => {
@@ -67,10 +68,29 @@ function CategoriesButton({
     return context.measureText('中').width; // 使用中文字符测量，更准确
   }, []);
 
+  // 检测屏幕尺寸
+  const checkIsDesktop = useCallback(() => {
+    const desktopBreakpoint = 1024; // 与CSS中的断点保持一致
+    setIsDesktop(window.innerWidth >= desktopBreakpoint);
+  }, []);
+
   // 动态计算可用宽度和文本截断
   const calculateLayout = useCallback(() => {
     if (!navRef.current || !buttonRef.current || !selectedCategory) return;
 
+    // 桌面端：始终限制为10个字符
+    if (isDesktop) {
+      const maxTextWidthDesktop = getCharacterWidth() * 10; // 10个字符的宽度
+      const finalDisplayText = selectedCategory.length > 10 
+        ? selectedCategory.slice(0, 10) + '...' 
+        : selectedCategory;
+      
+      setMaxWidth(maxTextWidthDesktop);
+      setDisplayText(finalDisplayText);
+      return;
+    }
+
+    // 移动端：动态计算可用宽度
     const navWidth = navRef.current.offsetWidth;
     const navPadding = 32; // 1rem * 2 = 32px (左右padding)
     const gap = 24; // 1.5rem = 24px (gap between elements)
@@ -118,13 +138,30 @@ function CategoriesButton({
     
     setMaxWidth(finalMaxWidth);
     setDisplayText(finalDisplayText);
-  }, [selectedCategory, navRef, getCharacterWidth]);
+  }, [selectedCategory, navRef, getCharacterWidth, isDesktop]);
 
   // 防抖的计算函数
   const debouncedCalculateLayout = useCallback(
     debounce(calculateLayout, 100),
     [calculateLayout, debounce]
   );
+
+  // 初始化屏幕尺寸检测
+  useEffect(() => {
+    // 初始检测
+    checkIsDesktop();
+    
+    // 监听窗口大小变化，更新屏幕尺寸状态
+    const handleResize = () => {
+      checkIsDesktop();
+    };
+    
+    window.addEventListener('resize', handleResize);
+    
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, [checkIsDesktop]);
 
   // 监听窗口大小变化和nav宽度变化
   useEffect(() => {
@@ -133,19 +170,21 @@ function CategoriesButton({
     // 初始计算
     calculateLayout();
 
-    // ResizeObserver监听nav宽度变化
+    // ResizeObserver监听nav宽度变化（仅移动端需要）
     let resizeObserver: ResizeObserver | null = null;
     
-    if (navRef.current) {
+    if (!isDesktop && navRef.current) {
       resizeObserver = new ResizeObserver(() => {
         debouncedCalculateLayout();
       });
       resizeObserver.observe(navRef.current);
     }
 
-    // 监听窗口大小变化
+    // 监听窗口大小变化（移动端需要重新计算布局）
     const handleResize = () => {
-      debouncedCalculateLayout();
+      if (!isDesktop) {
+        debouncedCalculateLayout();
+      }
     };
     
     window.addEventListener('resize', handleResize);
@@ -156,7 +195,14 @@ function CategoriesButton({
       }
       window.removeEventListener('resize', handleResize);
     };
-  }, [selectedCategory, calculateLayout, debouncedCalculateLayout, navRef]);
+  }, [selectedCategory, calculateLayout, debouncedCalculateLayout, navRef, isDesktop]);
+
+  // 当屏幕尺寸状态变化时重新计算布局
+  useEffect(() => {
+    if (selectedCategory) {
+      calculateLayout();
+    }
+  }, [isDesktop, calculateLayout, selectedCategory]);
 
   const isSelected = selectedCategory !== null && selectedCategory !== undefined;
 
