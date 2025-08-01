@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import AuthGuard from '@/lib/components/AuthGuard';
 import styles from './privacy.module.css';
 
 export const metadata: Metadata = {
@@ -8,7 +9,8 @@ export const metadata: Metadata = {
 
 export default function PrivacyPage() {
   return (
-    <div className={styles.container}>
+    <AuthGuard requireAuth={false}>
+      <div className={styles.container}>
       <div className={styles.header}>
         <h1 className={styles.title}>隐私权政策</h1>
         <p className={styles.lastUpdated}>最后更新：2024年12月19日</p>
@@ -195,5 +197,6 @@ export default function PrivacyPage() {
         </div>
       </div>
     </div>
+    </AuthGuard>
   );
 }

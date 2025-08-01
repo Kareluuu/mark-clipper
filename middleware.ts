@@ -9,6 +9,7 @@ const publicRoutes = [
   '/auth/extension',
   '/auth/verify',
   '/auth/confirm',
+  '/privacy', // 隐私政策页面无需认证
 ]
 
 // API 路由前缀
