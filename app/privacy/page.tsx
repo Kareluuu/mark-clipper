@@ -182,7 +182,7 @@ export default function PrivacyPage() {
             如果您对此隐私权政策有任何疑问或担忧，或者想要行使您的数据权利，请联系我们：
           </p>
           <div className={styles.contactInfo}>
-            <p><strong>电子邮件：</strong> privacy@mark-clipper.com</p>
+            <p><strong>电子邮件：</strong> privacy@marksclipper.com</p>
             <p><strong>应用内反馈：</strong> 通过应用设置中的&ldquo;反馈&rdquo;功能</p>
           </div>
         </section>
