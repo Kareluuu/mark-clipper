@@ -16,6 +16,7 @@ export interface Database {
           url: string | null
           user_id: string
           theme_name: ThemeKey
+          category: string
         }
         Insert: {
           id?: number
@@ -25,6 +26,7 @@ export interface Database {
           url?: string | null
           user_id: string
           theme_name?: ThemeKey
+          category?: string
         }
         Update: {
           id?: number
@@ -34,6 +36,7 @@ export interface Database {
           url?: string | null
           user_id?: string
           theme_name?: ThemeKey
+          category?: string
         }
       }
       // 添加其他表的类型定义...

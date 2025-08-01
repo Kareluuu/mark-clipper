@@ -29,12 +29,23 @@ export async function GET(request: NextRequest) {
       process.env.SUPABASE_SERVICE_ROLE_KEY!
     );
 
-    // 获取当前用户的 clips，包含 theme_name 字段
-    const { data, error } = await supabase
+    // 获取查询参数
+    const { searchParams } = new URL(request.url);
+    const category = searchParams.get('category');
+
+    // 构建查询
+    let query = supabase
       .from('clips')
-      .select('id, title, text_plain, created_at, url, theme_name')
+      .select('id, title, text_plain, created_at, url, theme_name, category')
       .eq('user_id', authResult.userId!)
       .order('created_at', { ascending: false });
+
+    // 如果提供了category参数，添加筛选条件
+    if (category && category !== 'all') {
+      query = query.eq('category', category);
+    }
+
+    const { data, error } = await query;
 
     if (error) {
       console.error('数据库查询错误:', error);
@@ -44,7 +55,7 @@ export async function GET(request: NextRequest) {
       );
     }
 
-    console.log(`✅ 用户 ${authResult.userEmail} 获取了 ${data?.length || 0} 条 clips`);
+    console.log(`✅ 用户 ${authResult.userEmail} 获取了 ${data?.length || 0} 条 clips${category ? ` (category: ${category})` : ''}`);
     return NextResponse.json(data, { headers: corsHeaders });
 
   } catch (error) {
@@ -73,19 +84,20 @@ export async function POST(request: NextRequest) {
       process.env.SUPABASE_SERVICE_ROLE_KEY!
     );
 
-    // 支持单条或多条插入，自动注入 user_id 和处理 theme_name
+    // 支持单条或多条插入，自动注入 user_id 和处理 theme_name、category
     const records = Array.isArray(body) ? body : [body];
     const recordsWithUserId = records.map(record => ({
       ...record,
       user_id: authResult.userId!, // 自动注入当前用户ID
       theme_name: record.theme_name || DEFAULT_THEME, // 若缺少 theme_name，回退到默认主题
+      category: record.category || 'default', // 若缺少 category，默认为 'default'
       created_at: new Date().toISOString()
     }));
 
     const { data, error } = await supabase
       .from('clips')
       .insert(recordsWithUserId)
-      .select('id, title, text_plain, created_at, url, theme_name');
+      .select('id, title, text_plain, created_at, url, theme_name, category');
 
     if (error) {
       console.error('数据库插入错误:', error);
