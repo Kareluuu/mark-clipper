@@ -2,4 +2,5 @@
 export { Card } from './Card';
 export { default as UserMenu } from './UserMenu';
 export { EditModal } from './EditModal';
+export { CategoryModal } from './CategoryModal';
 export { default as Nav } from './Nav'; 

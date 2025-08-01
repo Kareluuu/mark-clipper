@@ -64,7 +64,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  border-radius: 0.375rem;
+  border-radius: 0rem;
   width: 2.25rem; /* 36px，所有断点保持一致 */
   height: 2.25rem; /* 36px，所有断点保持一致 */
   padding: 0;
@@ -81,5 +81,60 @@
 
 .refreshButtonIcon {
   color: #fafafa; /* 白色图标，适应深色背景 */
+  flex-shrink: 0;
+}
+
+/* Categories按钮样式 - 与刷新按钮保持一致 */
+.categoriesButton {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 0rem;
+  width: 2.25rem; /* 36px，所有断点保持一致 */
+  height: 2.25rem; /* 36px，所有断点保持一致 */
+  padding: 0;
+  border: none;
+  background: transparent;
+  transition: background-color 0.2s;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.categoriesButton:hover {
+  background-color: rgba(255, 255, 255, 0.1); /* 适应深色背景的hover效果 */
+}
+
+.categoriesButtonIcon {
+  color: #fafafa; /* 白色图标，适应深色背景 */
+  flex-shrink: 0;
+}
+
+/* Categories按钮选中状态 - 根据Figma设计稿严格还原 */
+.categoriesButtonSelected {
+  background-color: #fafafa !important; /* neutral-50，匹配Figma */
+  width: auto !important; /* 自动宽度以适应文字 */
+  padding: 0.5rem 1rem !important; /* px-4 py-2，匹配Figma的16px/8px */
+  gap: 0.25rem; /* gap-1，4px间距，匹配Figma */
+  border-radius: 0rem; /* 保持圆角 */
+}
+
+.categoriesButtonSelected:hover {
+  background-color: #f4f4f5 !important; /* 悬停时稍微深一点的灰色 */
+}
+
+.categoriesButtonSelected .categoriesButtonIcon {
+  color: #18181b !important; /* zinc-900，深色图标，匹配Figma */
+  width: 1.25rem; /* size-5，20px，匹配Figma */
+  height: 1.25rem; /* size-5，20px，匹配Figma */
+}
+
+.categoriesButtonText {
+  font-family: 'Geist', sans-serif;
+  font-weight: 500; /* Medium，匹配Figma */
+  font-size: 14px; /* text-sm，匹配Figma */
+  line-height: 20px; /* leading-5，匹配Figma */
+  color: #18181b; /* zinc-900，深色文字，匹配Figma */
+  white-space: nowrap; /* 防止换行 */
   flex-shrink: 0;
 } 

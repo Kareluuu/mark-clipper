@@ -3,7 +3,8 @@
 import React, { useEffect, useState } from "react";
 import { useClips } from "../lib/useClips";
 import { useEditClip } from "../lib/useEditClip";
-import { Card, Nav, EditModal } from "./components";
+import { useCategories } from "../lib/useCategories";
+import { Card, Nav, EditModal, CategoryModal } from "./components";
 import styles from "./page.module.css";
 import AuthGuard from "@/lib/components/AuthGuard";
 
@@ -188,7 +189,9 @@ function MasonryLayout({ children }: { children: React.ReactNode[] }) {
 
 export default function Home() {
   // 数据获取
-  const { data: clips, error, isLoading, mutate } = useClips();
+  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
+  const { data: clips, error, isLoading, mutate } = useClips(selectedCategory);
+  const { categories, isLoading: categoriesLoading } = useCategories();
   
   // 编辑状态管理 - 使用专门的hook
   const {
@@ -220,6 +223,9 @@ export default function Home() {
   const [toast, setToast] = useState<{ show: boolean; type: 'success' | 'fail' | 'deleted' | 'delete-fail' }>({ show: false, type: 'success' });
   const [deletingIds, setDeletingIds] = useState<Set<number>>(new Set());
   const [refreshing, setRefreshing] = useState(false);
+  
+  // CategoryModal状态管理
+  const [categoryModalOpen, setCategoryModalOpen] = useState(false);
 
   // 刷新按钮逻辑，调用 mutate 重新请求
   const handleRefresh = async () => {
@@ -234,6 +240,22 @@ export default function Home() {
     }
     setTimeout(() => setToast((t) => ({ ...t, show: false })), 2000);
     setRefreshing(false);
+  };
+
+  // Categories按钮点击处理函数
+  const handleCategoriesClick = () => {
+    setCategoryModalOpen(true);
+  };
+
+  // 处理Category选择
+  const handleCategorySelect = (category: string | null) => {
+    setSelectedCategory(category);
+    console.log('Selected category:', category);
+  };
+
+  // 关闭CategoryModal
+  const handleCloseCategoryModal = () => {
+    setCategoryModalOpen(false);
   };
 
   // 编辑卡片逻辑 - 使用hook中的函数
@@ -308,8 +330,12 @@ export default function Home() {
           </div>
         </div>
         
-        {/* Nav组件 */}
-        <Nav onRefresh={handleRefresh} />
+                  {/* Nav组件 */}
+          <Nav 
+            onRefresh={handleRefresh} 
+            onCategoriesClick={handleCategoriesClick} 
+            selectedCategory={selectedCategory}
+          />
         
         {/* Toast */}
         <Toast type={toast.type} show={toast.show} />
@@ -321,6 +347,16 @@ export default function Home() {
           clip={editingClip}
           onSubmit={submitEdit}
           isSubmitting={editSubmitting}
+        />
+        
+        {/* Categories模态框 */}
+        <CategoryModal
+          isOpen={categoryModalOpen}
+          onClose={handleCloseCategoryModal}
+          onCategorySelect={handleCategorySelect}
+          categories={categories}
+          selectedCategory={selectedCategory}
+          isLoading={categoriesLoading}
         />
       </div>
     </AuthGuard>

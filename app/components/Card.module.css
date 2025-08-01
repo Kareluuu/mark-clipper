@@ -73,11 +73,42 @@
   width: 100%;
 }
 
-/* 卡片顶部icon */
-.cardIcon {
-  width: 24px;
-  height: 24px;
+/* 卡片顶部引用图标 */
+.quoteIcon {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  width: 31px;
+  height: 18px;
   flex-shrink: 0;
+  color: #000000;
+}
+
+/* Category badge样式 */
+.categoryBadge {
+  display: flex;
+  flex-direction: row;
+  gap: 4px;
+  align-items: center;
+  justify-content: center;
+  height: 22px;
+  border-radius: 0;
+  flex-shrink: 0;
+  font-family: 'Geist', sans-serif;
+  font-weight: 600;
+  font-size: 12px;
+  line-height: 16px;
+  color: #18181b;
+}
+
+.categoryBadge svg {
+  width: 14px;
+  height: 14px;
+  color: #18181b;
+}
+
+.categoryBadge span {
+  white-space: nowrap;
 }
 
 /* 主要内容文本 */
@@ -88,6 +119,7 @@
   align-items: flex-start;
   justify-content: flex-start;
   width: 100%;
+  margin: 0; /* 确保没有默认margin */
 }
 
 .cardText {
@@ -104,6 +136,7 @@
   flex-shrink: 1;
   word-wrap: break-word;
   overflow-wrap: break-word;
+  margin: 0; /* 确保没有默认margin */
 }
 
 /* 分割线 */
@@ -124,14 +157,15 @@
   background-color: #000000;
 }
 
-/* Ref区域 */
+/* Ref区域 - 修改为水平布局 */
 .cardRefSection {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   gap: 8px;
-  align-items: flex-start;
+  align-items: center;
   justify-content: flex-start;
   width: 100%;
+  cursor: pointer;
 }
 
 /* Ref标签 */
@@ -160,14 +194,15 @@
   flex-shrink: 0;
 }
 
-/* 标题区域 */
+/* 标题区域 - 修改为单行显示 */
 .cardTitleRow {
   display: flex;
   flex-direction: row;
   gap: 10px;
-  align-items: flex-start;
+  align-items: center;
   justify-content: flex-start;
-  width: 100%;
+  flex: 1;
+  min-width: 0; /* 确保flex子项可以收缩 */
 }
 
 .cardTitle {
@@ -177,13 +212,11 @@
   font-size: 12px;
   line-height: 20px;
   color: #18181b;
-  flex-basis: 0;
-  flex-grow: 1;
-  min-height: 1px;
-  min-width: 1px;
-  flex-shrink: 1;
-  word-wrap: break-word;
-  overflow-wrap: break-word;
+  flex: 1;
+  min-width: 0; /* 确保文本可以收缩 */
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 /* 操作区域 */

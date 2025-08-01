@@ -1,7 +1,7 @@
 import useSWR from 'swr';
 import { useAuth } from '@/lib/contexts/AuthContext';
 import { useRouter } from 'next/navigation';
-import { useCallback } from 'react';
+import { useCallback, useMemo } from 'react';
 import { ThemeKey } from '@/lib/themes/themeConfig';
 
 // 更新的 Clip 接口，匹配 API 返回格式
@@ -12,6 +12,7 @@ export interface Clip {
   created_at: string; // API 现在总是返回这个字段
   url?: string; // 可选字段
   theme_name: ThemeKey; // 新增
+  category: string; // 新增category字段
   // 不包含 user_id，因为 API 已经过滤了
 }
 
@@ -78,7 +79,7 @@ const createAuthenticatedFetcher = (signOut: () => Promise<void>, router: Return
   };
 };
 
-export function useClips() {
+export function useClips(category?: string | null) {
   const { user, loading: authLoading, signOut } = useAuth();
   const router = useRouter();
 
@@ -88,10 +89,20 @@ export function useClips() {
     [signOut, router]
   );
 
+  // 构建API URL，包含category参数
+  const apiUrl = useMemo(() => {
+    if (!user || authLoading) return null;
+    
+    const baseUrl = '/api/clips';
+    if (category && category !== null) {
+      return `${baseUrl}?category=${encodeURIComponent(category)}`;
+    }
+    return baseUrl;
+  }, [user, authLoading, category]);
+
   // 使用 SWR，但只有在用户已认证时才请求
   const swrResult = useSWR<Clip[]>(
-    // 关键：只有当用户存在时才设置 key，否则为 null（SWR 不会请求）
-    user && !authLoading ? `/api/clips` : null,
+    apiUrl,
     authenticatedFetcher,
     {
       // SWR 配置选项
