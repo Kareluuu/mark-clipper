@@ -1,7 +1,6 @@
 "use client";
 
 import React from "react";
-import Image from "next/image";
 import { Hash } from "lucide-react";
 import { Clip } from "@/lib/useClips";
 import { getThemeConfig } from '@/lib/themes/themeConfig';

@@ -141,10 +141,10 @@ function CategoriesButton({
   }, [selectedCategory, navRef, getCharacterWidth, isDesktop]);
 
   // 防抖的计算函数
-  const debouncedCalculateLayout = useCallback(
-    debounce(calculateLayout, 100),
-    [calculateLayout, debounce]
-  );
+  const debouncedCalculateLayout = useCallback(() => {
+    const debouncedFn = debounce(calculateLayout, 100);
+    return debouncedFn();
+  }, [calculateLayout, debounce]);
 
   // 初始化屏幕尺寸检测
   useEffect(() => {

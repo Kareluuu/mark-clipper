@@ -20,7 +20,7 @@ export default function PrivacyPage() {
         <section className={styles.section}>
           <h2 className={styles.sectionTitle}>1. 概述</h2>
           <p className={styles.paragraph}>
-            Mark Clipper（"我们"、"本应用"）尊重您的隐私权。本隐私权政策说明了我们如何收集、使用、存储和保护您在使用Mark Clipper网页应用和浏览器扩展时的个人信息。
+            Mark Clipper（&ldquo;我们&rdquo;、&ldquo;本应用&rdquo;）尊重您的隐私权。本隐私权政策说明了我们如何收集、使用、存储和保护您在使用Mark Clipper网页应用和浏览器扩展时的个人信息。
           </p>
           <p className={styles.paragraph}>
             Mark Clipper是一个网页内容标记和管理工具，帮助用户收集、整理和管理来自各个网站的有价值内容。
@@ -183,7 +183,7 @@ export default function PrivacyPage() {
           </p>
           <div className={styles.contactInfo}>
             <p><strong>电子邮件：</strong> privacy@mark-clipper.com</p>
-            <p><strong>应用内反馈：</strong> 通过应用设置中的"反馈"功能</p>
+            <p><strong>应用内反馈：</strong> 通过应用设置中的&ldquo;反馈&rdquo;功能</p>
           </div>
         </section>
 
