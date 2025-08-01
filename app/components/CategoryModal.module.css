@@ -13,13 +13,14 @@
   display: flex;
   align-items: stretch;
   justify-content: center;
-  padding: 1.5rem; /* 24px外边距 */
+  padding: 1rem; /* 移动端：16px外边距 */
   min-height: 100vh;
   overflow: hidden;
 }
 
 @media (min-width: 640px) {
   .modalOverlay {
+    padding: 2rem; /* 桌面端：32px外边距 */
     align-items: stretch; /* 改为stretch以填充高度 */
   }
 }
@@ -55,26 +56,30 @@
 @media (min-width: 640px) {
   .modalContainer {
     max-width: 480px;
-    height: 100%; /* 填充可用高度 */
-    max-height: calc(100vh - 3rem); /* 保持24px外边距 */
+    height: auto; /* 自动高度 */
+    min-height: 60vh; /* 最小高度 */
+    max-height: calc(100vh - 4rem); /* 适应新的32px外边距 */
   }
 }
 
 @media (min-width: 768px) {
   .modalContainer {
     max-width: 600px;
+    min-height: 65vh; /* 平板设备较大高度 */
   }
 }
 
 @media (min-width: 1024px) {
   .modalContainer {
     max-width: 720px;
+    min-height: 70vh; /* 桌面设备更大高度 */
   }
 }
 
 @media (min-width: 1280px) {
   .modalContainer {
     max-width: 800px;
+    min-height: 75vh; /* 大屏设备最大高度 */
   }
 }
 
@@ -95,9 +100,30 @@
 
 @media (min-width: 640px) {
   .editorContainer {
-    height: 100%; /* 填充父容器高度 */
-    min-height: 100%;
-    max-height: none; /* 移除最大高度限制 */
+    height: auto; /* 自动高度 */
+    min-height: 60vh; /* 最小高度适应内容 */
+    max-height: calc(100vh - 4rem); /* 适应新的外边距 */
+  }
+}
+
+@media (min-width: 768px) {
+  .editorContainer {
+    min-height: 65vh; /* 平板设备高度 */
+    max-height: calc(100vh - 4rem);
+  }
+}
+
+@media (min-width: 1024px) {
+  .editorContainer {
+    min-height: 70vh; /* 桌面设备高度 */
+    max-height: calc(100vh - 4rem);
+  }
+}
+
+@media (min-width: 1280px) {
+  .editorContainer {
+    min-height: 75vh; /* 大屏设备高度 */
+    max-height: calc(100vh - 4rem);
   }
 }
 
@@ -127,8 +153,8 @@
 /* 关闭按钮 - 固定在右上角 */
 .closeButton {
   position: absolute;
-  top: 1.5rem; /* 24px，与容器padding一致 */
-  right: 1.5rem; /* 24px，与容器padding一致 */
+  top: 1rem; /* 移动端：16px，与容器padding一致 */
+  right: 1rem; /* 移动端：16px，与容器padding一致 */
   display: flex;
   align-items: center;
   justify-content: center;
@@ -141,6 +167,18 @@
   cursor: pointer;
   flex-shrink: 0;
   z-index: 10; /* 确保在内容之上 */
+  /* iOS Safari 触摸优化 */
+  -webkit-touch-callout: none;
+  -webkit-tap-highlight-color: transparent;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+@media (min-width: 640px) {
+  .closeButton {
+    top: 2rem; /* 桌面端：32px，与容器padding一致 */
+    right: 2rem; /* 桌面端：32px，与容器padding一致 */
+  }
 }
 
 .closeButton:hover {
@@ -160,12 +198,43 @@
   max-width: 100%;
   box-sizing: border-box;
   overflow-y: auto;
-  min-height: 200px;
+  min-height: 200px; /* 移动端最小高度 */
+  max-height: calc(70vh - 100px); /* 移动端最大高度 */
   display: flex;
   flex-direction: column;
   justify-content: flex-end; /* 整体内容沉底 */
-  padding: 1.5rem; /* 24px内边距 */
-  gap: 1.5rem; /* 24px间距 */
+  padding: 1rem; /* 移动端：16px内边距 */
+  gap: 1rem; /* 移动端：16px间距 */
+}
+
+@media (min-width: 640px) {
+  .categoriesArea {
+    min-height: 250px; /* 小屏设备 */
+    max-height: calc(100vh - 200px);
+    padding: 1.5rem; /* 桌面端：24px内边距 */
+    gap: 1.5rem; /* 桌面端：24px间距 */
+  }
+}
+
+@media (min-width: 768px) {
+  .categoriesArea {
+    min-height: 300px; /* 平板设备 */
+    max-height: calc(100vh - 180px);
+  }
+}
+
+@media (min-width: 1024px) {
+  .categoriesArea {
+    min-height: 350px; /* 桌面设备 */
+    max-height: calc(100vh - 150px);
+  }
+}
+
+@media (min-width: 1280px) {
+  .categoriesArea {
+    min-height: 400px; /* 大屏设备 */
+    max-height: calc(100vh - 120px);
+  }
 }
 
 /* Category网格布局 - 根据Figma设计稿 */
@@ -188,7 +257,7 @@
   height: 2.25rem; /* 36px高度，匹配Figma */
   font-family: 'Geist', sans-serif;
   font-weight: 500; /* Medium weight，匹配Figma */
-  font-size: 14px; /* Text-sm，匹配Figma */
+  font-size: 16px; /* 16px防止iOS Safari自动缩放 */
   line-height: 20px; /* 匹配Figma */
   cursor: pointer;
   transition: all 0.2s ease;
@@ -197,6 +266,13 @@
   justify-content: center;
   white-space: nowrap;
   flex-shrink: 0;
+  /* iOS Safari 防缩放和触摸优化 */
+  -webkit-text-size-adjust: 100% !important;
+  -webkit-touch-callout: none !important;
+  -webkit-tap-highlight-color: transparent !important;
+  -webkit-user-select: none;
+  user-select: none;
+  touch-action: manipulation; /* 优化触摸响应 */
 }
 
 .categoryButton:hover {
@@ -277,13 +353,20 @@
   width: 100%;
   font-family: 'Geist', sans-serif;
   font-weight: 500; /* Medium，匹配Figma */
-  font-size: 14px; /* Text-sm，匹配Figma */
+  font-size: 16px; /* 16px防止iOS Safari自动缩放 */
   line-height: 20px; /* 匹配Figma */
   cursor: pointer;
   transition: all 0.2s ease;
   display: flex;
   align-items: center;
   justify-content: center;
+  /* iOS Safari 防缩放和触摸优化 */
+  -webkit-text-size-adjust: 100% !important;
+  -webkit-touch-callout: none !important;
+  -webkit-tap-highlight-color: transparent !important;
+  -webkit-user-select: none;
+  user-select: none;
+  touch-action: manipulation; /* 优化触摸响应 */
 }
 
 .viewAllButton:hover {
@@ -348,4 +431,32 @@
   width: 100%;
   height: 100%;
   -webkit-overflow-scrolling: touch;
+}
+
+/* 移动端全局优化 - 防止iOS Safari缩放和触摸优化 */
+@media (max-width: 640px) {
+  .modalContainer * {
+    /* 确保所有文本至少16px防止自动缩放 */
+    font-size: max(16px, 1em) !important;
+    -webkit-text-size-adjust: 100% !important;
+  }
+  
+  .modalContainer button,
+  .modalContainer input,
+  .modalContainer textarea {
+    /* 移动端按钮和输入框优化 */
+    -webkit-appearance: none !important;
+    appearance: none !important;
+    -webkit-tap-highlight-color: transparent !important;
+    -webkit-touch-callout: none !important;
+    touch-action: manipulation !important;
+  }
+}
+
+/* 通用的移动端触摸优化 */
+.modalContainer {
+  /* 优化滚动性能 */
+  -webkit-overflow-scrolling: touch;
+  /* 防止橡皮筋效果 */
+  overscroll-behavior: contain;
 }

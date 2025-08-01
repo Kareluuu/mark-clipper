@@ -117,6 +117,7 @@
   padding: 0.5rem 1rem !important; /* px-4 py-2，匹配Figma的16px/8px */
   gap: 0.25rem; /* gap-1，4px间距，匹配Figma */
   border-radius: 0rem; /* 保持圆角 */
+  min-width: fit-content; /* 确保按钮能适应内容 */
 }
 
 .categoriesButtonSelected:hover {
@@ -127,6 +128,7 @@
   color: #18181b !important; /* zinc-900，深色图标，匹配Figma */
   width: 1.25rem; /* size-5，20px，匹配Figma */
   height: 1.25rem; /* size-5，20px，匹配Figma */
+  flex-shrink: 0; /* 图标不缩放 */
 }
 
 .categoriesButtonText {
@@ -136,5 +138,8 @@
   line-height: 20px; /* leading-5，匹配Figma */
   color: #18181b; /* zinc-900，深色文字，匹配Figma */
   white-space: nowrap; /* 防止换行 */
-  flex-shrink: 0;
+  overflow: hidden; /* 隐藏溢出内容 */
+  text-overflow: ellipsis; /* 显示省略号 */
+  max-width: var(--category-text-max-width, none); /* 使用CSS变量控制最大宽度 */
+  min-width: 0; /* 允许缩小 */
 } 
