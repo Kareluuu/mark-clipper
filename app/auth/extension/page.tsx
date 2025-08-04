@@ -172,9 +172,9 @@ function ExtensionAuthContent() {
         
         <div className={styles.authWrapper}>
           <div className={styles.authCard}>
-            <h1 className={styles.authTitle}>登录 Mark Clipper 扩展</h1>
+            <h1 className={styles.authTitle}>Login Marks Clipper Extension</h1>
             <p className={styles.authSubtitle}>
-              使用您的账户登录以在浏览器扩展中使用 Mark Clipper
+              Use your account to login to Marks Clipper Extension
             </p>
             
             <Auth
@@ -198,8 +198,8 @@ function ExtensionAuthContent() {
             />
             
             <div className="mt-4 p-3 bg-blue-50 rounded-lg">
-              <p className="text-sm text-blue-700">
-                💡 登录成功后将自动返回扩展
+              <p className="text-sm text-center" style={{ color: '#71717A' }}>
+                💡 After login, you will be redirected to the extension
               </p>
             </div>
           </div>
