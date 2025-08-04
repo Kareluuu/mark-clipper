@@ -110,6 +110,12 @@ function ExtensionAuthContent() {
       return
     }
 
+    // 标记这是扩展登录，以便callback能够识别
+    if (typeof window !== 'undefined') {
+      sessionStorage.setItem('isExtensionLogin', 'true')
+      console.log('🏷️ Set extension login marker in sessionStorage')
+    }
+
     // 检查当前是否已有活跃会话
     const checkCurrentSession = async () => {
       try {
@@ -231,7 +237,7 @@ function ExtensionAuthContent() {
               }}
               showLinks={AUTH_OPTIONS.showLinks}
               localization={authLocalization}
-              redirectTo={`${typeof window !== 'undefined' ? window.location.origin : ''}/auth/callback?from=extension`}
+              redirectTo={`${typeof window !== 'undefined' ? window.location.origin : ''}/auth/callback`}
             />
             
             <div className="mt-4 p-3 bg-blue-50 rounded-lg">
