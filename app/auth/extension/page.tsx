@@ -27,6 +27,13 @@ function ExtensionAuthContent() {
   // 处理认证成功的逻辑
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const handleAuthSuccess = useCallback(async (session: any) => {
+    console.log('🚀 handleAuthSuccess called with session:', {
+      hasSession: !!session,
+      userEmail: session?.user?.email,
+      redirectTo,
+      hasRedirectTo: !!redirectTo
+    })
+    
     setIsAuthenticating(true)
     
     try {
@@ -39,26 +46,31 @@ function ExtensionAuthContent() {
           user: JSON.stringify({
             id: session.user.id,
             email: session.user.email,
-            name: session.user.user_metadata?.name || session.user.email
+            name: session.user.user_metadata?.name || session.user.email,
+            avatar_url: session.user.user_metadata?.avatar_url
           })
         }
         
         const redirectUrl = new URL(redirectTo)
         redirectUrl.hash = new URLSearchParams(authData).toString()
         
-        console.log('重定向详细信息:')
+        console.log('🔗 重定向详细信息:')
         console.log('- 原始redirectTo:', redirectTo)
-        console.log('- 认证数据:', authData)
+        console.log('- 认证数据keys:', Object.keys(authData))
         console.log('- 最终重定向URL:', redirectUrl.href)
-        console.log('- Hash部分:', redirectUrl.hash)
+        console.log('- Hash部分长度:', redirectUrl.hash.length)
         
         // 添加短暂延迟确保日志输出
+        console.log('⏰ 1秒后开始重定向...')
         setTimeout(() => {
+          console.log('🎯 正在重定向到:', redirectUrl.href)
           window.location.href = redirectUrl.href
         }, 1000)
       } else {
+        console.log('❌ No redirectTo URL found')
         // PostMessage方式（备选方案）
         if (window.opener) {
+          console.log('📤 Using postMessage fallback')
           window.opener.postMessage({
             type: 'AUTH_SUCCESS',
             session: {
@@ -73,17 +85,27 @@ function ExtensionAuthContent() {
             }
           }, '*')
           window.close()
+        } else {
+          console.log('❌ No window.opener found')
         }
       }
     } catch (error) {
-      console.error('Extension auth redirect failed:', error)
+      console.error('❌ Extension auth redirect failed:', error)
       setIsAuthenticating(false)
     }
   }, [redirectTo])
 
   useEffect(() => {
+    console.log('🔍 Extension auth page loaded with params:', {
+      source,
+      redirectTo,
+      authSuccess,
+      currentUrl: window.location.href
+    })
+
     // 检查是否来自扩展
     if (source !== 'extension') {
+      console.log('❌ Not from extension, redirecting to main auth...')
       router.push('/auth')
       return
     }
@@ -91,27 +113,42 @@ function ExtensionAuthContent() {
     // 检查当前是否已有活跃会话
     const checkCurrentSession = async () => {
       try {
+        console.log('🔄 Checking current session...')
         const { data: { session }, error } = await supabase.auth.getSession()
-        console.log('Current session check:', session?.user?.email, error)
-        console.log('Auth success parameter:', authSuccess)
+        console.log('✅ Session check result:', {
+          hasSession: !!session,
+          userEmail: session?.user?.email,
+          error: error?.message,
+          authSuccess
+        })
         
         if (session && !error) {
           // 用户已登录，直接处理认证信息返回
-          console.log('Found active session, processing auth success...')
+          console.log('🎉 Found active session, processing auth success...')
           await handleAuthSuccess(session)
         } else if (authSuccess === 'true') {
           // 如果有auth_success参数但没有立即获取到session，等待一下再重试
-          console.log('Auth success indicated but no session yet, retrying...')
+          console.log('⏳ Auth success indicated but no session yet, retrying in 500ms...')
           setTimeout(async () => {
+            console.log('🔄 Retrying session check...')
             const { data: { session: retrySession }, error: retryError } = await supabase.auth.getSession()
+            console.log('🔄 Retry result:', {
+              hasSession: !!retrySession,
+              userEmail: retrySession?.user?.email,
+              error: retryError?.message
+            })
             if (retrySession && !retryError) {
-              console.log('Retry successful, processing auth success...')
+              console.log('✅ Retry successful, processing auth success...')
               await handleAuthSuccess(retrySession)
+            } else {
+              console.log('❌ Retry failed, session still not available')
             }
           }, 500)
+        } else {
+          console.log('ℹ️ No active session and no auth_success parameter')
         }
       } catch (error) {
-        console.error('检查当前会话失败:', error)
+        console.error('❌ 检查当前会话失败:', error)
       }
     }
 
@@ -194,7 +231,7 @@ function ExtensionAuthContent() {
               }}
               showLinks={AUTH_OPTIONS.showLinks}
               localization={authLocalization}
-              redirectTo={`${typeof window !== 'undefined' ? window.location.origin : ''}/auth/callback`}
+              redirectTo={`${typeof window !== 'undefined' ? window.location.origin : ''}/auth/callback?from=extension`}
             />
             
             <div className="mt-4 p-3 bg-blue-50 rounded-lg">
