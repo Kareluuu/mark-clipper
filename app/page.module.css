@@ -297,12 +297,17 @@
 }
 
 /* 空状态样式 */
-.emptyState {
-  background-color: #F4F4F5;
+/* 旧的空状态样式已移除，使用新的onboardingCard样式 */
+
+/* 空状态容器（现在由MasonryLayout处理布局） */
+
+/* 引导卡片样式 */
+.onboardingCard {
+  background-color: #F4F4F5; /* zinc-100 */
   width: 100%;
   max-width: 368px;
   padding: 24px;
-  border-radius: 0.375rem;
+  border-radius: 0;
   display: flex;
   flex-direction: column;
   gap: 24px;
@@ -310,17 +315,11 @@
   justify-content: flex-start;
   min-height: fit-content;
   height: auto;
+  box-sizing: border-box;
 }
 
-.emptyStateIcon {
-  width: 24px;
-  height: 24px;
-  flex-shrink: 0;
-  font-size: 24px;
-  line-height: 1;
-}
-
-.emptyStateContent {
+/* 卡片内容容器 */
+.cardContent {
   display: flex;
   flex-direction: column;
   gap: 16px;
@@ -329,7 +328,33 @@
   width: 100%;
 }
 
-.emptyStateTitle {
+/* 引用图标样式 */
+.quoteIcon {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  width: fit-content;
+  color: #000000;
+}
+
+.quoteIcon svg {
+  width: 31px;
+  height: 18px;
+  flex-shrink: 0;
+}
+
+/* 卡片文本内容 */
+.cardTextContent {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  align-items: flex-start;
+  justify-content: flex-start;
+  width: 100%;
+}
+
+/* 卡片标题 */
+.cardTitle {
   font-family: 'Helvetica', sans-serif;
   font-style: normal;
   font-weight: bold;
@@ -339,68 +364,82 @@
   margin: 0;
 }
 
-.emptyStateDescription {
+/* 卡片描述 */
+.cardDescription {
   font-family: 'Helvetica', sans-serif;
   font-style: normal;
   font-weight: 400;
   font-size: 16px;
   line-height: normal;
-  color: #52525B;
+  color: #000000;
   margin: 0;
 }
 
-.emptyStateDescription .highlight {
+/* 文本颜色样式 */
+.textZinc600 {
+  color: #52525B;
+}
+
+.textZinc800 {
+  color: #27272A;
+}
+
+.textBold {
   font-weight: bold;
-  color: #18181b;
+  color: #27272A;
 }
 
-.emptyStateSteps {
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
+/* 分割线样式 */
+.divider {
+  height: 0;
   width: 100%;
+  position: relative;
+  flex-shrink: 0;
 }
 
-.emptyStateStep {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  width: 100%;
+.dividerLine {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  top: -1px;
+  height: 1px;
+  background-color: #000000; /* black */
 }
 
-.emptyStateStepBadge {
-  background-color: #fafafa;
+/* 安装按钮样式 */
+.installButton {
+  background-color: #18181B; /* zinc-900 */
   display: flex;
+  flex-direction: row;
+  height: 36px;
   align-items: center;
   justify-content: center;
-  padding: 2px 10px;
-  border-radius: 6px;
-  height: 22px;
-  width: fit-content;
+  padding: 8px 16px;
+  border: none;
+  border-radius: 0;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: background-color 0.2s ease;
 }
 
-.emptyStateStepBadgeText {
+.installButton:hover {
+  background-color: #3F3F46; /* zinc-700 */
+}
+
+.installButtonText {
   font-family: 'Geist', sans-serif;
   font-style: normal;
-  font-weight: 600;
-  font-size: 12px;
-  line-height: 16px;
-  color: #18181b;
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 20px;
+  color: #FAFAFA; /* neutral-50 */
   white-space: nowrap;
   margin: 0;
 }
 
-.emptyStateStepDescription {
-  font-family: 'Helvetica', sans-serif;
-  font-style: normal;
-  font-weight: 400;
-  font-size: 16px;
-  line-height: normal;
-  color: #52525B;
-  margin: 0;
-}
-
-.emptyStateCallToAction {
+/* 卡片副标题 */
+.cardSubtitle {
   font-family: 'Helvetica', sans-serif;
   font-style: normal;
   font-weight: bold;
@@ -408,6 +447,16 @@
   line-height: normal;
   color: #000000;
   margin: 0;
+}
+
+/* 桌面端布局适配 - 现在由MasonryLayout处理 */
+
+/* 移动端优化 */
+@media (max-width: 639px) {
+  .onboardingCard {
+    flex-shrink: 0;
+    min-height: fit-content;
+  }
 }
 
 /* 移动端特殊优化 */

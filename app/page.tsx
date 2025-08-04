@@ -28,40 +28,91 @@ function SkeletonCard() {
   );
 }
 
-function EmptyState() {
+function QuoteIcon() {
   return (
-    <div className={styles.emptyState}>
-      <span className={styles.emptyStateIcon}>📋</span>
-      <div className={styles.emptyStateContent}>
-        <h2 className={styles.emptyStateTitle}>还没有标记内容</h2>
-        <p className={styles.emptyStateDescription}>
-          开始使用 <span className="highlight">Marks扩展</span> 来保存您感兴趣的网页内容吧！
-        </p>
-        <div className={styles.emptyStateSteps}>
-          <div className={styles.emptyStateStep}>
-            <div className={styles.emptyStateStepBadge}>
-              <span className={styles.emptyStateStepBadgeText}>Step 1</span>
-            </div>
-            <p className={styles.emptyStateStepDescription}>安装 Marks 浏览器扩展</p>
-          </div>
-          <div className={styles.emptyStateStep}>
-            <div className={styles.emptyStateStepBadge}>
-              <span className={styles.emptyStateStepBadgeText}>Step 2</span>
-            </div>
-            <p className={styles.emptyStateStepDescription}>在任意网页上选择文本并点击扩展图标</p>
-          </div>
-          <div className={styles.emptyStateStep}>
-            <div className={styles.emptyStateStepBadge}>
-              <span className={styles.emptyStateStepBadgeText}>Step 3</span>
-            </div>
-            <p className={styles.emptyStateStepDescription}>您的标记将自动同步到这里</p>
-          </div>
+    <div className={styles.quoteIcon}>
+      <svg width="31" height="18" viewBox="0 0 31 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M9 0C4.02944 0 0 4.02944 0 9H9V0Z" fill="currentColor"/>
+        <rect y="9" width="9" height="9" fill="currentColor"/>
+        <path d="M9 9L13.5 9V13.5V18L9 18V9Z" fill="currentColor"/>
+        <path d="M26.5 0C21.5294 0 17.5 4.02944 17.5 9H26.5V0Z" fill="currentColor"/>
+        <rect x="17.5" y="9" width="9" height="9" fill="currentColor"/>
+        <path d="M26.5 9L31 9V13.5V18L26.5 18V9Z" fill="currentColor"/>
+      </svg>
+    </div>
+  );
+}
+
+function Divider() {
+  return (
+    <div className={styles.divider}>
+      <div className={styles.dividerLine}></div>
+    </div>
+  );
+}
+
+function EmptyState() {
+  const handleInstallExtension = () => {
+    window.open("https://chromewebstore.google.com/detail/pfgnjcdecedfbgkpgfbnmiddpdlanapk?utm_source=item-share-cb", "_blank");
+  };
+
+  const onboardingCards = [
+    // 卡片1: 欢迎卡片
+    <div key="welcome" className={styles.onboardingCard}>
+      <div className={styles.cardContent}>
+        <QuoteIcon />
+        <div className={styles.cardTextContent}>
+          <h2 className={styles.cardTitle}>Welcome to Marks!</h2>
+          <p className={styles.cardDescription}>
+            <span className={styles.textZinc600}>I am a SaaS application that allows you to </span>
+            <span className={styles.textBold}>mark any useful information on the web</span>
+            <span className={styles.textZinc800}>.</span>
+            <span className={styles.textZinc600}> Please follow the steps below to complete your first task!</span>
+          </p>
         </div>
-        <p className={styles.emptyStateCallToAction}>
-          让我们开始您的知识收集之旅！
-        </p>
+      </div>
+    </div>,
+
+    // 卡片2: 安装扩展卡片
+    <div key="install" className={styles.onboardingCard}>
+      <div className={styles.cardContent}>
+        <QuoteIcon />
+        <div className={styles.cardTextContent}>
+          <h2 className={styles.cardTitle}>STEP.1</h2>
+          <p className={styles.cardDescription}>
+            Please install the Marks Clipper chrome extension first.
+          </p>
+        </div>
+        <Divider />
+        <button 
+          className={styles.installButton}
+          onClick={handleInstallExtension}
+        >
+          <span className={styles.installButtonText}>Install Chrome Extension</span>
+        </button>
+      </div>
+    </div>,
+
+    // 卡片3: 使用说明卡片
+    <div key="usage" className={styles.onboardingCard}>
+      <div className={styles.cardContent}>
+        <QuoteIcon />
+        <div className={styles.cardTextContent}>
+          <h2 className={styles.cardTitle}>STEP.2</h2>
+          <p className={styles.cardDescription}>
+            Once the extension is installed, simply use your cursor to copy any piece of content, and it will be marked and saved here!
+          </p>
+        </div>
+        <Divider />
+        <h3 className={styles.cardSubtitle}>Well, let us do it!</h3>
       </div>
     </div>
+  ];
+
+  return (
+    <MasonryLayout>
+      {onboardingCards}
+    </MasonryLayout>
   );
 }
 
