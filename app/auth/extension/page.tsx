@@ -136,21 +136,31 @@ function ExtensionAuthContent() {
         } else if (authSuccess === 'true') {
           // 如果有auth_success参数但没有立即获取到session，等待一下再重试
           console.log('⏳ Auth success indicated but no session yet, retrying in 500ms...')
-          setTimeout(async () => {
-            console.log('🔄 Retrying session check...')
+          
+          // 尝试多次检查，给Supabase更多时间同步
+          let retryCount = 0
+          const maxRetries = 5
+          const retryInterval = setInterval(async () => {
+            retryCount++
+            console.log(`🔄 Retrying session check (${retryCount}/${maxRetries})...`)
+            
             const { data: { session: retrySession }, error: retryError } = await supabase.auth.getSession()
             console.log('🔄 Retry result:', {
               hasSession: !!retrySession,
               userEmail: retrySession?.user?.email,
-              error: retryError?.message
+              error: retryError?.message,
+              retryCount
             })
+            
             if (retrySession && !retryError) {
               console.log('✅ Retry successful, processing auth success...')
+              clearInterval(retryInterval)
               await handleAuthSuccess(retrySession)
-            } else {
-              console.log('❌ Retry failed, session still not available')
+            } else if (retryCount >= maxRetries) {
+              console.log('❌ Max retries reached, session still not available')
+              clearInterval(retryInterval)
             }
-          }, 500)
+          }, 1000) // 每秒重试一次
         } else {
           console.log('ℹ️ No active session and no auth_success parameter')
           

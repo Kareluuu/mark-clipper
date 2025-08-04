@@ -32,6 +32,14 @@ export async function GET(request: NextRequest) {
     // 检查state参数中是否包含扩展标识（如果Google OAuth使用state传递）
     (state && state.includes('extension'))
   )
+  
+  console.log('🔍 Extension detection details:', {
+    referer,
+    state,
+    isFromExtension,
+    refererIncludesExtension: referer?.includes('/auth/extension'),
+    stateIncludesExtension: state?.includes('extension')
+  })
 
   // 如果有错误参数，记录并重定向到错误页面
   if (error) {
@@ -61,18 +69,30 @@ export async function GET(request: NextRequest) {
         // 或者在首页显示成功消息
       }
 
-      // OAuth处理成功，重定向到成功页面进行client-side处理
-      console.log('✅ OAuth processing complete, redirecting to success page')
-      
       const forwardedHost = request.headers.get('x-forwarded-host')
       const isLocalEnv = process.env.NODE_ENV === 'development'
       
-      if (isLocalEnv) {
-        return NextResponse.redirect(`${origin}/auth/callback/success`)
-      } else if (forwardedHost) {
-        return NextResponse.redirect(`https://${forwardedHost}/auth/callback/success`)
+      // 如果是来自扩展登录，直接重定向回扩展页面
+      if (isFromExtension) {
+        console.log('🚀 OAuth success from extension, redirecting back to extension auth page')
+        const redirectUrl = isLocalEnv ? 
+          `${origin}/auth/extension?source=extension&auth_success=true` :
+          forwardedHost ? 
+            `https://${forwardedHost}/auth/extension?source=extension&auth_success=true` :
+            `${origin}/auth/extension?source=extension&auth_success=true`
+        
+        return NextResponse.redirect(redirectUrl)
       } else {
-        return NextResponse.redirect(`${origin}/auth/callback/success`)
+        // 普通登录，重定向到成功页面或主页
+        console.log('✅ OAuth processing complete, redirecting to success page')
+        
+        if (isLocalEnv) {
+          return NextResponse.redirect(`${origin}/auth/callback/success`)
+        } else if (forwardedHost) {
+          return NextResponse.redirect(`https://${forwardedHost}/auth/callback/success`)
+        } else {
+          return NextResponse.redirect(`${origin}/auth/callback/success`)
+        }
       }
     } else {
       console.error('❌ Code exchange failed:', exchangeError)
