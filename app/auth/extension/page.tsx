@@ -177,8 +177,11 @@ function ExtensionAuthContent() {
 
   // 如果不是来自扩展，不渲染内容（会被重定向）
   if (source !== 'extension') {
+    console.log('❌ 来源检查失败，重定向到主登录页')
     return <div>正在重定向...</div>
   }
+
+  console.log('✅ 来源检查通过，渲染扩展登录页面')
 
   if (isAuthenticating) {
     return (
@@ -206,6 +209,8 @@ function ExtensionAuthContent() {
     )
   }
 
+  console.log('🎨 渲染扩展登录页面UI')
+  
   return (
     <div className={styles.container}>
       <div className={styles.content}>
@@ -238,6 +243,7 @@ function ExtensionAuthContent() {
               showLinks={AUTH_OPTIONS.showLinks}
               localization={authLocalization}
               redirectTo={`${typeof window !== 'undefined' ? window.location.origin : ''}/auth/callback`}
+
             />
             
             <div className="mt-4 p-3 bg-blue-50 rounded-lg">
