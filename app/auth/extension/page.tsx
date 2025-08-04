@@ -22,6 +22,7 @@ function ExtensionAuthContent() {
   // 获取URL参数
   const redirectTo = searchParams.get('redirect_to')
   const source = searchParams.get('source')
+  const authSuccess = searchParams.get('auth_success')
 
   // 处理认证成功的逻辑
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -92,10 +93,22 @@ function ExtensionAuthContent() {
       try {
         const { data: { session }, error } = await supabase.auth.getSession()
         console.log('Current session check:', session?.user?.email, error)
+        console.log('Auth success parameter:', authSuccess)
         
         if (session && !error) {
           // 用户已登录，直接处理认证信息返回
+          console.log('Found active session, processing auth success...')
           await handleAuthSuccess(session)
+        } else if (authSuccess === 'true') {
+          // 如果有auth_success参数但没有立即获取到session，等待一下再重试
+          console.log('Auth success indicated but no session yet, retrying...')
+          setTimeout(async () => {
+            const { data: { session: retrySession }, error: retryError } = await supabase.auth.getSession()
+            if (retrySession && !retryError) {
+              console.log('Retry successful, processing auth success...')
+              await handleAuthSuccess(retrySession)
+            }
+          }, 500)
         }
       } catch (error) {
         console.error('检查当前会话失败:', error)
@@ -117,7 +130,7 @@ function ExtensionAuthContent() {
     })
 
     return () => subscription.unsubscribe()
-  }, [supabase, router, redirectTo, source, handleAuthSuccess])
+  }, [supabase, router, redirectTo, source, authSuccess, handleAuthSuccess])
 
   // 如果不是来自扩展，不渲染内容（会被重定向）
   if (source !== 'extension') {
