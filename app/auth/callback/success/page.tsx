@@ -1,12 +1,11 @@
 'use client'
 
 import { useEffect } from 'react'
-import { useRouter, useSearchParams } from 'next/navigation'
+import { useRouter } from 'next/navigation'
 import { createClient } from '@/lib/supabase/client'
 
 export default function CallbackPage() {
   const router = useRouter()
-  const searchParams = useSearchParams()
   const supabase = createClient()
 
   useEffect(() => {
@@ -51,7 +50,7 @@ export default function CallbackPage() {
     }
 
     handleCallback()
-  }, [router, supabase, searchParams])
+  }, [router, supabase])
 
   return (
     <div className="min-h-screen flex items-center justify-center">
