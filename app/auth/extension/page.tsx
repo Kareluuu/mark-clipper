@@ -125,7 +125,8 @@ function ExtensionAuthContent() {
           hasSession: !!session,
           userEmail: session?.user?.email,
           error: error?.message,
-          authSuccess
+          authSuccess,
+          redirectTo
         })
         
         if (session && !error) {
@@ -152,6 +153,25 @@ function ExtensionAuthContent() {
           }, 500)
         } else {
           console.log('ℹ️ No active session and no auth_success parameter')
+          
+          // 如果有redirectTo但没有session，可能是页面直接被访问
+          // 检查用户是否已经在主应用中登录了
+          if (redirectTo) {
+            console.log('🔍 Have redirectTo but no session, checking if user is logged in to main app...')
+            // 延迟检查，给Supabase客户端更多时间初始化
+            setTimeout(async () => {
+              const { data: { session: delayedSession }, error: delayedError } = await supabase.auth.getSession()
+              console.log('🔄 Delayed session check:', {
+                hasSession: !!delayedSession,
+                userEmail: delayedSession?.user?.email,
+                error: delayedError?.message
+              })
+              if (delayedSession && !delayedError) {
+                console.log('🎉 Found session in delayed check, processing...')
+                await handleAuthSuccess(delayedSession)
+              }
+            }, 1000)
+          }
         }
       } catch (error) {
         console.error('❌ 检查当前会话失败:', error)
