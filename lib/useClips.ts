@@ -13,6 +13,7 @@ export interface Clip {
   url?: string; // 可选字段
   theme_name: ThemeKey; // 新增
   category: string; // 新增category字段
+  html_raw?: string | null; // 富文本HTML（可选）
   // 不包含 user_id，因为 API 已经过滤了
 }
 

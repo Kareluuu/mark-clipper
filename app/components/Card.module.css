@@ -139,6 +139,68 @@
   margin: 0; /* 确保没有默认margin */
 }
 
+/* 富文本容器（继承卡片正文排版） */
+.cardRichText {
+  font-family: 'Helvetica', sans-serif;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 1.6;
+  color: #000000;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+}
+
+.cardRichText p {
+  margin: 0 0 8px 0;
+}
+
+.cardRichText a {
+  color: #111827;
+  text-decoration: underline;
+}
+
+.cardRichText ul,
+.cardRichText ol {
+  padding-left: 1.2em;
+  margin: 0 0 8px 0;
+}
+
+.cardRichText li {
+  margin: 4px 0;
+}
+
+.cardRichText blockquote {
+  margin: 8px 0;
+  padding-left: 12px;
+  border-left: 3px solid #18181b;
+  color: #111111;
+}
+
+.cardRichText strong { font-weight: 700; }
+.cardRichText em { font-style: italic; }
+
+.cardRichText h1,
+.cardRichText h2,
+.cardRichText h3,
+.cardRichText h4,
+.cardRichText h5,
+.cardRichText h6 {
+  font-weight: 600;
+  margin: 6px 0;
+}
+
+.cardRichText pre,
+.cardRichText code {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+}
+
+.cardRichText pre {
+  background: rgba(0,0,0,0.06);
+  padding: 8px;
+  border-radius: 6px;
+  overflow-x: auto;
+}
+
 /* 分割线 */
 .cardDivider {
   width: 100%;

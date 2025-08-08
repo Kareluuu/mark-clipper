@@ -86,7 +86,7 @@ async function apiRequest<T>(
 // 更新clip的API函数
 export async function updateClip(
   clipId: number,
-  updates: Partial<Pick<Clip, 'text_plain' | 'title' | 'url' | 'theme_name'>>
+  updates: Partial<Pick<Clip, 'text_plain' | 'title' | 'url' | 'theme_name' | 'html_raw'>>
 ): Promise<Clip> {
   console.log(`📡 发送更新请求到 clip ${clipId}:`, {
     fields: Object.keys(updates),
