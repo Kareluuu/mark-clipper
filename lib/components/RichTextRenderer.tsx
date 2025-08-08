@@ -55,6 +55,13 @@ export const QuillContentStyles = () => (
       /* 基础文本样式 */
       word-wrap: break-word;
       overflow-wrap: break-word;
+      /* 强制继承父级颜色，覆盖Quill默认样式 */
+      color: inherit !important;
+    }
+    
+    /* 强制覆盖Quill默认的段落颜色 */
+    .rich-text-content * {
+      color: inherit !important;
     }
     
     /* Quill格式化样式 */

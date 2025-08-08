@@ -79,6 +79,14 @@ body {
   padding: 12px 15px;
 }
 
+/* 覆盖Quill默认的文本颜色，确保富文本内容继承父级颜色 */
+.rich-text-content,
+.rich-text-content p,
+.rich-text-content div,
+.rich-text-content span {
+  color: inherit !important;
+}
+
 .ql-toolbar.ql-snow {
   border-top: 1px solid #ccc;
   border-left: 1px solid #ccc;
