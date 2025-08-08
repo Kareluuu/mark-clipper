@@ -103,13 +103,14 @@ export const QuillContentStyles = () => (
     
     /* 链接样式 */
     .rich-text-content a {
-      color: #2563eb;
+      color: inherit;
       text-decoration: underline;
       word-break: break-all;
     }
     
     .rich-text-content a:hover {
-      color: #1d4ed8;
+      color: inherit;
+      opacity: 0.8;
     }
     
     /* 段落间距 */
