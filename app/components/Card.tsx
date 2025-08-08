@@ -1,12 +1,11 @@
 "use client";
 
 import React from "react";
-import DOMPurify from 'isomorphic-dompurify';
-import { plainTextToHtml } from '@/lib/components/QuillEditor';
 import { Hash } from "lucide-react";
 import { Clip } from "@/lib/useClips";
 import { getThemeConfig } from '@/lib/themes/themeConfig';
 import { EditButton, DeleteButton, CopyButton } from "./ActionButtons";
+import { RichTextRenderer } from "@/lib/components/RichTextRenderer";
 import styles from "./Card.module.css";
 
 // 新的Quote图标组件（使用public/Quote icon.svg的内联版本）
@@ -66,18 +65,13 @@ export function Card({ clip, onDelete, onEdit, isDeleting = false }: CardProps) 
             <CategoryBadge category={clip.category} />
           )}
 
-          {/* 富文本内容渲染（优先使用 html_raw，回退为 text_plain->HTML） */}
+          {/* 主要内容文本 - 使用富文本渲染器 */}
           <div className={styles.cardTextRow}>
-            {(() => {
-              const rawHtml = clip.html_raw ?? plainTextToHtml(clip.text_plain || '');
-              const safeHtml = DOMPurify.sanitize(rawHtml, { ADD_ATTR: ['target','rel'] });
-              return (
-                <div
-                  className={styles.cardRichText}
-                  dangerouslySetInnerHTML={{ __html: safeHtml }}
-                />
-              );
-            })()}
+            <RichTextRenderer 
+              htmlContent={clip.html_raw}
+              fallbackText={clip.text_plain}
+              className={styles.cardText}
+            />
           </div>
 
           {/* 分割线 */}

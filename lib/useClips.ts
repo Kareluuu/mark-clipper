@@ -9,11 +9,11 @@ export interface Clip {
   id: number;
   title: string;
   text_plain: string;
+  html_raw?: string | null; // 新增：存储Quill富文本HTML内容
   created_at: string; // API 现在总是返回这个字段
   url?: string; // 可选字段
   theme_name: ThemeKey; // 新增
   category: string; // 新增category字段
-  html_raw?: string | null; // 富文本HTML（可选）
   // 不包含 user_id，因为 API 已经过滤了
 }
 
