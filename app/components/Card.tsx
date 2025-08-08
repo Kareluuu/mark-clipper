@@ -5,7 +5,6 @@ import { Hash } from "lucide-react";
 import { Clip } from "@/lib/useClips";
 import { getThemeConfig } from '@/lib/themes/themeConfig';
 import { EditButton, DeleteButton, CopyButton } from "./ActionButtons";
-import { RichTextRenderer } from "@/lib/components/RichTextRenderer";
 import styles from "./Card.module.css";
 
 // 新的Quote图标组件（使用public/Quote icon.svg的内联版本）
@@ -65,13 +64,9 @@ export function Card({ clip, onDelete, onEdit, isDeleting = false }: CardProps) 
             <CategoryBadge category={clip.category} />
           )}
 
-          {/* 主要内容文本 - 使用富文本渲染器 */}
+          {/* 主要内容文本 */}
           <div className={styles.cardTextRow}>
-            <RichTextRenderer 
-              htmlContent={clip.html_raw}
-              fallbackText={clip.text_plain}
-              className={styles.cardText}
-            />
+            <p className={styles.cardText}>{clip.text_plain}</p>
           </div>
 
           {/* 分割线 */}

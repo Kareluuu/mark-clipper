@@ -36,7 +36,7 @@ export async function GET(request: NextRequest) {
     // 构建查询
     let query = supabase
       .from('clips')
-      .select('id, title, text_plain, html_raw, created_at, url, theme_name, category')
+      .select('id, title, text_plain, created_at, url, theme_name, category')
       .eq('user_id', authResult.userId!)
       .order('created_at', { ascending: false });
 
@@ -97,7 +97,7 @@ export async function POST(request: NextRequest) {
     const { data, error } = await supabase
       .from('clips')
       .insert(recordsWithUserId)
-      .select('id, title, text_plain, html_raw, created_at, url, theme_name, category');
+      .select('id, title, text_plain, created_at, url, theme_name, category');
 
     if (error) {
       console.error('数据库插入错误:', error);

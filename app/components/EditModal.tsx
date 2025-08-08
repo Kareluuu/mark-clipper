@@ -25,8 +25,7 @@ export function EditModal({ isOpen, onClose, clip, onSubmit, isSubmitting = fals
   // 初始化编辑器内容
   useEffect(() => {
     if (clip && isOpen) {
-      // 如果有HTML内容，优先使用HTML内容，否则从纯文本生成
-      const initialHtml = clip.html_raw || plainTextToHtml(clip.text_plain || '');
+      const initialHtml = plainTextToHtml(clip.text_plain || '');
       setEditorContent(initialHtml);
       setPlainTextContent(clip.text_plain || '');
       setHasContentChanged(false);
@@ -89,7 +88,6 @@ export function EditModal({ isOpen, onClose, clip, onSubmit, isSubmitting = fals
       try {
         await onSubmit({
           text_plain: plainTextContent, // 使用编辑器更新后的纯文本内容
-          html_raw: editorContent, // 同时保存HTML内容
           title: clip.title
         });
         // onSubmit中已经处理了关闭逻辑，这里不需要再次调用onClose

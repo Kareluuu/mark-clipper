@@ -13,7 +13,6 @@ export interface Database {
           created_at: string
           title: string | null
           text_plain: string | null
-          html_raw: string | null
           url: string | null
           user_id: string
           theme_name: ThemeKey
@@ -24,7 +23,6 @@ export interface Database {
           created_at?: string
           title?: string | null
           text_plain?: string | null
-          html_raw?: string | null
           url?: string | null
           user_id: string
           theme_name?: ThemeKey
@@ -35,7 +33,6 @@ export interface Database {
           created_at?: string
           title?: string | null
           text_plain?: string | null
-          html_raw?: string | null
           url?: string | null
           user_id?: string
           theme_name?: ThemeKey
