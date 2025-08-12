@@ -109,7 +109,7 @@ export default function UserMenu() {
   }
 
   const handleDiscordFeedback = () => {
-    window.open('https://discord.gg/3pbXSd28', '_blank', 'noopener,noreferrer')
+    window.open('https://discord.gg/2uq3uHhDkX', '_blank', 'noopener,noreferrer')
     handleCloseDropdown()
   }
 
