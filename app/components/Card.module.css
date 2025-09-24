@@ -139,6 +139,223 @@
   margin: 0; /* 确保没有默认margin */
 }
 
+/* HTML内容专用样式 - 确保与Quill编辑器样式一致 */
+.htmlContent {
+  /* 继承基础文本样式 */
+  font-family: 'Inter', 'Helvetica', sans-serif;
+  line-height: 1.6;
+  
+  /* 确保所有子元素都有合适的基础样式 */
+  color: #000000;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+}
+
+/* 标题样式 - 支持所有HTML标题级别 */
+.htmlContent h1 {
+  font-size: 2em !important;
+  font-weight: 700 !important;
+  margin: 16px 0 12px 0 !important;
+  line-height: 1.2 !important;
+  color: #000000 !important;
+  display: block !important;
+}
+
+.htmlContent h2 {
+  font-size: 1.5em !important;
+  font-weight: 700 !important;
+  margin: 12px 0 8px 0 !important;
+  line-height: 1.3 !important;
+  color: #000000 !important;
+  display: block !important;
+}
+
+.htmlContent h3 {
+  font-size: 1.05em !important;
+  font-weight: 600 !important;
+  margin: 6px 0 3px 0 !important;
+  line-height: 1.4 !important;
+  color: #000000 !important;
+}
+
+/* 段落样式 */
+.htmlContent p {
+  margin: 8px 0 !important;
+  line-height: 1.6 !important;
+  color: #000000 !important;
+  display: block !important;
+  font-size: inherit !important;
+}
+
+/* 文本格式化样式 */
+.htmlContent strong, .htmlContent b {
+  font-weight: 600 !important;
+  color: inherit !important;
+}
+
+.htmlContent em, .htmlContent i {
+  font-style: italic !important;
+  color: inherit !important;
+}
+
+.htmlContent u {
+  text-decoration: underline !important;
+  color: inherit !important;
+}
+
+.htmlContent s, .htmlContent strike {
+  text-decoration: line-through !important;
+  color: inherit !important;
+}
+
+/* 代码样式 */
+.htmlContent code {
+  background-color: rgba(0, 0, 0, 0.1) !important;
+  padding: 2px 4px !important;
+  border-radius: 3px !important;
+  font-family: 'Monaco', 'Menlo', 'Consolas', monospace !important;
+  font-size: 0.9em !important;
+  color: inherit !important;
+}
+
+.htmlContent pre {
+  background-color: rgba(0, 0, 0, 0.05) !important;
+  padding: 8px 12px !important;
+  border-radius: 4px !important;
+  margin: 8px 0 !important;
+  overflow-x: auto !important;
+  font-family: 'Monaco', 'Menlo', 'Consolas', monospace !important;
+  font-size: 0.9em !important;
+  line-height: 1.4 !important;
+}
+
+/* 列表样式 */
+.htmlContent ol, .htmlContent ul {
+  margin: 6px 0 !important;
+  padding-left: 16px !important;
+}
+
+.htmlContent ol {
+  list-style-type: decimal !important;
+}
+
+.htmlContent ul {
+  list-style-type: disc !important;
+}
+
+.htmlContent li {
+  margin: 2px 0 !important;
+  line-height: 1.4 !important;
+  color: inherit !important;
+}
+
+/* 嵌套列表样式 */
+.htmlContent ol ol, .htmlContent ul ul, .htmlContent ol ul, .htmlContent ul ol {
+  margin: 2px 0 !important;
+  padding-left: 20px !important;
+}
+
+/* 引用样式 */
+.htmlContent blockquote {
+  border-left: 2px solid rgba(0, 0, 0, 0.3) !important;
+  padding-left: 10px !important;
+  margin: 8px 0 !important;
+  font-style: italic !important;
+  color: rgba(0, 0, 0, 0.8) !important;
+  background-color: rgba(0, 0, 0, 0.02) !important;
+}
+
+/* 链接样式 */
+.htmlContent a {
+  color: #000000 !important;
+  text-decoration: underline !important;
+  text-decoration-color: rgba(0, 0, 0, 0.5) !important;
+}
+
+.htmlContent a:hover {
+  text-decoration-color: rgba(0, 0, 0, 0.8) !important;
+}
+
+/* 分割线样式 */
+.htmlContent hr {
+  border: none !important;
+  border-top: 1px solid rgba(0, 0, 0, 0.2) !important;
+  margin: 12px 0 !important;
+}
+
+/* 图片样式 */
+.htmlContent img {
+  max-width: 100% !important;
+  height: auto !important;
+  border-radius: 4px !important;
+  margin: 8px 0 !important;
+}
+
+/* 表格样式（如果需要支持） */
+.htmlContent table {
+  border-collapse: collapse !important;
+  width: 100% !important;
+  margin: 8px 0 !important;
+}
+
+.htmlContent th, .htmlContent td {
+  border: 1px solid rgba(0, 0, 0, 0.2) !important;
+  padding: 6px 8px !important;
+  text-align: left !important;
+}
+
+.htmlContent th {
+  background-color: rgba(0, 0, 0, 0.05) !important;
+  font-weight: 600 !important;
+}
+
+/* Quill 特殊格式支持 */
+.htmlContent .ql-align-center {
+  text-align: center !important;
+}
+
+.htmlContent .ql-align-right {
+  text-align: right !important;
+}
+
+.htmlContent .ql-align-justify {
+  text-align: justify !important;
+}
+
+/* 确保HTML内容的全局重置和基础样式 */
+.htmlContent * {
+  box-sizing: border-box;
+}
+
+/* 超长内容的性能优化 */
+.htmlContent > * {
+  /* 为每个HTML元素启用GPU加速 */
+  transform: translateZ(0);
+}
+
+/* 长内容的视觉优化 */
+.cardText {
+  /* 确保长文本有良好的可读性 */
+  line-height: 1.6;
+  
+  /* 优化长内容的渲染 */
+  contain: layout style;
+}
+
+/* 移动端长内容优化 */
+@media (max-width: 768px) {
+  .htmlContent {
+    /* 移动端上减少复杂渲染 */
+    contain: layout;
+  }
+  
+  .cardText {
+    /* 移动端上确保文本不会过小 */
+    font-size: 16px !important;
+    line-height: 1.5;
+  }
+}
+
 /* 分割线 */
 .cardDivider {
   width: 100%;

@@ -2,19 +2,7 @@ import useSWR from 'swr';
 import { useAuth } from '@/lib/contexts/AuthContext';
 import { useRouter } from 'next/navigation';
 import { useCallback, useMemo } from 'react';
-import { ThemeKey } from '@/lib/themes/themeConfig';
-
-// 更新的 Clip 接口，匹配 API 返回格式
-export interface Clip {
-  id: number;
-  title: string;
-  text_plain: string;
-  created_at: string; // API 现在总是返回这个字段
-  url?: string; // 可选字段
-  theme_name: ThemeKey; // 新增
-  category: string; // 新增category字段
-  // 不包含 user_id，因为 API 已经过滤了
-}
+import { Clip } from '@/lib/types';
 
 // 认证错误类
 class AuthError extends Error {
@@ -100,19 +88,19 @@ export function useClips(category?: string | null) {
     return baseUrl;
   }, [user, authLoading, category]);
 
-  // 使用 SWR，但只有在用户已认证时才请求
-  const swrResult = useSWR<Clip[]>(
+  // 使用 SWR，只负责数据获取，不进行任何转译处理
+  const { data, error, mutate, isValidating } = useSWR<Clip[]>(
     apiUrl,
     authenticatedFetcher,
     {
-      // SWR 配置选项
-      revalidateOnFocus: true, // 窗口获得焦点时重新验证
-      revalidateOnReconnect: true, // 网络重连时重新验证
-      errorRetryCount: 2, // 错误时重试 2 次
-      errorRetryInterval: 1000, // 重试间隔 1 秒
-      dedupingInterval: 5000, // 5 秒内的重复请求会被去重
+      // SWR 配置选项 - 专注于数据获取性能
+      revalidateOnFocus: true,
+      revalidateOnReconnect: true, 
+      errorRetryCount: 2,
+      errorRetryInterval: 1000,
+      dedupingInterval: 5000,
       
-      // 错误处理
+      // 数据获取的错误处理
       onError: (error) => {
         if (error instanceof AuthError) {
           console.log('认证错误已处理，用户将被重定向到登录页');
@@ -121,16 +109,21 @@ export function useClips(category?: string | null) {
         }
       },
 
-      // 成功时的回调
+      // 数据获取成功的回调
       onSuccess: (data) => {
-        console.log(`🔄 数据刷新成功，获取到 ${data.length} 条 clips`);
+        console.log(`📦 成功获取 ${data.length} 条原始clips数据${category ? ` (category: ${category})` : ''}`);
       },
     }
   );
 
+  // 返回简洁的数据获取状态，不包含任何转译逻辑
   return {
-    ...swrResult,
-    // 增强的状态信息
+    clips: data || [],
+    isLoading: !error && !data,
+    isValidating,
+    error,
+    mutate,
+    // 认证状态信息
     isAuthenticated: !!user,
     isAuthLoading: authLoading,
   };

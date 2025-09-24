@@ -29,8 +29,11 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <AuthProvider>
-        {children}
+          {children}
         </AuthProvider>
+        {process.env.NODE_ENV === 'development' && (
+          <script src="/debug-headings.js" defer />
+        )}
       </body>
     </html>
   );

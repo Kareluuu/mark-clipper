@@ -1,9 +1,12 @@
 "use client";
 
-import React from "react";
+import React, { useMemo } from "react";
 import { Hash } from "lucide-react";
-import { Clip } from "@/lib/useClips";
+import { Clip } from "@/lib/types";
 import { getThemeConfig } from '@/lib/themes/themeConfig';
+import { getDisplayContentSync } from '@/lib/utils/contentStrategy';
+import { useRenderingPerformance } from '@/lib/utils/renderingPerformanceMonitor';
+import { determineRenderStrategy } from '@/lib/utils/contentOptimization';
 import { EditButton, DeleteButton, CopyButton } from "./ActionButtons";
 import styles from "./Card.module.css";
 
@@ -44,6 +47,54 @@ export function Card({ clip, onDelete, onEdit, isDeleting = false }: CardProps) 
   const theme = getThemeConfig(clip.theme_name);
   const style = theme.cssVariables as React.CSSProperties;
 
+  // 性能监控 - 为每个Card实例分配唯一ID
+  const componentId = `card-${clip.id}`;
+  const { elementRef } = useRenderingPerformance(componentId, clip);
+
+  // 按需转译，使用内存缓存优化性能
+  const displayContent = useMemo(() => {
+    const result = getDisplayContentSync(clip, { 
+      fallbackToPlainText: true,
+      logErrors: true  // 启用日志以便调试
+    });
+    
+    // 调试信息
+    if (clip.html_raw && clip.html_raw.includes('<h1')) {
+      console.log(`🔍 Card调试 Clip ${clip.id}:`, {
+        原始HTML: clip.html_raw.substring(0, 200),
+        处理结果: result.substring(0, 200),
+        是否还有h1: result.includes('<h1'),
+        是否有h2: result.includes('<h2'),
+        是否有style: result.includes('style=')
+      });
+    }
+    
+    return result;
+  }, [clip.html_raw, clip.text_plain, clip.title]);
+
+  // 获取纯文本内容用于回退显示（完整内容，不截断）
+  const plainTextContent = useMemo(() => {
+    return clip.text_plain || clip.title || '';
+  }, [clip.text_plain, clip.title]);
+
+  // 检查是否有HTML内容（用于决定渲染方式）
+  const hasHtmlContent = useMemo(() => {
+    // 检查转译后的displayContent是否包含HTML标签
+    if (!displayContent || displayContent.trim() === '') {
+      return false;
+    }
+    
+    // 简单检查是否包含HTML标签
+    const hasHtmlTags = /<[^>]+>/g.test(displayContent);
+    
+    return hasHtmlTags;
+  }, [displayContent, clip.id]);
+
+  // 分析内容复杂度并确定渲染策略
+  const renderStrategy = useMemo(() => {
+    return determineRenderStrategy(clip);
+  }, [clip.html_raw, clip.text_plain]);
+
   // 处理Ref点击跳转
   const handleRefClick = () => {
     if (clip.url) {
@@ -52,7 +103,12 @@ export function Card({ clip, onDelete, onEdit, isDeleting = false }: CardProps) 
   };
 
   return (
-    <div style={style} className={`${styles.card} ${styles[theme.key]}`}>
+    <div 
+      ref={elementRef}
+      style={style} 
+      className={`${styles.card} ${styles[theme.key]}`}
+      data-complexity={renderStrategy.useVirtualization ? 'extreme' : 'normal'}
+    >
       <div className={styles.cardContent}>
         {/* 主要内容区域 */}
         <div className={styles.cardMainSection}>
@@ -64,9 +120,18 @@ export function Card({ clip, onDelete, onEdit, isDeleting = false }: CardProps) 
             <CategoryBadge category={clip.category} />
           )}
 
-          {/* 主要内容文本 */}
+          {/* 主要内容文本 - 支持HTML渲染和纯文本显示 */}
           <div className={styles.cardTextRow}>
-            <p className={styles.cardText}>{clip.text_plain}</p>
+            {hasHtmlContent ? (
+              // 渲染HTML内容
+              <div 
+                className={`${styles.cardText} ${styles.htmlContent}`}
+                dangerouslySetInnerHTML={{ __html: displayContent }}
+              />
+            ) : (
+              // 渲染完整的纯文本内容
+              <p className={styles.cardText}>{plainTextContent}</p>
+            )}
           </div>
 
           {/* 分割线 */}

@@ -2,6 +2,10 @@
 
 import React, { useMemo, useCallback } from 'react';
 import dynamic from 'next/dynamic';
+// 导入Quill CSS样式
+import 'react-quill/dist/quill.snow.css';
+// 导入更强大的HTML转译工具
+import { htmlToPlainText as htmlToText } from '../utils/htmlTranslator';
 
 // 动态导入 ReactQuill，禁用 SSR，并应用polyfill
 const ReactQuill = dynamic(
@@ -63,13 +67,9 @@ interface QuillEditorProps {
   minHeight?: string;
 }
 
-// 将HTML转换为纯文本的工具函数
+// 将HTML转换为纯文本的工具函数 - 使用增强版转译器
 export const htmlToPlainText = (html: string): string => {
-  if (typeof window === 'undefined') return html;
-  
-  const div = document.createElement('div');
-  div.innerHTML = html;
-  return div.textContent || div.innerText || '';
+  return htmlToText(html);
 };
 
 // 将纯文本转换为基本HTML格式的工具函数
@@ -85,20 +85,22 @@ export function QuillEditor({
   className,
   minHeight = "250px"
 }: QuillEditorProps) {
-  // 简化的Quill工具栏配置 - 只保留基本功能
+  // 扩展的Quill工具栏配置 - 包含header支持
   const modules = useMemo(() => ({
     toolbar: [
-      ['bold', 'italic', 'underline'],
-      [{ 'list': 'ordered'}, { 'list': 'bullet' }],
-      ['link', 'blockquote'],
-      ['clean']
+      [{ header: [2, false] }],                     // 标题组 - 支持h2和normal
+      ['bold', 'italic', 'underline'],              // 文本样式组
+      [{ 'list': 'ordered'}, { 'list': 'bullet' }], // 列表组
+      ['link', 'blockquote'],                       // 特殊格式组
+      ['clean']                                     // 清除格式组
     ],
   }), []);
 
   const formats = [
-    'bold', 'italic', 'underline',
-    'list', 'bullet',
-    'link', 'blockquote'
+    'header',                                       // 标题格式
+    'bold', 'italic', 'underline',                 // 文本样式
+    'list', 'bullet',                              // 列表格式
+    'link', 'blockquote'                           // 特殊格式
   ];
 
   // 处理内容变化
@@ -157,19 +159,78 @@ export function QuillEditor({
           color: #9ca3af !important;
           font-style: normal !important;
         }
-        /* 简化工具栏样式 */
+        
+        /* Header样式 */
+        .ql-editor h2 {
+          font-size: 1.5em !important;
+          font-weight: 600 !important;
+          margin: 16px 0 8px 0 !important;
+          line-height: 1.4 !important;
+          color: #1f2937 !important;
+        }
+        
+        /* 工具栏样式分组 */
         .ql-toolbar .ql-formats {
           margin-right: 8px !important;
         }
+        .ql-toolbar .ql-formats:last-child {
+          margin-right: 0 !important;
+        }
+        
+        /* 工具栏按钮样式 */
         .ql-toolbar button {
           padding: 4px 6px !important;
           margin: 0 1px !important;
+          border-radius: 3px !important;
         }
         .ql-toolbar button:hover {
           background-color: #f3f4f6 !important;
         }
         .ql-toolbar button.ql-active {
           background-color: #e5e7eb !important;
+          color: #374151 !important;
+        }
+        
+        /* Header下拉选择器样式 */
+        .ql-toolbar .ql-header {
+          width: 80px !important;
+        }
+        .ql-toolbar .ql-header .ql-picker-label {
+          padding: 4px 8px !important;
+          border-radius: 3px !important;
+        }
+        .ql-toolbar .ql-header .ql-picker-label:hover {
+          background-color: #f3f4f6 !important;
+        }
+        .ql-toolbar .ql-header.ql-active .ql-picker-label {
+          background-color: #e5e7eb !important;
+        }
+        
+        /* 列表样式 */
+        .ql-editor ol, .ql-editor ul {
+          padding-left: 24px !important;
+          margin: 8px 0 !important;
+        }
+        .ql-editor li {
+          margin: 4px 0 !important;
+        }
+        
+        /* 引用样式 */
+        .ql-editor blockquote {
+          border-left: 4px solid #e5e7eb !important;
+          padding-left: 16px !important;
+          margin: 12px 0 !important;
+          font-style: italic !important;
+          color: #6b7280 !important;
+        }
+        
+        /* 链接样式 */
+        .ql-editor a {
+          color: #3b82f6 !important;
+          text-decoration: underline !important;
+        }
+        .ql-editor a:hover {
+          color: #1d4ed8 !important;
         }
       `}</style>
     </div>

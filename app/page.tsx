@@ -241,7 +241,7 @@ function MasonryLayout({ children }: { children: React.ReactNode[] }) {
 export default function Home() {
   // 数据获取
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
-  const { data: clips, error, isLoading, mutate } = useClips(selectedCategory);
+  const { clips, error, isLoading, mutate } = useClips(selectedCategory);
   const { categories, isLoading: categoriesLoading } = useCategories();
   
   // 编辑状态管理 - 使用专门的hook

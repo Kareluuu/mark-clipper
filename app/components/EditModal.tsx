@@ -1,9 +1,10 @@
 "use client";
 
-import React, { useEffect, useRef, useState, useCallback } from "react";
+import React, { useEffect, useRef, useState, useCallback, useMemo } from "react";
 import { createPortal } from "react-dom";
-import { Clip } from "@/lib/useClips";
+import { Clip } from "@/lib/types";
 import { QuillEditor, plainTextToHtml } from "@/lib/components/QuillEditor";
+import { getEditContent } from '@/lib/utils/contentStrategy';
 import styles from "./EditModal.module.css";
 
 export interface EditModalProps {
@@ -16,26 +17,88 @@ export interface EditModalProps {
 
 export function EditModal({ isOpen, onClose, clip, onSubmit, isSubmitting = false }: EditModalProps) {
   const modalRef = useRef<HTMLDivElement>(null);
+  const renderCountRef = useRef(0);
+  const hasContentChangedRef = useRef(false); // 使用 ref 来避免严格模式的影响
   
   // 编辑器内容状态管理
   const [editorContent, setEditorContent] = useState<string>('');
+  const [isEditorInitialized, setIsEditorInitialized] = useState<boolean>(false);
   const [plainTextContent, setPlainTextContent] = useState<string>('');
   const [hasContentChanged, setHasContentChanged] = useState<boolean>(false);
   
-  // 初始化编辑器内容
+  // 追踪组件渲染次数
+  renderCountRef.current += 1;
+  
+  // 编辑时获取合适的初始内容（按需转译）
+  const initialContent = useMemo(() => {
+    if (!clip) return '';
+    return getEditContent(clip, {
+      preserveFormatting: true // 编辑时保持原始格式完整性
+    });
+  }, [clip?.html_raw, clip?.text_plain]);
+
+  // 初始化编辑器内容 - 只在真正需要初始化时才重置状态
   useEffect(() => {
     if (clip && isOpen) {
-      const initialHtml = plainTextToHtml(clip.text_plain || '');
-      setEditorContent(initialHtml);
+      console.log(`🔧 EditModal ${clip.id} 初始化:`, {
+        initialContentLength: initialContent.length,
+        clipHtmlRawLength: (clip.html_raw || '').length
+      });
+      
+      setEditorContent(initialContent);
       setPlainTextContent(clip.text_plain || '');
+      hasContentChangedRef.current = false;
       setHasContentChanged(false);
+      setIsEditorInitialized(true); // 标记编辑器已初始化
+    } else if (!isOpen) {
+      // 模态框关闭时重置初始化状态
+      setIsEditorInitialized(false);
     }
-  }, [clip, isOpen]);
+  }, [clip?.id, isOpen, initialContent]); // 添加 isOpen 和 initialContent 依赖
   
-  // 处理编辑器内容变化
+  // 可选：监控 hasContentChanged 状态变化（调试时启用）
+  // useEffect(() => {
+  //   console.log(`📊 EditModal ${clip?.id} hasContentChanged 状态变化:`, hasContentChanged);
+  // }, [hasContentChanged, clip?.id]);
+  
+  // 处理编辑器内容变化 - 使用 useRef 避免闭包问题
   const handleEditorChange = useCallback((htmlContent: string) => {
     setEditorContent(htmlContent);
-  }, []);
+    
+    // 只有在编辑器初始化完成后才进行变化检测
+    if (!isEditorInitialized) {
+      console.log(`⏳ EditModal ${clip?.id} 编辑器尚未初始化完成，跳过变化检测`);
+      return;
+    }
+    
+    // 检测HTML内容是否发生变化
+    const originalHtml = clip?.html_raw || '';
+    const htmlChanged = htmlContent !== originalHtml;
+    const initialChanged = htmlContent !== initialContent;
+    
+    console.log(`🔍 EditModal ${clip?.id} 变化检测:`, {
+      htmlChanged,
+      initialChanged,
+      willActivate: htmlChanged || initialChanged,
+      htmlContentLength: htmlContent.length,
+      originalLength: originalHtml.length,
+      initialLength: initialContent.length,
+      htmlContent: htmlContent.substring(0, 100),
+      originalHtml: originalHtml.substring(0, 100),
+      initialContent: initialContent.substring(0, 100)
+    });
+    
+    // 更新状态，同时更新 ref 和 state 来避免严格模式影响
+    if (htmlChanged || initialChanged) {
+      hasContentChangedRef.current = true;
+      setHasContentChanged(true);
+      console.log(`✅ EditModal ${clip?.id} 检测到内容变化，启用保存按钮`);
+    } else {
+      hasContentChangedRef.current = false;
+      setHasContentChanged(false);
+      console.log(`❌ EditModal ${clip?.id} 未检测到内容变化，禁用保存按钮`);
+    }
+  }, [clip?.html_raw, initialContent, isEditorInitialized, clip?.id]);
   
   // 处理纯文本内容变化
   const handleTextChange = useCallback((plainText: string) => {
@@ -73,28 +136,53 @@ export function EditModal({ isOpen, onClose, clip, onSubmit, isSubmitting = fals
 
   // 处理提交
   const handleSubmit = async () => {
-    if (!clip || isSubmitting) return;
+    console.log(`🔄 EditModal ${clip?.id} handleSubmit 被调用:`, {
+      hasClip: !!clip,
+      isSubmitting,
+      hasContentChanged,
+      hasContentChangedRef: hasContentChangedRef.current,
+      plainTextLength: plainTextContent?.length || 0,
+      editorContentLength: editorContent?.length || 0
+    });
+
+    if (!clip || isSubmitting) {
+      console.log(`❌ EditModal ${clip?.id} 提交条件不满足:`, {
+        hasClip: !!clip,
+        isSubmitting
+      });
+      return;
+    }
     
     // 检查是否有内容变化，避免无意义的保存请求
-    if (!hasContentChanged) {
-      console.log('No content changes detected, closing modal');
+    if (!hasContentChanged && !hasContentChangedRef.current) {
+      console.log(`❌ EditModal ${clip?.id} 没有检测到内容变化，关闭模态框`);
       onClose();
       return;
     }
     
-    console.log('Submitting edited clip:', clip.id, 'with new content:', plainTextContent);
+    console.log(`📡 EditModal ${clip?.id} 开始提交编辑:`, {
+      plainText: plainTextContent,
+      plainTextLength: plainTextContent?.length || 0,
+      htmlContent: editorContent,
+      htmlLength: editorContent?.length || 0,
+      title: clip.title
+    });
     
     if (onSubmit) {
       try {
         await onSubmit({
-          text_plain: plainTextContent, // 使用编辑器更新后的纯文本内容
+          text_plain: plainTextContent, // 纯文本内容
+          html_raw: editorContent,      // 🚨 新增：保存HTML内容
           title: clip.title
         });
+        console.log(`✅ EditModal ${clip?.id} 提交成功`);
         // onSubmit中已经处理了关闭逻辑，这里不需要再次调用onClose
       } catch (error) {
-        console.error('Submit failed:', error);
+        console.error(`❌ EditModal ${clip?.id} 提交失败:`, error);
         // 错误处理已经在hook中完成，这里只是记录日志
       }
+    } else {
+      console.warn(`⚠️ EditModal ${clip?.id} onSubmit 函数未提供`);
     }
   };
 
@@ -165,15 +253,28 @@ export function EditModal({ isOpen, onClose, clip, onSubmit, isSubmitting = fals
           <div className={styles.modalFooter}>
             <button 
               className={styles.submitButton}
-              onClick={handleSubmit}
-              disabled={isSubmitting || !hasContentChanged}
+              onClick={(e) => {
+                console.log(`🖱️ EditModal ${clip?.id} Save按钮被点击:`, {
+                  isDisabled: isSubmitting || !hasContentChangedRef.current,
+                  isSubmitting,
+                  hasContentChangedRef: hasContentChangedRef.current,
+                  hasContentChanged,
+                  buttonEnabled: hasContentChangedRef.current && !isSubmitting
+                });
+                if (!isSubmitting && hasContentChangedRef.current) {
+                  handleSubmit();
+                } else {
+                  console.log(`⚠️ EditModal ${clip?.id} 按钮被点击但被禁用状态阻止执行`);
+                }
+              }}
+              disabled={isSubmitting || !hasContentChangedRef.current}
               style={{
-                opacity: (hasContentChanged && !isSubmitting) ? 1 : 0.7,
-                backgroundColor: (hasContentChanged && !isSubmitting) ? '#18181b' : '#71717a',
-                cursor: (isSubmitting || !hasContentChanged) ? 'not-allowed' : 'pointer'
+                opacity: (hasContentChangedRef.current && !isSubmitting) ? 1 : 0.7,
+                backgroundColor: (hasContentChangedRef.current && !isSubmitting) ? '#18181b' : '#71717a',
+                cursor: (isSubmitting || !hasContentChangedRef.current) ? 'not-allowed' : 'pointer'
               }}
             >
-              {isSubmitting ? 'Saving...' : hasContentChanged ? 'Save Changes' : 'No Changes'}
+              {isSubmitting ? 'Saving...' : hasContentChangedRef.current ? 'Save Changes' : 'No Changes'}
             </button>
           </div>
         </div>
