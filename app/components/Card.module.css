@@ -42,18 +42,22 @@
 /* 主题特定样式 - 用于特定布局差异 */
 .Olivine {
   /* Olivine 主题特定样式 */
+  position: relative;
 }
 
 .Jasmine {
   /* Jasmine 主题特定样式 */
+  position: relative;
 }
 
 .Maya_blue {
   /* Maya_blue 主题特定样式 */
+  position: relative;
 }
 
 .Eggshell {
   /* Eggshell 主题特定样式 */
+  position: relative;
 }
 
 .cardContent {

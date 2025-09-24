@@ -341,7 +341,7 @@ export function setupExtremeErrorScenario(): void {
  * 测试错误恢复能力
  */
 export async function testErrorRecovery(
-  testFunction: () => Promise<any>,
+  testFunction: () => Promise<unknown>,
   maxRetries: number = 3
 ): Promise<{
   success: boolean;

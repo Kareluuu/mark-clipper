@@ -126,7 +126,7 @@ export function transformToUpdate(data: Partial<Clip>): ClipUpdate {
  * - 运行时类型检查
  * - 用于 API 响应验证
  */
-export function isValidClip(obj: any): obj is Clip {
+export function isValidClip(obj: unknown): obj is Clip {
   return (
     obj &&
     typeof obj.id === 'number' &&
@@ -145,7 +145,7 @@ export function isValidClip(obj: any): obj is Clip {
  * - 运行时类型检查
  * - 用于数据库查询结果验证
  */
-export function isValidClipRow(obj: any): obj is ClipRow {
+export function isValidClipRow(obj: unknown): obj is ClipRow {
   return (
     obj &&
     typeof obj.id === 'number' &&
@@ -174,7 +174,7 @@ export function transformClipRows(rows: ClipRow[]): Clip[] {
 /**
  * 过滤和验证 Clip 数组
  */
-export function validateClips(clips: any[]): Clip[] {
+export function validateClips(clips: unknown[]): Clip[] {
   return clips.filter(isValidClip);
 }
 

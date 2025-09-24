@@ -3,6 +3,7 @@
  * 监控组件层按需转译的性能表现
  */
 
+import React from 'react';
 import { getCacheStats } from './contentCache';
 
 // =============================================================================
@@ -229,7 +230,7 @@ export function withPerformanceMonitoring<P extends object>(
   WrappedComponent: React.ComponentType<P>,
   componentName: string
 ) {
-  const MonitoredComponent = React.forwardRef<any, P>((props, ref) => {
+  const MonitoredComponent = React.forwardRef<HTMLElement, P>((props, ref) => {
     const startTime = React.useRef<number>(0);
     
     // 记录渲染开始

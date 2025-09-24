@@ -514,7 +514,7 @@ export async function batchGetDisplayContentAsync(clips: Clip[], options: Conten
  * @param clip - Clip对象
  * @returns 验证结果
  */
-export function validateDataModelSimplicity(clip: any): {
+export function validateDataModelSimplicity(clip: unknown): {
   isSimple: boolean;
   redundantFields: string[];
   recommendations: string[];
