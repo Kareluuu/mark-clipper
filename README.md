@@ -1,36 +1,13 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 ![cover-v5-optimized](./public/GitHub_README.png)
-## Getting Started
 
-First, run the development server:
+## About Marks Clipper
+这是一款非常垂直的小工具，基于chrome extension的基础，进行web页面的关键内容抓取并进行mark。我作为开发这款应用的主要用于我自己的旅行目的地mark以及一些对我有用的碎片化web信息的mark。
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+## About Treavel
+我经常在旅行出行前做一部分攻略，以更好的规划我的旅行行程线路，这里就会涉及到记录很多信息的场景，比如我会用marks来记录一些location信息，这样我到当地时我就直接打开marks页面点击location信息就会提示帮我跳转google map进行直接导航，我觉得这个很好。
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## About information mark
+我经常会遇到一些对我有用的网页内容或者整个网站，我其实不是很喜欢在这里再去打开一个app去手动复制粘贴进去保存，我更喜欢直接在当前页面通过唤起chrome插件直接进行信息的mark，并且进行轻量的管理。
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
-
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## About disscus the road map of marks clipper
+欢迎大家加入disord来进行未来功能迭代的探讨：https://discord.gg/2uq3uHhDkX
